@@ -1,8 +1,6 @@
-# Anforderungen und Konstruktionsstand
+# Konstruktion
 
 Adapter zwischen dem originalen Trek-Steuersatzdeckel (Émonda SL 6, 2024) und dem Tavelo-Avro-Rise-Cockpit.
-
-**Stand:** 2026-09-28 · Rev. B.1 · finaler Prototyp in Fertigung
 
 ---
 
@@ -42,7 +40,7 @@ Nasenwinkel abgeleitet: aus der Querausdehnung 23,2°, aus der Längsausdehnung 
 
 | Größe | Wert | Quelle |
 |---|---|---|
-| α_T: Trek-Sitzfläche gegen die Schaftnormale | **17°** (vorläufig) | Trek-Stapel im Fahrbetrieb etwa waagerecht, Lenkwinkel ~73°; **Lehrkeile 15–19° klären den exakten Wert** |
+| α_T: Trek-Sitzfläche gegen die Schaftnormale | **17°** | Trek-Stapel im Fahrbetrieb etwa waagerecht, Lenkwinkel ~73°; am eigenen Rad mit den Lehrkeilen 15–19° prüfen |
 | α_V: Tavelo-Sitzfläche gegen die Schaftnormale | **8°** | gemessen: Klemmbohrung 8° nach hinten gekippt bei flach aufliegender Sitzfläche |
 | Keil zwischen Unter- und Oberseite | **α_T − α_V ≈ 9°** | hinten dünn, vorn dick |
 
@@ -63,26 +61,3 @@ Der Lenkwinkel spielt für die Passung keine Rolle. Maßgeblich sind nur die Nei
 | D-7 | Werkstoff PA12 (MJF) für das Endteil | Das Teil liegt in der Kraftkette der Lagervorspannung und wird warm; kein PLA/PETG. |
 | D-8 | Lehrkeile: 4 mm, Vollkontur, zweiteilig ohne Gelenk, Ober- und Unterseite parallel | Sie prüfen nur α_T; ein Gelenk wäre bei 4 mm zu filigran. |
 | D-9 | Drucklayout: beide Hälften in einer Datei, getrennt, Unterseite auf dem Druckbett | ein Auftrag, keine verschränkten Teile im Druck |
-
-## 6. Offene Punkte
-
-| ID | Frage | Vorgehen |
-|---|---|---|
-| O-1 | Exakter Wert von α_T | Lehrkeile drucken und prüfen (`04_Fertigung/Lehrkeile_Auftrag.md`). Weicht der Wert von 17° ab: `ALPHA_TREK` in `02_CAD/adapter.py` ändern und neu exportieren. |
-| O-2 | Passung des Gelenks nach MJF-Druck | Testmontage; bei Bedarf Zapfen nachschleifen oder `JOINT_CLEAR` auf 0,3 erhöhen. |
-
-## 7. Verworfene Annahmen (Kurzfassung)
-
-- **Gesamtlänge 52,2** (Skizze V2) war ein Messfehler, richtig sind **58** (13 + ~15 + 30).
-- **Oberseite senkrecht zum Schaft** (Keil 17°), abgeleitet aus der Stack-Bemaßung der Tavelo-Zeichnung: durch die Messung α_V = 8° widerlegt.
-- **α_V = 18°** (Keil ≈ 0°), abgeleitet aus der Tavelo-Referenz 72°: durch die Messung widerlegt.
-- **Z-Schloss** als Teilung: hält die Hälften quer nicht; ersetzt durch das Gelenk (D-5).
-- **Lehrkeil vorn offen:** ersetzt durch die zweiteilige Vollkontur.
-
-## 8. Revisionen
-
-| Rev. | Inhalt |
-|---|---|
-| A–A.3 | Anforderungen aus Skizze V2 und Fotos, Lehrkeil-Ansatz, Maßkorrekturen |
-| B.0 | Adapter 20 mm mit Gelenk nach Tavelo-Vorbild |
-| B.1 | α_V = 8° gemessen → Keil 9°; Höhe entlang der Schaftachse; Regelflächen-Außenwand; Drucklayout |

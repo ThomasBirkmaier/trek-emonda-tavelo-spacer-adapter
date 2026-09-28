@@ -2,7 +2,7 @@
 Adapter Trek Émonda SL 6 (2024) -> Tavelo Avro Rise
 Parametrisches CadQuery-Modell. Maße in mm, Winkel in Grad.
 
-Koordinatensystem (siehe 00_Anforderungen.md):
+Koordinatensystem (siehe KONSTRUKTION.md):
   Ursprung  = Schnittpunkt Schaftachse mit der Unterseite (Trek-Auflageebene)
   +x        = nach hinten (Richtung Oberrohr), -x = Fahrtrichtung
   y         = quer, Teil symmetrisch zu y = 0 (Teilungsebene)
@@ -24,7 +24,7 @@ import os
 import cadquery as cq
 
 # ---------------------------------------------------------------- Parameter
-# Winkel (ALPHA_TREK vorläufig, siehe 00_Anforderungen.md O-1)
+# Winkel (ALPHA_TREK am eigenen Rad mit den Lehrkeilen prüfen)
 ALPHA_TREK = 17.0         # Neigung Trek-Auflageebene gegen Schaftnormale -> Lehrkeile
 ALPHA_TAVELO = 8.0        # gemessen 2026-09-28: Tavelo-Klemmbohrung 8° nach hinten gekippt bei flach aufliegender Sitzfläche
 

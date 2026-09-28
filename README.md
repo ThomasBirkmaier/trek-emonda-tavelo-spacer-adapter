@@ -25,9 +25,20 @@ Das Modell ist parametrisch (Python/CadQuery). Wer einen anderen Rahmen oder and
 
 1. Datei **`02_CAD/out/DRUCK_Adapter_H20_T17_V8.stl`** (oder `.3mf`/`.step`) bei einem Druckdienst hochladen, zum Beispiel Craftcloud. Die Datei enthält beide Hälften, getrennt gelegt; die Menge ist 1.
 2. Verfahren **MJF**, Material **PA12**, Farbe schwarz. Kein FDM/PLA/PETG: Das Teil liegt in der Kraftkette der Lagervorspannung.
-3. Optional vorab die **Lehrkeile** (`DRUCK_Lehrkeil_15…19deg`) drucken, um den Trek-Winkel am eigenen Rad zu prüfen. Kosten: wenige Euro, SLA-Resin reicht.
+3. Empfohlen: vorher mit den **Lehrkeilen** den Trek-Winkel am eigenen Rad prüfen (siehe unten).
 
-Details zu Material, Passungen und Prüfung: [`04_Fertigung/`](04_Fertigung/)
+Passungen: Bohrung 0,15 mm und Gelenk 0,2 mm Spiel radial, Nasentaschen 0,3 mm pro Seite. Klemmt das Gelenk nach dem Druck, die Zapfen leicht nachschleifen oder `JOINT_CLEAR` erhöhen.
+
+### Trek-Winkel prüfen (Lehrkeile)
+
+`02_CAD/out/DRUCK_Lehrkeil_15…19deg`: fünf 4 mm dünne Keile mit 15–19°, je zweiteilig ohne Gelenk. SLA-Resin reicht, das kostet wenige Euro.
+
+1. Vorbau abnehmen, der Trek-Deckel bleibt drauf.
+2. Beide Hälften um Schaft und Leitungen legen, die Nasen in die Taschen setzen und die Hälften zusammenhalten.
+3. Gegen Licht prüfen: Der Keil, der ohne Spalt und ohne Kippeln aufliegt, gibt α_T an.
+   - Spalt **hinten** (bei den Nasen): Winkel zu groß → nächstkleineren Keil probieren
+   - Spalt **vorn** (an der Spitze): Winkel zu klein → nächstgrößeren Keil probieren
+4. Weicht der Wert von 17° ab: `ALPHA_TREK` anpassen und neu exportieren.
 
 ### Ich will das Modell anpassen
 
@@ -48,7 +59,7 @@ Die Parameter stehen oben in [`02_CAD/adapter.py`](02_CAD/adapter.py):
 
 | Parameter | Bedeutung | Aktuell |
 |---|---|---|
-| `ALPHA_TREK` | Neigung der Trek-Sitzfläche gegen die Schaftnormale | 17,0° (vorläufig) |
+| `ALPHA_TREK` | Neigung der Trek-Sitzfläche gegen die Schaftnormale | 17,0° (mit den Lehrkeilen prüfen) |
 | `ALPHA_TAVELO` | Neigung der Tavelo-Sitzfläche gegen die Schaftnormale | 8,0° (gemessen) |
 | `HEIGHT` | Höhe entlang der Schaftachse | 20 mm |
 | `JOINT_CLEAR` | radiales Spiel im Gelenk | 0,2 mm (bei engen Toleranzen 0,3) |
@@ -69,24 +80,17 @@ Die Winkel stehen im Dateinamen der Exporte (`..._T17_V8`), damit man sieht, wel
 
 | Pfad | Inhalt |
 |---|---|
-| [`00_Anforderungen.md`](00_Anforderungen.md) | Schnittstellen, Maße, Winkel, Konstruktionsentscheidungen, offene Punkte |
+| [`KONSTRUKTION.md`](KONSTRUKTION.md) | Schnittstellen, Koordinatensystem, Maße, Winkel, Konstruktionsentscheidungen |
 | `01_Input/` | Skizze, Herstellerzeichnung und Fotos, die ins Modell eingeflossen sind |
 | `02_CAD/adapter.py` | parametrisches Modell, einzige Quelle der Geometrie |
 | `02_CAD/out/` | `Adapter_*` = zusammengebaut (Ansicht); `DRUCK_*` = druckfertig |
 | `03_Renderings/` | Aufmacherbild, Schnitte, Iso-Ansicht, Drucklayout |
-| `04_Fertigung/` | Druckaufträge mit Material, Passungen, Prüf- und Montageanleitung |
-
-## Status
-
-- [x] Geometrie Rev. B.1; Prototyp in Fertigung (PA12 MJF, α_T = 17° vorläufig)
-- [ ] α_T mit den Lehrkeilen bestätigen, bei Abweichung neu exportieren
-- [ ] Testmontage: Gelenk, beide Fugen, Vorspannung, Probefahrt auf der Rolle
 
 ![Schnitte](03_Renderings/Adapter_H20_Schnitte.png)
 
 ## Hinweis zur Sicherheit
 
-Der Adapter sitzt am Steuersatz und damit an einem sicherheitsrelevanten Bauteil. Er ist ein privates Eigenbauprojekt, nicht vom Hersteller freigegeben und bisher nur als Prototyp erprobt. Maße und Winkel vor dem Druck am eigenen Rad prüfen. Nutzung auf eigene Verantwortung.
+Der Adapter sitzt am Steuersatz und damit an einem sicherheitsrelevanten Bauteil. Er ist ein privates Eigenbauprojekt, nicht vom Hersteller freigegeben und nicht im Fahrbetrieb erprobt. Maße und Winkel vor dem Druck am eigenen Rad prüfen. Nutzung auf eigene Verantwortung.
 
 ## Lizenz
 
