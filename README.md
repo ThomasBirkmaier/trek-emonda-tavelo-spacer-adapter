@@ -38,6 +38,6 @@ Die wichtigsten Parameter stehen oben in `02_CAD/adapter.py`: `ALPHA_TREK`, `ALP
 
 ## Status
 
-- [x] Geometrie Rev. B.1; Prototyp bei Craftcloud in Auftrag (PA12 MJF, α_T = 17° vorläufig)
-- [ ] α_T mit den Lehrkeilen bestätigen (15–19°), bei Abweichung neu exportieren
+- [x] Geometrie Rev. B.1, Adapter bei Craftcloud in Auftrag (PA12 MJF)
+- [ ] α_T mit den Lehrkeilen bestätigen (15–19°)
 - [ ] Testmontage: Gelenk, beide Fugen gegen Licht, Vorspannung
