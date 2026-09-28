@@ -17,15 +17,14 @@ Koordinatensystem (siehe KONSTRUKTION.md):
 Aufruf (aus dem Repo-Wurzelverzeichnis):  python 02_CAD/adapter.py
   -> 02_CAD/out/Adapter_H20_T<aT>_V<aV>.*      Adapter zusammengebaut (Ansicht/Kontrolle)
   -> 02_CAD/out/DRUCK_Adapter_...stl/.3mf/.step  Drucklayout, beide Hälften getrennt
-  -> 02_CAD/out/DRUCK_Lehrkeil_<a>deg.*          Lehrkeile 15–19° zur Bestimmung von ALPHA_TREK
 """
 import math
 import os
 import cadquery as cq
 
 # ---------------------------------------------------------------- Parameter
-# Winkel (ALPHA_TREK am eigenen Rad mit den Lehrkeilen prüfen)
-ALPHA_TREK = 17.0         # Neigung Trek-Auflageebene gegen Schaftnormale -> Lehrkeile
+# Winkel
+ALPHA_TREK = 17.0         # Neigung Trek-Auflageebene gegen Schaftnormale (geschätzt: Trek-Stapel ~waagerecht bei ~73° Lenkwinkel)
 ALPHA_TAVELO = 8.0        # gemessen 2026-09-28: Tavelo-Klemmbohrung 8° nach hinten gekippt bei flach aufliegender Sitzfläche
 
 # Höhe
@@ -71,10 +70,6 @@ JOINTS = [
     dict(x=-24.1, d=3.2, e=2.4, w=1.6),   # vorn, in der 6,8-mm-Wand vor der Sichel
     dict(x=26.0, d=4.0, e=2.9, w=2.2),    # hinten, zwischen den Nasen
 ]
-
-# Lehrkeile
-GAUGE_T = 4.0
-GAUGE_ANGLES = [15.0, 16.0, 17.0, 18.0, 19.0]
 
 BIG = 200.0
 
@@ -213,24 +208,12 @@ def split_halves(body, aT, h, with_joints=True):
 
 
 # ---------------------------------------------------------------- Bauteile
-def adapter(aT=ALPHA_TREK, aV=ALPHA_TAVELO, h=HEIGHT, label=None, with_joints=True):
+def adapter(aT=ALPHA_TREK, aV=ALPHA_TAVELO, h=HEIGHT, with_joints=True):
     body = envelope(aT, aV, h).union(pins(aT, aV, h))
-    if label:
-        P, n, u, d = top_frame(aT, aV, h)
-        c = P + u * 9.0 + cq.Vector(0, -16.2, 0)
-        txt = (cq.Workplane("XY").text(label, 4.0, 1.2, kind="bold", halign="center", valign="center")
-               .translate((0, 0, -0.6)).rotate((0, 0, 0), (0, 1, 0), math.degrees(d)).translate(c))
-        body = body.cut(txt)
     A, B = split_halves(body, aT, h, with_joints)
     holes = bore_cutter(aT).union(crescent_cutter(aT)).union(nose_pocket_cutters())
     A, B = A.cut(holes), B.cut(holes)
     return A, B
-
-
-def gauge(alpha):
-    """Lehrkeil: Adaptergeometrie in 4 mm, Ober- und Unterseite parallel (nur Trek-Seite wird geprüft).
-    Zweiteilig ohne Gelenk – die Hälften werden beim Prüfen von Hand gehalten."""
-    return adapter(alpha, alpha, GAUGE_T / math.cos(math.radians(alpha)), label=f"{alpha:g}", with_joints=False)
 
 
 def export_pair(A, B, path_stem):
@@ -263,8 +246,3 @@ if __name__ == "__main__":
     print("Adapter", "Körper A/B:", len(A.solids().vals()), len(B.solids().vals()), "Volumen %.0f mm3" % v)
     bb = export_print_layout(A, B, os.path.join(out, f"DRUCK_Adapter_H{HEIGHT:g}_T{ALPHA_TREK:g}_V{ALPHA_TAVELO:g}"))
     print("  Drucklayout Bauraum %.1f x %.1f x %.1f mm" % (bb.xlen, bb.ylen, bb.zlen))
-    for a in GAUGE_ANGLES:
-        A, B = gauge(a)
-        name = f"Lehrkeil_{a:04.1f}deg".replace(".", "_")
-        export_print_layout(A, B, os.path.join(out, "DRUCK_" + name), gap=3.0)
-        print(name)

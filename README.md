@@ -20,7 +20,7 @@ Konstruiert und vermessen an genau dieser Kombination:
 | Cockpit | **Tavelo Avro Rise**, 380 mm Breite, 80 mm Länge, −10° |
 
 Nicht geprüft, aber naheliegend:
-- **Andere Größen des Émonda SL:** Der Deckel ist vermutlich gleich, der Trek-Winkel kann aber vom Lenkwinkel der Größe abhängen. Deshalb vorher mit den Lehrkeilen prüfen.
+- **Andere Größen des Émonda SL:** Der Deckel ist vermutlich gleich, der Trek-Winkel kann aber vom Lenkwinkel der Größe abhängen. Deshalb nach der Montage die untere Fuge prüfen (siehe Montage).
 - **Andere Breiten und Längen des Avro Rise:** Die Sitzfläche des Vorbaus sollte gleich sein, das ist aber nicht nachgemessen.
 - **Émonda SLR, ältere Modelljahre, andere Tavelo-Modelle, mechanische Schaltungen:** nicht kompatibel bzw. ungeprüft. Maße und Winkel stehen in [`KONSTRUKTION.md`](KONSTRUKTION.md), das Modell lässt sich anpassen.
 
@@ -43,20 +43,8 @@ Nicht geprüft, aber naheliegend:
 
 1. Datei **`02_CAD/out/DRUCK_Adapter_H20_T17_V8.stl`** (oder `.3mf`/`.step`) bei einem Druckdienst hochladen, zum Beispiel Craftcloud. Die Datei enthält beide Hälften, getrennt gelegt; die Menge ist 1.
 2. Verfahren **MJF**, Material **PA12**, Farbe schwarz. Kein FDM/PLA/PETG: Das Teil liegt in der Kraftkette der Lagervorspannung.
-3. Empfohlen: vorher mit den **Lehrkeilen** den Trek-Winkel am eigenen Rad prüfen (siehe unten).
 
 Passungen: Bohrung 0,15 mm und Gelenk 0,2 mm Spiel radial, Nasentaschen 0,3 mm pro Seite. Klemmt das Gelenk nach dem Druck, die Zapfen leicht nachschleifen oder `JOINT_CLEAR` erhöhen.
-
-### Trek-Winkel prüfen (Lehrkeile)
-
-`02_CAD/out/DRUCK_Lehrkeil_15…19deg`: fünf 4 mm dünne Keile mit 15–19°, je zweiteilig ohne Gelenk. SLA-Resin reicht, das kostet wenige Euro.
-
-1. Vorbau abnehmen, der Trek-Deckel bleibt drauf.
-2. Beide Hälften um Schaft und Leitungen legen, die Nasen in die Taschen setzen und die Hälften zusammenhalten.
-3. Gegen Licht prüfen: Der Keil, der ohne Spalt und ohne Kippeln aufliegt, gibt α_T an.
-   - Spalt **hinten** (bei den Nasen): Winkel zu groß → nächstkleineren Keil probieren
-   - Spalt **vorn** (an der Spitze): Winkel zu klein → nächstgrößeren Keil probieren
-4. Weicht der Wert von 17° ab: `ALPHA_TREK` anpassen und neu exportieren.
 
 ### Ich will das Modell anpassen
 
@@ -68,16 +56,15 @@ cd trek-emonda-tavelo-spacer-adapter
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
-python 02_CAD/adapter.py             # exportiert Adapter + Lehrkeile nach 02_CAD/out
+python 02_CAD/adapter.py             # exportiert den Adapter nach 02_CAD/out
 python 02_CAD/render_adapter.py      # Schnitte, Iso-Ansicht
-python 02_CAD/render_lehrkeil.py 17  # Rendering eines Lehrkeils
 ```
 
 Die Parameter stehen oben in [`02_CAD/adapter.py`](02_CAD/adapter.py):
 
 | Parameter | Bedeutung | Aktuell |
 |---|---|---|
-| `ALPHA_TREK` | Neigung der Trek-Sitzfläche gegen die Schaftnormale | 17,0° (mit den Lehrkeilen prüfen) |
+| `ALPHA_TREK` | Neigung der Trek-Sitzfläche gegen die Schaftnormale | 17,0° (geschätzt, siehe Montage) |
 | `ALPHA_TAVELO` | Neigung der Tavelo-Sitzfläche gegen die Schaftnormale | 8,0° (gemessen) |
 | `HEIGHT` | Höhe entlang der Schaftachse | 20 mm |
 | `JOINT_CLEAR` | radiales Spiel im Gelenk | 0,2 mm (bei engen Toleranzen 0,3) |
@@ -93,6 +80,7 @@ Die Winkel stehen im Dateinamen der Exporte (`..._T17_V8`), damit man sieht, wel
 3. Hälfte **B** (Zapfen oben) seitlich ansetzen und **entlang des Schafts** von oben einschieben, bis sie aufsitzt.
 4. Tavelo-Vorbau aufsetzen, die Stifte rasten in die Sacklöcher, Vorspannung wie gewohnt einstellen.
 5. Beide Fugen gegen Licht prüfen: Trek-Deckel ↔ Adapter und Adapter ↔ Vorbau.
+   Klafft die untere Fuge, stimmt `ALPHA_TREK` nicht: Spalt **hinten** → Wert zu groß, Spalt **vorn** → Wert zu klein. Anpassen (1° ≈ 1 mm Spalt über die Länge) und neu exportieren.
 
 ## Repository-Struktur
 

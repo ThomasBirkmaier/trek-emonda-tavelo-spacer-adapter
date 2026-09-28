@@ -40,7 +40,7 @@ Nasenwinkel abgeleitet: aus der Querausdehnung 23,2°, aus der Längsausdehnung 
 
 | Größe | Wert | Quelle |
 |---|---|---|
-| α_T: Trek-Sitzfläche gegen die Schaftnormale | **17°** | Trek-Stapel im Fahrbetrieb etwa waagerecht, Lenkwinkel ~73°; am eigenen Rad mit den Lehrkeilen 15–19° prüfen |
+| α_T: Trek-Sitzfläche gegen die Schaftnormale | **17°** | Trek-Stapel im Fahrbetrieb etwa waagerecht, Lenkwinkel ~73°; geschätzt, nicht gemessen |
 | α_V: Tavelo-Sitzfläche gegen die Schaftnormale | **8°** | gemessen: Klemmbohrung 8° nach hinten gekippt bei flach aufliegender Sitzfläche |
 | Keil zwischen Unter- und Oberseite | **α_T − α_V ≈ 9°** | hinten dünn, vorn dick |
 
@@ -59,5 +59,4 @@ Der Lenkwinkel spielt für die Passung keine Rolle. Maßgeblich sind nur die Nei
 | D-5 | **Gelenk nach Tavelo-Vorbild:** je Teilstelle zwei Zapfen mit Hals in Schlüssellochaufnahmen, unten von A nach B, oben von B nach A. Vorn: Ø 3,2 / Hals 1,6 / Versatz 2,4, bei x = −24,1. Hinten: Ø 4,0 / Hals 2,2 / Versatz 2,9, bei x = +26,0. Spiel 0,2 radial, 0,15 axial, Fuge 0,25 | Die Zapfen sperren quer. Gefügt wird durch Aufschieben von B entlang des Schafts. CAD-Kollisionstest: keine Überschneidung; quer blockiert ab ~0,5 mm; entlang des Schafts frei fügbar. |
 | D-6 | Höhe 20 entlang der Schaftachse | ersetzt einen 20-mm-Spacerstapel |
 | D-7 | Werkstoff PA12 (MJF) für das Endteil | Das Teil liegt in der Kraftkette der Lagervorspannung und wird warm; kein PLA/PETG. |
-| D-8 | Lehrkeile: 4 mm, Vollkontur, zweiteilig ohne Gelenk, Ober- und Unterseite parallel | Sie prüfen nur α_T; ein Gelenk wäre bei 4 mm zu filigran. |
-| D-9 | Drucklayout: beide Hälften in einer Datei, getrennt, Unterseite auf dem Druckbett | ein Auftrag, keine verschränkten Teile im Druck |
+| D-8 | Drucklayout: beide Hälften in einer Datei, getrennt, Unterseite auf dem Druckbett | ein Auftrag, keine verschränkten Teile im Druck |
