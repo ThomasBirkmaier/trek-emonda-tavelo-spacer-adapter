@@ -1,0 +1,5 @@
+cadquery>=2.4
+trimesh
+matplotlib
+numpy
+scipy
