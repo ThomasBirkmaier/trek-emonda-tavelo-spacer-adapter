@@ -6,6 +6,24 @@ Zweiteiliger, 3D-gedruckter Adapter, mit dem ein integriertes **Tavelo Avro Rise
 
 Das Modell ist parametrisch (Python/CadQuery). Wer einen anderen Rahmen oder andere Winkel hat, ändert ein paar Zahlen und exportiert neu.
 
+## Für welches Rad und welches Cockpit
+
+Konstruiert und vermessen an genau dieser Kombination:
+
+| | |
+|---|---|
+| Rahmen | **Trek Émonda SL 6, Modelljahr 2024** (Gen-3-Plattform), 500 Series OCLV Carbon (**SL, nicht SLR**), Größe 54 |
+| Artikel | GTIN/EAN 768682472743, Trek-Teilenr. 5297498 |
+| Steuersatz | originaler Trek-Steuersatzdeckel mit zwei Nasen hinten, bleibt montiert |
+| Gabelschaft | Carbon, Ø 28,6, seitlich abgeflacht auf 26,75 |
+| Schaltung | **105 Di2** (funkend): durch den Adapter laufen nur zwei Bremsleitungen, keine Schaltzüge |
+| Cockpit | **Tavelo Avro Rise**, 380 mm Breite, 80 mm Länge, −10° |
+
+Nicht geprüft, aber naheliegend:
+- **Andere Größen des Émonda SL:** Der Deckel ist vermutlich gleich, der Trek-Winkel kann aber vom Lenkwinkel der Größe abhängen. Deshalb vorher mit den Lehrkeilen prüfen.
+- **Andere Breiten und Längen des Avro Rise:** Die Sitzfläche des Vorbaus sollte gleich sein, das ist aber nicht nachgemessen.
+- **Émonda SLR, ältere Modelljahre, andere Tavelo-Modelle, mechanische Schaltungen:** nicht kompatibel bzw. ungeprüft. Maße und Winkel stehen in [`KONSTRUKTION.md`](KONSTRUKTION.md), das Modell lässt sich anpassen.
+
 ## Auf einen Blick
 
 | | |
