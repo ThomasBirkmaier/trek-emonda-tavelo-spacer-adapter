@@ -34,7 +34,7 @@ Adapter zwischen dem originalen Trek-Steuersatzdeckel (Émonda SL 6, 2024) und d
 | Sichel (Leitungskanal, zur Bohrung offen) | Vorderkante 6,8 hinter der Spitze; Breite außen 22,75 / innen 20,2 | x = −21,2; y = ±11,375 / ±10,1 |
 | Stifte oben (Tavelo) | Ø 3 × 1,85; Abstand 28,75; 42,0 ab Hinterkante (Prototyp 40,5: Adapter saß 1,5 zu weit vorn) | x = −12,0; y = ±14,375 (in der Oberseite) |
 | Trek-Nasen | Langloch 7,6 × 2,4 × 1,5; äußerste Punkte 20,25 auseinander, innerste 11,35; Längsausdehnung 7,0 | Mitte x = +20,0; y = ±7,9; 24° zur Längsachse, V-förmig (vorn außen) |
-| Taschen für die Nasen | Nase + 0,3 Spiel pro Seite, Tiefe 2,5 | |
+| Taschen für die Nasen | Nase + 0,3 Spiel pro Seite, Tiefe 2,5; vorderes (inneres) Ende zur Bohrung geöffnet (Durchbruch in Taschenbreite) | |
 | Höhe | 20 entlang der Schaftachse | senkrecht zur Unterseite: hinten 15,5 / Achse 20,1 / vorn 24,3 |
 
 Nasenwinkel abgeleitet: aus der Querausdehnung 23,2°, aus der Längsausdehnung 27,8°, beides erfüllt bei 24,0°. Die Maße sind auf ±0,2 konsistent; das Taschenspiel deckt die Unsicherheit ab.
@@ -55,7 +55,7 @@ Der Lenkwinkel spielt für die Passung keine Rolle. Maßgeblich sind nur die Nei
 
 | ID | Entscheidung | Begründung |
 |---|---|---|
-| D-1 | Bohrung Ø 30 senkrecht zur Schaftachse (0,7 Spiel radial zum Schaft Ø 28,6), als Langloch 2 nach hinten verlängert (32 × 30); Vorderkante 15 vor der Achse | Die Lage kommt von den Trek-Nasen unten und den Tavelo-Stiften oben, nicht vom Schaft. Das Langloch gibt dem Vorbau nach hinten Luft. Der Prototyp (Ø 28,9, Kreise parallel zur Unterseite gezeichnet) war senkrecht zur Achse längs nur 27,6 und damit enger als der Schaft. Die Tavelo-Spacer haben ebenfalls 30. Wand zu den Stiften 2,1; zu den Nasentaschen nur 0,3 (noch offen). |
+| D-1 | Bohrung Ø 30 senkrecht zur Schaftachse (0,7 Spiel radial zum Schaft Ø 28,6), als Langloch 2 nach hinten verlängert (32 × 30); Vorderkante 15 vor der Achse | Die Lage kommt von den Trek-Nasen unten und den Tavelo-Stiften oben, nicht vom Schaft. Das Langloch gibt dem Vorbau nach hinten Luft. Der Prototyp (Ø 28,9, Kreise parallel zur Unterseite gezeichnet) war senkrecht zur Achse längs nur 27,6 und damit enger als der Schaft. Die Tavelo-Spacer haben ebenfalls 30. Wand zu den Stiften 2,1. Die Nasentaschen sind zur Bohrung geöffnet (D-9). |
 | D-2 | Außenwand = Regelfläche zwischen Trek-Kontur (unten) und Tavelo-Kontur (oben) | Beide Fugen schließen bündig, obwohl die Ebenen 9° gegeneinander stehen. |
 | D-3 | Bohrung, Sichel und Gelenk entlang der Schaftachse | Das Teil wird entlang des Schafts gefügt, die Leitungen laufen parallel zum Schaft. Sichel und Gelenk sind als Profil parallel zur Unterseite definiert und entlang der Achse geschert, senkrecht zur Achse also längs um cos α_T kürzer; für sie ist das unerheblich. Die Bohrung ist ein echter Zylinder um die Achse (siehe D-1). |
 | D-4 | Zweiteilig, Teilung bei y = 0 | Montage um Schaft und Leitungen, ohne die Hydraulik zu öffnen. |
@@ -63,6 +63,8 @@ Der Lenkwinkel spielt für die Passung keine Rolle. Maßgeblich sind nur die Nei
 | D-6 | Höhe 20 entlang der Schaftachse | ersetzt einen 20-mm-Spacerstapel |
 | D-7 | Werkstoff PA12 (MJF) für das Endteil | Das Teil liegt in der Kraftkette der Lagervorspannung und wird warm; kein PLA/PETG. |
 | D-8 | Drucklayout: beide Hälften in einer Datei, getrennt, Unterseite auf dem Druckbett | ein Auftrag, keine verschränkten Teile im Druck |
+| D-9 | Nasentaschen am vorderen (inneren) Ende zur Bohrung geöffnet: Durchbruch in Taschenbreite (3,0) Richtung Schaftachse, Tiefe wie die Tasche | Durch das Langloch bliebe nur ein Steg von 0,27, der beim Druck oder bei der Montage wegbricht. Offen gibt es keine losen Splitter; die Übergänge zur Bohrung sind stumpfwinklig. Die Nasen werden seitlich und am hinteren Ende geführt. |
+| D-10 | Kantenradien: an Ober- und Unterseite Bohrung R 1,0, Leitungskanal R 0,5; innen am Übergang Langloch → Leitungskanal (Kante entlang der Achse) R 2,0 | Sauberes Aussehen, keine scharfen Kanten an den Leitungen. Am Kanal nur R 0,5, weil R 1,0 die Wand zur oberen vorderen Gelenkaufnahme auf 0,64 senkt (mit R 0,5: 1,21). |
 
 ## 6. Prototyp 1: Befund und Änderungen
 
@@ -82,9 +84,9 @@ Selbst gedruckt, am Rad montiert (2026-09-29).
 
 | ID | Punkt | Stand |
 |---|---|---|
-| O-1 | Wand zwischen Bohrungs-Langloch und Nasentaschen nur 0,27 | Durch das Langloch entstanden. Entweder so lassen (Steg bricht ggf. weg, Nasen dann nur seitlich geführt) oder die Taschen bewusst zur Bohrung öffnen. Nicht entschieden. |
-| O-2 | Weitere Kleinigkeiten am Prototyp | noch nicht besprochen |
-| O-3 | Endteil in PA12 (MJF) drucken und am Rad prüfen | nach Abschluss der Änderungen |
+| O-1 | Wand zwischen Bohrungs-Langloch und Nasentaschen nur 0,27 | erledigt: Taschen zur Bohrung geöffnet (D-9) |
+| O-2 | Feinschliff | erledigt: vorderes Gelenk verschoben (D-5), Taschen offen (D-9), Kantenradien (D-10) |
+| O-3 | Rev. C drucken und am Rad prüfen, dann Endteil in PA12 (MJF) | offen |
 
 Prüfen nach jeder Änderung: `python 02_CAD/check_adapter.py` (Kollision der Hälften, Bohrungsmaß, Wandstärken).
 
@@ -93,4 +95,4 @@ Prüfen nach jeder Änderung: `python 02_CAD/check_adapter.py` (Kollision der H�
 | Rev. | Datum | Inhalt |
 |---|---|---|
 | B.1 | 2026-09-28 | α_V = 8° gemessen → Keil 9°; Höhe entlang der Schaftachse; Regelflächen-Außenwand; Drucklayout. Stand von Prototyp 1 |
-| C | 2026-09-29 | Änderungen nach Prototyp 1 (Abschnitt 6) |
+| C | 2026-09-29 | Änderungen nach Prototyp 1 (Abschnitt 6); Taschen zur Bohrung geöffnet (D-9); Kantenradien (D-10) |

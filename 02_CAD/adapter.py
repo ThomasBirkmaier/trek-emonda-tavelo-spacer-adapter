@@ -52,6 +52,12 @@ NOSE_ANGLE = 24.0
 NOSE_CX, NOSE_CY = 20.0, 7.9
 POCKET_CLEAR = 0.3
 POCKET_DEPTH = 2.5         # Taschentiefe (vorher 1,8)
+POCKET_BRIDGE = 4.0        # Taschen vorn-innen zur Bohrung geöffnet (Steg wäre nur 0,27): Länge des Durchbruchs
+
+# Kantenradien an Ober- und Unterseite
+EDGE_R_BORE = 1.0          # Bohrung (Langloch)
+EDGE_R_CHANNEL = 0.5       # Leitungskanal; größer macht die Wand zum vorderen Gelenk zu dünn (R1: 0,64)
+EDGE_R_JUNCTION = 2.0      # innen: Übergang Langloch → Leitungskanal (Kante entlang der Achse)
 
 # Leitungskanal
 CRESCENT_FRONT_X = TIP_X + 6.8
@@ -178,13 +184,27 @@ def crescent_cutter(aT):
     return axial_prism(pts, aT, -20, 60, spline=True, periodic=False)
 
 
-def nose_pocket_cutters():
+def nose_pocket_cutters(aT=ALPHA_TREK):
+    """Taschen für die Trek-Nasen, senkrecht zur Unterseite. Das vordere (innere) Ende jeder Tasche liegt so nah an
+    der Bohrung, dass nur ein 0,27-Steg bliebe; deshalb läuft von dort ein Durchbruch gleicher Breite zur Schaftachse."""
     L, W = NOSE_L + 2 * POCKET_CLEAR, NOSE_W + 2 * POCKET_CLEAR
+    t = math.tan(math.radians(aT))
+    ax_x = 0.5 * POCKET_DEPTH * t + BORE_SLOT / math.cos(math.radians(aT))   # Langloch-Hinterkreis, halbe Taschentiefe
     res = None
     for s in (1, -1):
         ang = 180.0 - NOSE_ANGLE if s == 1 else 180.0 + NOSE_ANGLE
         p = (cq.Workplane("XY").workplane(offset=-1.0)
              .center(NOSE_CX, s * NOSE_CY).slot2D(L, W, ang).extrude(POCKET_DEPTH + 1.0))
+        if POCKET_BRIDGE > 0:
+            a = math.radians(ang)
+            cx = NOSE_CX + math.cos(a) * (L - W) / 2          # Mitte des vorderen Taschenendes
+            cy = s * NOSE_CY + math.sin(a) * (L - W) / 2
+            dx, dy = ax_x - cx, -cy
+            n = math.hypot(dx, dy); dx, dy = dx / n, dy / n
+            br = (cq.Workplane("XY").workplane(offset=-1.0)
+                  .center(cx + dx * POCKET_BRIDGE / 2, cy + dy * POCKET_BRIDGE / 2)
+                  .slot2D(POCKET_BRIDGE + W, W, math.degrees(math.atan2(dy, dx))).extrude(POCKET_DEPTH + 1.0))
+            p = p.union(br)
         res = p if res is None else res.union(p)
     return res
 
@@ -233,12 +253,40 @@ def split_halves(body, aT, h, with_joints=True):
 
 
 # ---------------------------------------------------------------- Bauteile
+def core_body(aT=ALPHA_TREK, aV=ALPHA_TAVELO, h=HEIGHT):
+    """Hülle minus Bohrung und Leitungskanal; deren Kanten an Ober- und Unterseite verrundet, dazu die beiden
+    Kanten entlang der Achse, an denen das Langloch in den Leitungskanal übergeht."""
+    from OCP.BRepFilletAPI import BRepFilletAPI_MakeFillet
+    bore, chan = bore_cutter(aT), crescent_cutter(aT)
+    body = envelope(aT, aV, h).cut(bore.union(chan)).val()
+    mk, n = BRepFilletAPI_MakeFillet(body.wrapped), 0
+
+    def on(cutter, e):
+        return cutter.distance(cq.Vertex.makeVertex(*e.positionAt(0.5).toTuple())) < 1e-4
+
+    if EDGE_R_JUNCTION > 0:
+        for e in body.Edges():
+            if on(bore.val(), e) and on(chan.val(), e):
+                mk.Add(EDGE_R_JUNCTION, e.wrapped); n += 1
+    for f in body.Faces():
+        if f.geomType() != "PLANE" or abs(f.normalAt().z) < 0.5:   # nur Ober- und Unterseite
+            continue
+        for e in f.Edges():
+            for cutter, r in ((bore.val(), EDGE_R_BORE), (chan.val(), EDGE_R_CHANNEL)):
+                if r > 0 and on(cutter, e):
+                    mk.Add(r, e.wrapped); n += 1
+                    break
+    if n == 0:
+        return cq.Workplane("XY").add(body)
+    mk.Build()
+    return cq.Workplane("XY").add(cq.Shape.cast(mk.Shape()))
+
+
 def adapter(aT=ALPHA_TREK, aV=ALPHA_TAVELO, h=HEIGHT, with_joints=True):
-    body = envelope(aT, aV, h).union(pins(aT, aV, h))
+    body = core_body(aT, aV, h).union(pins(aT, aV, h))
     A, B = split_halves(body, aT, h, with_joints)
-    holes = bore_cutter(aT).union(crescent_cutter(aT)).union(nose_pocket_cutters())
-    A, B = A.cut(holes), B.cut(holes)
-    return A, B
+    pockets = nose_pocket_cutters(aT)
+    return A.cut(pockets), B.cut(pockets)
 
 
 def export_pair(A, B, path_stem):

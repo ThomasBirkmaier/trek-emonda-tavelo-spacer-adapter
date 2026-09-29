@@ -28,6 +28,7 @@ Nach jeder Geometrieänderung alle drei in dieser Reihenfolge ausführen und Exp
 - Die Außenwand ist eine Regelfläche zwischen der Kontur unten (`bottom_outline_pts`, vorn 2,5 länger) und oben (`outline_wire_pts`). Die **Oberseite muss exakt bleiben**, dort liegt der Vorbau passgenau auf.
 - `axial_cylinder`/`axial_prism` sind geschert: Das Profil gilt parallel zur Unterseite und ist senkrecht zur Achse längs um cos 17° kürzer. Für Sichel und Gelenk ist das gewollt. Die **Bohrung** ist dagegen ein echter Zylinder (`bore_cutter`). Genau dieser Fehler hat den Prototyp am Schaft klemmen lassen.
 - Die Lage bestimmen die Trek-Nasen (Taschen unten) und die Tavelo-Stifte (oben), nicht der Schaft.
+- Die Nasentaschen sind absichtlich zur Bohrung geöffnet (`POCKET_BRIDGE`). Kantenradien (`core_body`): Bohrung R 1,0, Kanal nur R 0,5 (sonst wird die Wand zum vorderen Gelenk zu dünn), innen am Übergang Langloch → Kanal R 2,0.
 - **Richtungsregel Stifte:** Die Stifte stecken fest im Vorbau. Stifte im Adapter nach vorn → der Adapter wandert nach hinten, und umgekehrt.
 - Gelenke können nur in den zwei Stegen auf y = 0 liegen (vorn vor dem Kanal, hinten hinter der Bohrung). Das hintere Gelenk liegt bereits im Gleichgewicht zwischen Hinterkante und Nasentasche.
 
@@ -41,4 +42,4 @@ Nach jeder Geometrieänderung alle drei in dieser Reihenfolge ausführen und Exp
 
 ## Arbeitskopien
 
-GitHub (`ThomasBirkmaier/trek-emonda-tavelo-spacer-adapter`, Branch `main`) ist die Referenz. Thomas' Arbeitskopie liegt auf seinem Mac unter `~/Documents/Projects/Coding/Emonda Tavelo Spacer Adapter`. Arbeitet eine Cloud-Session ohne Push-Recht vom Mac aus, geht der Abgleich per `git bundle`: Bundle in den Repo-Root legen (nicht nach `.git`), `git fetch <bundle> main`, dann fast-forward, danach das Bundle löschen. `*.bundle` ist ignoriert. Auf dem Mac `git --no-optional-locks status` verwenden, damit keine `index.lock` liegen bleibt.
+GitHub (`ThomasBirkmaier/trek-emonda-tavelo-spacer-adapter`, Branch `main`) ist die Referenz. Thomas' Arbeitskopie liegt auf seinem Mac unter `~/Documents/Projects/Coding/Emonda Tavelo Spacer Adapter`. Arbeitet eine Cloud-Session ohne Push-Recht vom Mac aus, geht der Abgleich per `git bundle`: Bundle in den Repo-Root legen (nicht nach `.git`), `git fetch <bundle> main`, dann fast-forward, danach das Bundle löschen. `*.bundle` ist ignoriert. Auf dem Mac `git --no-optional-locks status` verwenden, damit keine `index.lock` liegen bleibt. PNGs nie einzeln per Dateiübertragung auf den Mac schreiben (sie bekommen dabei einen C2PA-Metadatenblock und gelten für Git als geändert), sondern per Bundle oder als Archiv.

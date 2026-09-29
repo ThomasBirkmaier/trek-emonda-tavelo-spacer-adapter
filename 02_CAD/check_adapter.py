@@ -2,7 +2,7 @@
 
 Aufruf (aus dem Repo-Wurzelverzeichnis):  python 02_CAD/check_adapter.py
 Wandstärken sind kürzeste Abstände zwischen den Schnittkörpern (OCCT), in mm.
-Stand Rev. C (siehe KONSTRUKTION.md): Nasentasche 0,27 (offen, O-1), sonst ≥ 1,6.
+Die Nasentaschen sind absichtlich zur Bohrung geöffnet (POCKET_BRIDGE), dort ist der Abstand 0.
 """
 import math
 import sys
@@ -17,9 +17,9 @@ aT, aV, h = A.ALPHA_TREK, A.ALPHA_TAVELO, A.HEIGHT
 env = A.envelope(aT, aV, h)
 side = [f for f in env.val().Faces() if f.geomType() != "PLANE"]   # Außenwand ohne Ober-/Unterseite
 bore = A.bore_cutter(aT).val()
-pockets = A.nose_pocket_cutters().val()
+pockets = A.nose_pocket_cutters(aT).val()
 pins = A.pins(aT, aV, h).val()
-holes = A.bore_cutter(aT).union(A.crescent_cutter(aT)).val()
+holes = env.cut(A.core_body(aT, aV, h)).val()   # Bohrung + Kanal inkl. Kantenradien
 
 
 def wall_out(solid):
@@ -39,8 +39,8 @@ print(f"Bohrung senkrecht zur Achse: längs {loc.xmin:.2f} … {loc.xmax:.2f} ({
       f"   Schaft Ø {A.STEERER_D}")
 
 # Wandstärken
-rows.append(("Bohrung ↔ Nasentasche", bore.distance(pockets)))
-rows.append(("Bohrung ↔ Stift", bore.distance(pins)))
+print(f"Nasentaschen zur Bohrung {'offen' if bore.distance(pockets) < 1e-6 else 'GESCHLOSSEN'}")
+rows.append(("Bohrung ↔ Stift", bore.distance(pins)))   # Wand; die Bohrungsrundung (R1) liegt auf der Oberseite dazwischen
 rows.append(("Bohrung ↔ Außenwand", wall_out(bore)))
 rows.append(("Stift ↔ Außenwand", wall_out(pins)))
 zm = h * math.cos(math.radians(aT)) / 2

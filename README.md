@@ -37,6 +37,7 @@ Nicht geprüft, aber naheliegend:
 | Schaft | Ø 28,6 (seitlich abgeflacht auf 26,75), Bohrung Ø 30 als Langloch 2 mm nach hinten (32 × 30): Die Lage kommt von Nasen und Stiften |
 | Leitungen | Kanal vor dem Schaft für zwei Bremsleitungen (Di2, funkend) |
 | Teilung | zwei Hälften mit Gelenk nach Tavelo-Vorbild, werden entlang des Schafts zusammengeschoben |
+| Kanten | Bohrung und Leitungskanal an Ober- und Unterseite sowie am Übergang verrundet |
 | Werkstoff | PA12, MJF-Druck |
 
 ## Schnellstart
