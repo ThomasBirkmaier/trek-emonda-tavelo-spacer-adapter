@@ -32,7 +32,7 @@ Nicht geprüft, aber naheliegend:
 | Oberseite | passt unter den Tavelo-Vorbau: Neigung α_V = 8°, zwei Stifte Ø 3 greifen in die Sacklöcher |
 | Keil | ≈ 9°, hinten dünn (15,5 mm), vorn dick (24,3 mm) |
 | Höhe | 20 mm entlang der Schaftachse (ersetzt einen 20-mm-Spacerstapel) |
-| Schaft | Ø 28,6 (seitlich abgeflacht auf 26,75), Bohrung Ø 28,9 |
+| Schaft | Ø 28,6 (seitlich abgeflacht auf 26,75), Bohrung Ø 30 als Langloch 2 mm nach hinten (32 × 30): Die Lage kommt von Nasen und Stiften |
 | Leitungen | Kanal vor dem Schaft für zwei Bremsleitungen (Di2, funkend) |
 | Teilung | zwei Hälften mit Gelenk nach Tavelo-Vorbild, werden entlang des Schafts zusammengeschoben |
 | Werkstoff | PA12, MJF-Druck |
@@ -44,7 +44,7 @@ Nicht geprüft, aber naheliegend:
 1. Datei **`02_CAD/out/DRUCK_Adapter_H20_T17_V8.stl`** (oder `.3mf`/`.step`) bei einem Druckdienst hochladen, zum Beispiel Craftcloud. Die Datei enthält beide Hälften, getrennt gelegt; die Menge ist 1.
 2. Verfahren **MJF**, Material **PA12**, Farbe schwarz. Kein FDM/PLA/PETG: Das Teil liegt in der Kraftkette der Lagervorspannung.
 
-Passungen: Bohrung 0,15 mm und Gelenk 0,2 mm Spiel radial, Nasentaschen 0,3 mm pro Seite. Klemmt das Gelenk nach dem Druck, die Zapfen leicht nachschleifen oder `JOINT_CLEAR` erhöhen.
+Passungen: Bohrung Ø 30 (0,7 mm Spiel radial zum Schaft, nach hinten 2 mm Langloch), Gelenk 0,2 mm Spiel radial, Nasentaschen 0,3 mm pro Seite. Klemmt das Gelenk nach dem Druck, die Zapfen leicht nachschleifen oder `JOINT_CLEAR` erhöhen.
 
 ### Ich will das Modell anpassen
 
@@ -68,7 +68,7 @@ Die Parameter stehen oben in [`02_CAD/adapter.py`](02_CAD/adapter.py):
 | `ALPHA_TAVELO` | Neigung der Tavelo-Sitzfläche gegen die Schaftnormale | 8,0° (gemessen) |
 | `HEIGHT` | Höhe entlang der Schaftachse | 20 mm |
 | `JOINT_CLEAR` | radiales Spiel im Gelenk | 0,2 mm (bei engen Toleranzen 0,3) |
-| `BORE_CLEAR` | radiales Spiel Bohrung/Schaft | 0,15 mm |
+| `BORE_D`, `BORE_SLOT` | Bohrungsdurchmesser, Langloch nach hinten | 30 mm (Schaft 28,6), 2 mm |
 | `outline_wire_pts()`, `NOSE_*`, `PIN_*` | Kontur, Nasen, Stifte | laut Skizze V2 |
 
 Die Winkel stehen im Dateinamen der Exporte (`..._T17_V8`), damit man sieht, welche Version man druckt.

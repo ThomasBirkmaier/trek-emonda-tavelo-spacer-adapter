@@ -33,7 +33,8 @@ HEIGHT = 20.0             # Adapterhöhe entlang der Schaftachse (Durchstoßpunk
 # Schaft
 STEERER_D = 28.6
 STEERER_FLAT = 26.75      # seitliche Abflachungen (nur Info, Bohrung rund)
-BORE_CLEAR = 0.15
+BORE_D = 30.0             # großzügig: Lage kommt von Trek-Nasen und Tavelo-Stiften, nicht vom Schaft (Prototyp 28,9 zu eng)
+BORE_SLOT = 2.0           # Langloch: Hinterkante 2 weiter hinten, Vorderkante fest (Luft für den Vorbau)
 
 # Außenkontur (Skizze V2; Freiform nach Vorgabe frei gestaltet)
 REAR_X = 30.0
@@ -68,7 +69,7 @@ JOINT_ZGAP = 0.15         # Luft in Schaftrichtung zwischen oberem und unterem Z
 JOINTS = [
     # x-Position, Zapfen-Ø, Versatz Zapfenmitte über die Fuge, Halsbreite
     # Versatz e > Zapfenradius + Spiel + ~0,6 mm, damit die Aufnahme echte Hinterschnitt-Lippen hat
-    dict(x=-24.1, d=3.2, e=2.4, w=1.6),   # vorn, in der 6,8-mm-Wand vor der Sichel
+    dict(x=-24.85, d=3.2, e=2.4, w=1.6),  # vorn, in der Wand vor der Sichel (Prototyp -24,1: nur 1,05 zum Kanal)
     dict(x=26.0, d=4.0, e=2.9, w=2.2),    # hinten, zwischen den Nasen
 ]
 
@@ -151,7 +152,19 @@ def envelope(aT, aV, h):
 
 
 def bore_cutter(aT):
-    return axial_cylinder(0, 0, STEERER_D / 2 + BORE_CLEAR, aT, -20, 60)
+    """Bohrung senkrecht zur Schaftachse rund (Ø BORE_D), als Langloch um BORE_SLOT nach hinten verlängert.
+    Vorderkante fest bei BORE_D/2 vor der Achse. Richtung 'hinten' senkrecht zur Achse in der x-z-Ebene."""
+    t = math.radians(aT)
+    ax = cq.Vector(math.sin(t), 0, math.cos(t))
+    back = cq.Vector(math.cos(t), 0, -math.sin(t))
+    r, base, length = BORE_D / 2, ax * -30, 90
+    s = cq.Solid.makeCylinder(r, length, base, ax)
+    if BORE_SLOT > 0:
+        s = s.fuse(cq.Solid.makeCylinder(r, length, base + back * BORE_SLOT, ax))
+        box = (cq.Solid.makeBox(BORE_SLOT, BORE_D, length, pnt=cq.Vector(0, -r, 0))
+               .rotate(cq.Vector(), cq.Vector(0, 1, 0), aT).translate(base))
+        s = s.fuse(box)
+    return cq.Workplane("XY").add(s.clean())
 
 
 def crescent_cutter(aT):
