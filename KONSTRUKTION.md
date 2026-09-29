@@ -8,7 +8,7 @@ Adapter zwischen dem originalen Trek-Steuersatzdeckel (Émonda SL 6, 2024) und d
 
 | ID | Schnittstelle | Gegenstück | Festlegung |
 |---|---|---|---|
-| IF-1 | Unterseite ↔ Trek-Deckel | originaler Trek-Deckel, bleibt unverändert | Kontur 58 × 39,5, zwei Nasen, Neigung α_T |
+| IF-1 | Unterseite ↔ Trek-Deckel | originaler Trek-Deckel, bleibt unverändert | Kontur 60,5 × 39,5 (Spitze 2,5 weiter vorn als oben), zwei Nasen, Neigung α_T |
 | IF-2 | Oberseite ↔ Tavelo-Vorbau | Vorbauunterseite (identisch zur Spacer-Sitzfläche) | Kontur 58 × 39,5, zwei Stifte in die Sacklöcher des Vorbaus, Neigung α_V |
 | IF-3 | Bohrung ↔ Gabelschaft | Carbonschaft Ø 28,6, seitlich abgeflacht auf 26,75 | Bohrung Ø 28,9, rund, entlang der Schaftachse |
 | IF-4 | Leitungsführung | 2 Bremsleitungen (Di2 funkt) | Tavelo-Kanal → Sichel → Öffnung im Trek-Deckel → Rahmen |
@@ -25,13 +25,14 @@ Adapter zwischen dem originalen Trek-Steuersatzdeckel (Émonda SL 6, 2024) und d
 
 | Merkmal | Wert | Im Koordinatensystem |
 |---|---|---|
-| Kontur (unten Trek, oben Tavelo, jeweils in der eigenen Ebene) | 58 × 39,5 | x = −28 … +30; y = ±19,75 |
+| Kontur oben (Tavelo, in der Oberseite) | 58 × 39,5 | x = −28 … +30; y = ±19,75 |
+| Kontur unten (Trek, in der Unterseite) | 60,5 × 39,5: vordere Hälfte nach vorn gestreckt, Spitze 2,5 weiter vorn; hintere Hälfte wie oben | x = −30,5 … +30 |
 | Bohrungsmitte → Hinterkante | 30 | |
 | vordere Bohrungskante → Spitze | 13,0 | |
 | Sichel (Leitungskanal, zur Bohrung offen) | Vorderkante 6,8 hinter der Spitze; Breite außen 22,75 / innen 20,2 | x = −21,2; y = ±11,375 / ±10,1 |
-| Stifte oben (Tavelo) | Ø 3 × 1,85; Abstand 28,75; 40,5 ab Hinterkante | x = −10,5; y = ±14,375 (in der Oberseite) |
+| Stifte oben (Tavelo) | Ø 3 × 1,85; Abstand 28,75; 42,0 ab Hinterkante (Prototyp 40,5: Adapter saß 1,5 zu weit vorn) | x = −12,0; y = ±14,375 (in der Oberseite) |
 | Trek-Nasen | Langloch 7,6 × 2,4 × 1,5; äußerste Punkte 20,25 auseinander, innerste 11,35; Längsausdehnung 7,0 | Mitte x = +20,0; y = ±7,9; 24° zur Längsachse, V-förmig (vorn außen) |
-| Taschen für die Nasen | Nase + 0,3 Spiel pro Seite, Tiefe 1,8 | |
+| Taschen für die Nasen | Nase + 0,3 Spiel pro Seite, Tiefe 2,5 | |
 | Höhe | 20 entlang der Schaftachse | senkrecht zur Unterseite: hinten 15,5 / Achse 20,1 / vorn 24,3 |
 
 Nasenwinkel abgeleitet: aus der Querausdehnung 23,2°, aus der Längsausdehnung 27,8°, beides erfüllt bei 24,0°. Die Maße sind auf ±0,2 konsistent; das Taschenspiel deckt die Unsicherheit ab.

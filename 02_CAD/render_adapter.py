@@ -24,7 +24,7 @@ aT = math.radians(ad.ALPHA_TREK)
 ax.plot([-8 * math.sin(aT), 32 * math.sin(aT)], [-8 * math.cos(aT), 32 * math.cos(aT)], "r--", lw=0.8, label="Schaftachse")
 ax.set_aspect("equal"); ax.grid(True, alpha=.35); ax.legend(fontsize=8, loc="upper left")
 ax.set_title(f"Seitenschnitt y = 8: Keil {ad.ALPHA_TREK - ad.ALPHA_TAVELO:g}°, vorn = links", fontsize=10)
-ax.set_xlabel("x in mm (+ hinten)"); ax.set_ylabel("z in mm"); ax.set_xlim(-32, 38); ax.set_ylim(-6, 30)
+ax.set_xlabel("x in mm (+ hinten)"); ax.set_ylabel("z in mm"); ax.set_xlim(-34, 38); ax.set_ylim(-6, 30)
 for ax, (z, t) in zip(axs[:3], zs):
     for m, k in ((mA, "A"), (mB, "B")):
         s = m.section(plane_origin=[0, 0, z], plane_normal=[0, 0, 1])
@@ -32,7 +32,7 @@ for ax, (z, t) in zip(axs[:3], zs):
             for e in s.discrete: ax.plot(e[:, 0], e[:, 1], "-", color=cols[k], lw=1.1)
     ax.axhline(0, color="k", lw=0.3, ls="--")
     ax.set_aspect("equal"); ax.grid(True, alpha=.35); ax.set_title(t, fontsize=10)
-    ax.set_xlabel("x in mm (+ hinten)"); ax.set_xlim(-30, 36); ax.set_ylim(-22, 22)
+    ax.set_xlabel("x in mm (+ hinten)"); ax.set_xlim(-33, 36); ax.set_ylim(-22, 22)
 fig.suptitle(f"Adapter H{H:g} – α_Trek {ad.ALPHA_TREK:g}°, α_Tavelo {ad.ALPHA_TAVELO:g}° – Hälfte A (y>0) blau, B (y<0) orange", fontsize=12)
 fig.tight_layout(); fig.savefig("03_Renderings/Adapter_H20_Schnitte.png", dpi=95)
 

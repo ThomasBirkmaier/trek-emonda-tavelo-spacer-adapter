@@ -39,13 +39,14 @@ BORE_CLEAR = 0.15
 REAR_X = 30.0
 TIP_X = -28.0             # 13,0 ab vorderer Bohrungskante (bemaßt) + ~15
 HALF_W = 19.75
+BOTTOM_TIP_EXTRA = 2.5     # Unterseite: Spitze 2,5 weiter vorn als oben (Stirnwand vorn stärker geneigt)
 
 # Trek-Nasen
 NOSE_L, NOSE_W, NOSE_H = 7.6, 2.4, 1.5
 NOSE_ANGLE = 24.0
 NOSE_CX, NOSE_CY = 20.0, 7.9
 POCKET_CLEAR = 0.3
-POCKET_DEPTH = NOSE_H + 0.3
+POCKET_DEPTH = 2.5         # Taschentiefe (vorher 1,8)
 
 # Leitungskanal
 CRESCENT_FRONT_X = TIP_X + 6.8
@@ -54,7 +55,7 @@ CRESCENT_HALF_IN = 20.2 / 2
 
 # Stifte oben (greifen in die Sacklöcher der Tavelo-Vorbauunterseite)
 PIN_D, PIN_H = 3.0, 1.85
-PIN_X = REAR_X - 40.5
+PIN_X = REAR_X - 42.0   # Prototyp: 40,5 → Adapter saß 1,5 zu weit vorn
 PIN_Y = 28.75 / 2
 
 # Teilung + Gelenk nach Tavelo-Vorbild:
@@ -131,12 +132,19 @@ def above_top_cutter(aT, aV, h):
 
 
 # ---------------------------------------------------------------- Features
+def bottom_outline_pts():
+    """Trek-Kontur der Unterseite: wie die Tavelo-Kontur, aber die vordere Hälfte (x < 0) nach vorn gestreckt,
+    sodass die Spitze um BOTTOM_TIP_EXTRA weiter vorn liegt. Quadratischer Verlauf: bei x = 0 tangential
+    auslaufend, damit die hintere Hälfte unverändert bleibt."""
+    return [(x - BOTTOM_TIP_EXTRA * (x / TIP_X) ** 2 if x < 0 else x, y) for (x, y) in outline_wire_pts()]
+
+
 def envelope(aT, aV, h):
-    """Regelfläche zwischen Trek-Kontur in der Unterseite (z=0) und Tavelo-Kontur in der Oberseite.
+    """Regelfläche zwischen Trek-Kontur in der Unterseite (z=0, bottom_outline_pts) und Tavelo-Kontur in der Oberseite.
     Beide Konturen sind relativ zum jeweiligen Durchstoßpunkt der Schaftachse definiert."""
     P, n, u, d = top_frame(aT, aV, h)
     pts = outline_wire_pts()
-    bottom = cq.Workplane("XY").spline(pts, periodic=True, includeCurrent=False).close().wire().val()
+    bottom = cq.Workplane("XY").spline(bottom_outline_pts(), periodic=True, includeCurrent=False).close().wire().val()
     top = (cq.Workplane("XY").spline(pts, periodic=True, includeCurrent=False).close()
            .rotate((0, 0, 0), (0, 1, 0), math.degrees(d)).translate(P).wire().val())
     return cq.Workplane("XY").add(cq.Solid.makeLoft([bottom, top], True))
