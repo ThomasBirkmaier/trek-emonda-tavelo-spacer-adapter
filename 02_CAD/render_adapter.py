@@ -1,6 +1,6 @@
 """Renderings des zweiteiligen Adapters: Schnitte in mehreren Höhen (Hälfte A blau, B orange), Iso/Explosion, Drucklayout.
 Vorher python 02_CAD/adapter.py ausführen (das Drucklayout wird aus 02_CAD/out/DRUCK_*.stl gelesen)."""
-import sys, math, numpy as np, trimesh, matplotlib
+import sys, os, math, tempfile, numpy as np, trimesh, matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
@@ -8,9 +8,10 @@ sys.path.insert(0, "02_CAD")
 import adapter as ad, cadquery as cq
 
 A, B = ad.adapter()
-cq.exporters.export(A, "/tmp/A.stl", tolerance=0.02, angularTolerance=0.1)
-cq.exporters.export(B, "/tmp/B.stl", tolerance=0.02, angularTolerance=0.1)
-mA, mB = trimesh.load("/tmp/A.stl"), trimesh.load("/tmp/B.stl")
+tmp = tempfile.mkdtemp()
+cq.exporters.export(A, os.path.join(tmp, "A.stl"), tolerance=0.02, angularTolerance=0.1)
+cq.exporters.export(B, os.path.join(tmp, "B.stl"), tolerance=0.02, angularTolerance=0.1)
+mA, mB = trimesh.load(os.path.join(tmp, "A.stl")), trimesh.load(os.path.join(tmp, "B.stl"))
 H = ad.HEIGHT
 cols = {"A": "tab:blue", "B": "tab:orange"}
 zs = [(0.5, "z = 0,5: Unterseite, Taschen für Trek-Nasen"), (4.5, "z = 4,5: unterer Zapfen von A greift in B"),

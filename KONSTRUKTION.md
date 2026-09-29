@@ -2,7 +2,7 @@
 
 Adapter zwischen dem originalen Trek-Steuersatzdeckel (Émonda SL 6, 2024) und dem Tavelo-Avro-Rise-Cockpit.
 
-**Stand:** Rev. C, 2026-09-29: Prototyp 1 gedruckt und am Rad geprüft, Änderungen eingearbeitet (Abschnitt 6).
+**Stand:** Rev. C, 2026-09-29: Prototyp 1 gedruckt und am Rad geprüft, Änderungen eingearbeitet (Abschnitt 6). Prototyp 2 (Rev. C, FDM) ist in Fertigung. Nächster Schritt: dessen Befund in Abschnitt 6 eintragen.
 
 ---
 
@@ -18,7 +18,7 @@ Adapter zwischen dem originalen Trek-Steuersatzdeckel (Émonda SL 6, 2024) und d
 ## 2. Koordinatensystem
 
 - **Ursprung:** Durchstoßpunkt der Schaftachse durch die Unterseite
-- **x:** Längsachse, **+x nach hinten** (Richtung Oberrohr), Spitze vorn bei x = −28
+- **x:** Längsachse, **+x nach hinten** (Richtung Oberrohr); Spitze vorn bei x = −28 (Oberseite) bzw. −30,5 (Unterseite)
 - **y:** quer; Teilungsebene y = 0, Hälfte A bei y > 0, Hälfte B bei y < 0
 - **z:** Normale der Unterseite
 - **Schaftachse:** um α_T gegen z nach hinten geneigt
@@ -36,6 +36,8 @@ Adapter zwischen dem originalen Trek-Steuersatzdeckel (Émonda SL 6, 2024) und d
 | Trek-Nasen | Langloch 7,6 × 2,4 × 1,5; äußerste Punkte 20,25 auseinander, innerste 11,35; Längsausdehnung 7,0 | Mitte x = +20,0; y = ±7,9; 24° zur Längsachse, V-förmig (vorn außen) |
 | Taschen für die Nasen | Nase + 0,3 Spiel pro Seite, Tiefe 2,5; vorderes (inneres) Ende zur Bohrung geöffnet (Durchbruch in Taschenbreite) | |
 | Höhe | 20 entlang der Schaftachse | senkrecht zur Unterseite: hinten 15,5 / Achse 20,1 / vorn 24,3 |
+
+Die Skizze V2 in `01_Input/` nennt eine Gesamtlänge von 52,2; das war ein Messfehler, richtig sind 58 (13 + ~15 + 30).
 
 Nasenwinkel abgeleitet: aus der Querausdehnung 23,2°, aus der Längsausdehnung 27,8°, beides erfüllt bei 24,0°. Die Maße sind auf ±0,2 konsistent; das Taschenspiel deckt die Unsicherheit ab.
 
@@ -86,7 +88,13 @@ Selbst gedruckt, am Rad montiert (2026-09-29).
 |---|---|---|
 | O-1 | Wand zwischen Bohrungs-Langloch und Nasentaschen nur 0,27 | erledigt: Taschen zur Bohrung geöffnet (D-9) |
 | O-2 | Feinschliff | erledigt: vorderes Gelenk verschoben (D-5), Taschen offen (D-9), Kantenradien (D-10) |
-| O-3 | Rev. C drucken und am Rad prüfen, dann Endteil in PA12 (MJF) | offen |
+| O-3 | Prototyp 2 (Rev. C, FDM) am Rad prüfen, dann Endteil in PA12 (MJF) | Prototyp 2 in Fertigung. Prüfen: Stifte ohne Druck in den Sacklöchern, B ohne Klemmen aufschiebbar, vorn und hinten bündig, Aufziehen ohne Feilen, Fugen dicht |
+| O-4 | Idee: Stahlstifte statt gedruckter Stifte (Zylinderstift Ø 3 × 6, ISO 8734, in Bohrung ≈ Ø 2,9 eingepresst; Passmaß ist eine Annahme) | nicht umgesetzt; erst Durchmesser und Tiefe der Sacklöcher im Vorbau messen (bisher ungemessen) |
+| O-5 | Idee: Einführfasen 0,3 an den Stiftspitzen, 0,3–0,5 an den Enden der Gelenkzapfen | nicht umgesetzt; erleichtert die Montage |
+| O-6 | Idee: Gelenkspiel für MJF auf 0,25–0,3 (`JOINT_CLEAR`) | nicht umgesetzt; Einschätzung, kein Messwert. 0,2 hat im FDM-Prototyp gepasst |
+| O-7 | Idee: „A“, „B“ und Revision innen einprägen; Oberfläche des Endteils gefärbt und dampfgeglättet | nicht umgesetzt |
+
+Geprüft und unkritisch (Review Rev. C): Die Vorspannung (angenommen 1–2 kN) drückt den 9°-Keil mit ≈ 16 % nach hinten; Reibung an Ober- und Unterseite (μ ≈ 0,2) hält das allein, dazu Stifte, Nasenflanken und nach 0,7 der Schaft. Flächenpressung ≈ 1–2 MPa auf je ≈ 900 mm². Das Gelenk trägt keine Fahrlasten, jede Hälfte sitzt über eigene Nase und eigenen Stift. Lenk- und Biegemomente laufen über die Vorbauklemmung in den Schaft.
 
 Prüfen nach jeder Änderung: `python 02_CAD/check_adapter.py` (Kollision der Hälften, Bohrungsmaß, Wandstärken).
 

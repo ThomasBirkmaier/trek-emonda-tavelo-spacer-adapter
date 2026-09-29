@@ -6,7 +6,7 @@ Zweiteiliger, 3D-gedruckter Adapter, mit dem ein integriertes **Tavelo Avro Rise
 
 Das Modell ist parametrisch (Python/CadQuery). Wer einen anderen Rahmen oder andere Winkel hat, ändert ein paar Zahlen und exportiert neu.
 
-**Stand:** Ein erster Prototyp wurde gedruckt und am Rad geprüft, die Korrekturen sind eingearbeitet (Rev. C, siehe [`KONSTRUKTION.md`](KONSTRUKTION.md)). Das Endteil in PA12 ist noch nicht gedruckt.
+**Stand (Rev. C, 2026-09-29):** Prototyp 1 wurde gedruckt und am Rad geprüft, alle Korrekturen sind eingearbeitet. Prototyp 2 (Rev. C, FDM) ist in Fertigung, das Endteil in PA12 ist noch nicht gedruckt. Details, Befund und offene Punkte: [`KONSTRUKTION.md`](KONSTRUKTION.md).
 
 ## Für welches Rad und welches Cockpit
 
@@ -45,13 +45,13 @@ Nicht geprüft, aber naheliegend:
 ### Ich will nur drucken
 
 1. Datei **`02_CAD/out/DRUCK_Adapter_H20_T17_V8.stl`** (oder `.3mf`/`.step`) bei einem Druckdienst hochladen, zum Beispiel Craftcloud. Die Datei enthält beide Hälften, getrennt gelegt; die Menge ist 1.
-2. Verfahren **MJF**, Material **PA12**, Farbe schwarz. Kein FDM/PLA/PETG: Das Teil liegt in der Kraftkette der Lagervorspannung.
+2. Verfahren **MJF**, Material **PA12**, Farbe schwarz. Zum Fahren kein FDM/PLA/PETG: Das Teil liegt in der Kraftkette der Lagervorspannung. Für eine reine Passprobe reicht ein FDM-Druck (Unterseite aufs Druckbett, so liegt sie in der Datei).
 
 Passungen: Bohrung Ø 30 (0,7 mm Spiel radial zum Schaft, nach hinten 2 mm Langloch), Gelenk 0,2 mm Spiel radial, Nasentaschen 0,3 mm pro Seite. Klemmt das Gelenk nach dem Druck, die Zapfen leicht nachschleifen oder `JOINT_CLEAR` erhöhen.
 
 ### Ich will das Modell anpassen
 
-Voraussetzung: Python 3.10–3.12.
+Voraussetzung: Python 3.10–3.12 (getestet mit 3.11).
 
 ```bash
 git clone https://github.com/ThomasBirkmaier/trek-emonda-tavelo-spacer-adapter.git
@@ -85,6 +85,7 @@ Die Winkel stehen im Dateinamen der Exporte (`..._T17_V8`), damit man sieht, wel
 4. Tavelo-Vorbau aufsetzen, die Stifte rasten in die Sacklöcher, Vorspannung wie gewohnt einstellen.
 5. Beide Fugen gegen Licht prüfen: Trek-Deckel ↔ Adapter und Adapter ↔ Vorbau.
    Klafft die untere Fuge, stimmt `ALPHA_TREK` nicht: Spalt **hinten** → Wert zu groß, Spalt **vorn** → Wert zu klein. Anpassen (1° ≈ 1 mm Spalt über die Länge) und neu exportieren.
+6. Nach den ersten Ausfahrten das Steuersatzspiel prüfen und bei Bedarf nachstellen: Kunststoff kann sich unter der Vorspannung etwas setzen.
 
 ## Repository-Struktur
 
@@ -92,11 +93,11 @@ Die Winkel stehen im Dateinamen der Exporte (`..._T17_V8`), damit man sieht, wel
 |---|---|
 | [`KONSTRUKTION.md`](KONSTRUKTION.md) | Schnittstellen, Koordinatensystem, Maße, Winkel, Konstruktionsentscheidungen, Befund Prototyp, offene Punkte |
 | [`CLAUDE.md`](CLAUDE.md) | Arbeitsanweisungen für Claude Code (Einstieg in neue Sessions) |
-| `01_Input/` | Skizze, Herstellerzeichnung und Fotos, die ins Modell eingeflossen sind |
+| `01_Input/` | Skizze, Herstellerzeichnung und Fotos, die ins Modell eingeflossen sind (Rohdaten; die Skizze enthält noch die verworfene Länge 52, richtig ist 58) |
 | `02_CAD/adapter.py` | parametrisches Modell, einzige Quelle der Geometrie |
 | `02_CAD/check_adapter.py`, `02_CAD/render_adapter.py` | Prüfungen und Renderings |
 | `02_CAD/out/` | `Adapter_*` = zusammengebaut (Ansicht); `DRUCK_*` = druckfertig |
-| `03_Renderings/` | Aufmacherbild, Schnitte, Iso-Ansicht, Drucklayout |
+| `03_Renderings/` | Aufmacherbild (generiert, Rev. C), Schnitte, Iso-Ansicht, Drucklayout (von `render_adapter.py` erzeugt) |
 
 ![Schnitte](03_Renderings/Adapter_H20_Schnitte.png)
 
