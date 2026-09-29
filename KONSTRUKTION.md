@@ -2,6 +2,8 @@
 
 Adapter zwischen dem originalen Trek-Steuersatzdeckel (Émonda SL 6, 2024) und dem Tavelo-Avro-Rise-Cockpit.
 
+**Stand:** Rev. C, 2026-09-29: Prototyp 1 gedruckt und am Rad geprüft, Änderungen eingearbeitet (Abschnitt 6).
+
 ---
 
 ## 1. Schnittstellen
@@ -28,7 +30,7 @@ Adapter zwischen dem originalen Trek-Steuersatzdeckel (Émonda SL 6, 2024) und d
 | Kontur oben (Tavelo, in der Oberseite) | 58 × 39,5 | x = −28 … +30; y = ±19,75 |
 | Kontur unten (Trek, in der Unterseite) | 60,5 × 39,5: vordere Hälfte nach vorn gestreckt, Spitze 2,5 weiter vorn; hintere Hälfte wie oben | x = −30,5 … +30 |
 | Bohrungsmitte → Hinterkante | 30 | |
-| vordere Bohrungskante → Spitze | 13,0 | |
+| vordere Bohrungskante → Spitze | 13,0 (Messmaß am Tavelo-Spacer, legt die Spitze fest) | |
 | Sichel (Leitungskanal, zur Bohrung offen) | Vorderkante 6,8 hinter der Spitze; Breite außen 22,75 / innen 20,2 | x = −21,2; y = ±11,375 / ±10,1 |
 | Stifte oben (Tavelo) | Ø 3 × 1,85; Abstand 28,75; 42,0 ab Hinterkante (Prototyp 40,5: Adapter saß 1,5 zu weit vorn) | x = −12,0; y = ±14,375 (in der Oberseite) |
 | Trek-Nasen | Langloch 7,6 × 2,4 × 1,5; äußerste Punkte 20,25 auseinander, innerste 11,35; Längsausdehnung 7,0 | Mitte x = +20,0; y = ±7,9; 24° zur Längsachse, V-förmig (vorn außen) |
@@ -41,8 +43,8 @@ Nasenwinkel abgeleitet: aus der Querausdehnung 23,2°, aus der Längsausdehnung 
 
 | Größe | Wert | Quelle |
 |---|---|---|
-| α_T: Trek-Sitzfläche gegen die Schaftnormale | **17°** | Trek-Stapel im Fahrbetrieb etwa waagerecht, Lenkwinkel ~73°; geschätzt, nicht gemessen |
-| α_V: Tavelo-Sitzfläche gegen die Schaftnormale | **8°** | gemessen: Klemmbohrung 8° nach hinten gekippt bei flach aufliegender Sitzfläche |
+| α_T: Trek-Sitzfläche gegen die Schaftnormale | **17°** | geschätzt (Trek-Stapel im Fahrbetrieb etwa waagerecht, Lenkwinkel ~73°), **am Prototyp 1 bestätigt**: untere Fuge schließt |
+| α_V: Tavelo-Sitzfläche gegen die Schaftnormale | **8°** | gemessen: Klemmbohrung 8° nach hinten gekippt bei flach aufliegender Sitzfläche; am Prototyp 1 bestätigt |
 | Keil zwischen Unter- und Oberseite | **α_T − α_V ≈ 9°** | hinten dünn, vorn dick |
 
 Gegenprobe α_V: Der Vorbau steht 80° zur Schaftachse und fällt damit relativ zur eigenen Sitzfläche um 2° ab. Am Émonda steigt die Sitzfläche 9° über die Horizontale, der Vorbau 7°. Das ist konsistent. Die gemessene „30-mm-Bohrung" der Tavelo-Spacer ist Spiel (28,6 / cos 8° = 28,9). Der Adapter übernimmt die 30.
@@ -55,9 +57,40 @@ Der Lenkwinkel spielt für die Passung keine Rolle. Maßgeblich sind nur die Nei
 |---|---|---|
 | D-1 | Bohrung Ø 30 senkrecht zur Schaftachse (0,7 Spiel radial zum Schaft Ø 28,6), als Langloch 2 nach hinten verlängert (32 × 30); Vorderkante 15 vor der Achse | Die Lage kommt von den Trek-Nasen unten und den Tavelo-Stiften oben, nicht vom Schaft. Das Langloch gibt dem Vorbau nach hinten Luft. Der Prototyp (Ø 28,9, Kreise parallel zur Unterseite gezeichnet) war senkrecht zur Achse längs nur 27,6 und damit enger als der Schaft. Die Tavelo-Spacer haben ebenfalls 30. Wand zu den Stiften 2,1; zu den Nasentaschen nur 0,3 (noch offen). |
 | D-2 | Außenwand = Regelfläche zwischen Trek-Kontur (unten) und Tavelo-Kontur (oben) | Beide Fugen schließen bündig, obwohl die Ebenen 9° gegeneinander stehen. |
-| D-3 | Bohrung, Sichel und Gelenk entlang der Schaftachse | Das Teil wird entlang des Schafts gefügt, die Leitungen laufen parallel zum Schaft. |
+| D-3 | Bohrung, Sichel und Gelenk entlang der Schaftachse | Das Teil wird entlang des Schafts gefügt, die Leitungen laufen parallel zum Schaft. Sichel und Gelenk sind als Profil parallel zur Unterseite definiert und entlang der Achse geschert, senkrecht zur Achse also längs um cos α_T kürzer; für sie ist das unerheblich. Die Bohrung ist ein echter Zylinder um die Achse (siehe D-1). |
 | D-4 | Zweiteilig, Teilung bei y = 0 | Montage um Schaft und Leitungen, ohne die Hydraulik zu öffnen. |
 | D-5 | **Gelenk nach Tavelo-Vorbild:** je Teilstelle zwei Zapfen mit Hals in Schlüssellochaufnahmen, unten von A nach B, oben von B nach A. Vorn: Ø 3,2 / Hals 1,6 / Versatz 2,4, bei x = −24,85 (Prototyp −24,1; verschoben für mehr Wand zum Kanal, min. 1,6). Hinten: Ø 4,0 / Hals 2,2 / Versatz 2,9, bei x = +26,0. Spiel 0,2 radial, 0,15 axial, Fuge 0,25 | Die Zapfen sperren quer. Gefügt wird durch Aufschieben von B entlang des Schafts. CAD-Kollisionstest: keine Überschneidung; quer blockiert ab ~0,5 mm; entlang des Schafts frei fügbar. |
 | D-6 | Höhe 20 entlang der Schaftachse | ersetzt einen 20-mm-Spacerstapel |
 | D-7 | Werkstoff PA12 (MJF) für das Endteil | Das Teil liegt in der Kraftkette der Lagervorspannung und wird warm; kein PLA/PETG. |
 | D-8 | Drucklayout: beide Hälften in einer Datei, getrennt, Unterseite auf dem Druckbett | ein Auftrag, keine verschränkten Teile im Druck |
+
+## 6. Prototyp 1: Befund und Änderungen
+
+Selbst gedruckt, am Rad montiert (2026-09-29).
+
+| Befund | Ursache | Änderung (Rev. C) |
+|---|---|---|
+| Winkel oben und unten passen, beide Fugen schließen | – | α_T = 17° und α_V = 8° bestätigt |
+| Gelenk passt | – | vorderes Gelenk trotzdem 0,75 nach vorn (x = −24,85): Wand zum Leitungskanal 1,05 → 1,8 |
+| Bohrung sehr schwer aufzuziehen, musste aufgefeilt werden | Kreise parallel zur Unterseite gezeichnet, senkrecht zur Achse längs nur 27,6 (Schaft 28,6) | Bohrung als echter Zylinder um die Achse, Ø 30, Langloch 2 nach hinten (D-1) |
+| Adapter sitzt 1,5 zu weit vorn: steht vorn über den Vorbau, hinten fehlt Material | Stifte 1,5 zu weit hinten (Skizzenmaß 40,5 ab Hinterkante) | Stifte 42,0 ab Hinterkante (x = −12,0). Merkregel: Die Stifte sind im Vorbau fixiert; Stifte im Adapter nach vorn → Adapter wandert nach hinten |
+| Seitlich kein Versatz | – | – |
+| Taschen für die Trek-Nasen zu flach | – | Taschentiefe 1,8 → 2,5 |
+| Untere Kante vorn muss weiter nach vorn | – | Unterseite vorn 2,5 länger (60,5); Oberseite exakt unverändert, weil dort der Vorbau passgenau aufliegt. Dadurch wird nur die Stirnwand vorn schräger |
+
+## 7. Offene Punkte
+
+| ID | Punkt | Stand |
+|---|---|---|
+| O-1 | Wand zwischen Bohrungs-Langloch und Nasentaschen nur 0,27 | Durch das Langloch entstanden. Entweder so lassen (Steg bricht ggf. weg, Nasen dann nur seitlich geführt) oder die Taschen bewusst zur Bohrung öffnen. Nicht entschieden. |
+| O-2 | Weitere Kleinigkeiten am Prototyp | noch nicht besprochen |
+| O-3 | Endteil in PA12 (MJF) drucken und am Rad prüfen | nach Abschluss der Änderungen |
+
+Prüfen nach jeder Änderung: `python 02_CAD/check_adapter.py` (Kollision der Hälften, Bohrungsmaß, Wandstärken).
+
+## 8. Revisionen
+
+| Rev. | Datum | Inhalt |
+|---|---|---|
+| B.1 | 2026-09-28 | α_V = 8° gemessen → Keil 9°; Höhe entlang der Schaftachse; Regelflächen-Außenwand; Drucklayout. Stand von Prototyp 1 |
+| C | 2026-09-29 | Änderungen nach Prototyp 1 (Abschnitt 6) |

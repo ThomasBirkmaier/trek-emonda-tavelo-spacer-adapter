@@ -1,4 +1,5 @@
-"""Renderings des zweiteiligen Adapters: Schnitte in mehreren Höhen (Hälfte A blau, B orange) + Iso/Explosion."""
+"""Renderings des zweiteiligen Adapters: Schnitte in mehreren Höhen (Hälfte A blau, B orange), Iso/Explosion, Drucklayout.
+Vorher python 02_CAD/adapter.py ausführen (das Drucklayout wird aus 02_CAD/out/DRUCK_*.stl gelesen)."""
 import sys, math, numpy as np, trimesh, matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -48,3 +49,18 @@ for i, (el, az, t, ex) in enumerate([(28, -55, "Iso von vorn oben", 0), (22, -35
     draw(ax, mA, (0.25, 0.5, 0.85), 0, v); draw(ax, mB, (0.95, 0.55, 0.15), offB, v)
     ax.set_xlim(-32, 38); ax.set_ylim(-35, 35); ax.set_zlim(-10, 45); ax.set_box_aspect((70, 70, 55)); ax.view_init(el, az); ax.axis("off"); ax.set_title(t)
 fig.tight_layout(); fig.savefig("03_Renderings/Adapter_H20_Iso.png", dpi=95)
+
+# Drucklayout: so, wie die Druckdatei auf dem Bauraum liegt (Unterseite auf z = 0)
+mP = trimesh.load(f"02_CAD/out/DRUCK_Adapter_H{H:g}_T{ad.ALPHA_TREK:g}_V{ad.ALPHA_TAVELO:g}.stl")
+lo, hi = mP.bounds
+fig = plt.figure(figsize=(16, 7))
+for i, (el, az, t) in enumerate([(45, -25, "Drucklayout, Iso"), (90, -90, "Drucklayout, Draufsicht")]):
+    ax = fig.add_subplot(1, 2, i + 1, projection="3d")
+    e, a = np.radians(el), np.radians(az); v = np.array([np.cos(e) * np.cos(a), np.cos(e) * np.sin(a), np.sin(e)])
+    draw(ax, mP, (0.35, 0.35, 0.38), 0, v)
+    c = (lo + hi) / 2; r = (hi - lo).max() / 2 + 2
+    ax.set_xlim(c[0] - r, c[0] + r); ax.set_ylim(c[1] - r, c[1] + r); ax.set_zlim(0, 2 * r); ax.set_box_aspect((1, 1, 1))
+    ax.view_init(el, az); ax.axis("off"); ax.set_title(t)
+ext = hi - lo
+fig.suptitle(f"Bauraum {ext[0]:.1f} × {ext[1]:.1f} × {ext[2]:.1f} mm, Unterseite (Trek-Auflage) auf dem Druckbett", fontsize=12)
+fig.tight_layout(); fig.savefig("03_Renderings/Drucklayout_Adapter.png", dpi=95)

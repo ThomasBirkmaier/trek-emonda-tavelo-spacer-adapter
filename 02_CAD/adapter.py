@@ -11,12 +11,16 @@ Koordinatensystem (siehe KONSTRUKTION.md):
   Oberseite: Tavelo-Ebene, Normale gegen die Achse um ALPHA_TAVELO geneigt (gleiche Richtung wie Trek).
   Keilwinkel zwischen Unter- und Oberseite = ALPHA_TREK - ALPHA_TAVELO (hinten dünn, vorn dick).
   Außenwand = Regelfläche zwischen Trek-Kontur (Unterseite) und Tavelo-Kontur (Oberseite), je in ihrer Ebene.
-  Alles, was entlang des Schafts läuft oder geschoben wird (Außenwand, Bohrung, Sichel,
-  Gelenk-Zapfen), ist entlang der Schaftachse extrudiert ("geschert").
+  Alles, was entlang des Schafts läuft oder geschoben wird (Bohrung, Sichel, Gelenk-Zapfen),
+  ist entlang der Schaftachse extrudiert.
+  Achtung: axial_cylinder/axial_prism sind "geschert": Das Profil gilt in Ebenen parallel zur
+  Unterseite, senkrecht zur Achse ist es längs um cos(ALPHA_TREK) gestaucht. Für Sichel und Gelenk
+  ist das egal (Zapfen und Aufnahme gleich). Die Bohrung ist deshalb ein echter Zylinder um die Achse.
 
 Aufruf (aus dem Repo-Wurzelverzeichnis):  python 02_CAD/adapter.py
   -> 02_CAD/out/Adapter_H20_T<aT>_V<aV>.*      Adapter zusammengebaut (Ansicht/Kontrolle)
   -> 02_CAD/out/DRUCK_Adapter_...stl/.3mf/.step  Drucklayout, beide Hälften getrennt
+Danach: python 02_CAD/check_adapter.py (Wandstärken, Kollision), python 02_CAD/render_adapter.py
 """
 import math
 import os
@@ -24,7 +28,7 @@ import cadquery as cq
 
 # ---------------------------------------------------------------- Parameter
 # Winkel
-ALPHA_TREK = 17.0         # Neigung Trek-Auflageebene gegen Schaftnormale (geschätzt: Trek-Stapel ~waagerecht bei ~73° Lenkwinkel)
+ALPHA_TREK = 17.0         # Neigung Trek-Auflageebene gegen Schaftnormale (geschätzt, am Prototyp 1 bestätigt: untere Fuge schließt)
 ALPHA_TAVELO = 8.0        # gemessen 2026-09-28: Tavelo-Klemmbohrung 8° nach hinten gekippt bei flach aufliegender Sitzfläche
 
 # Höhe

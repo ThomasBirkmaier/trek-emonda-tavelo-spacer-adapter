@@ -6,6 +6,8 @@ Zweiteiliger, 3D-gedruckter Adapter, mit dem ein integriertes **Tavelo Avro Rise
 
 Das Modell ist parametrisch (Python/CadQuery). Wer einen anderen Rahmen oder andere Winkel hat, ändert ein paar Zahlen und exportiert neu.
 
+**Stand:** Ein erster Prototyp wurde gedruckt und am Rad geprüft, die Korrekturen sind eingearbeitet (Rev. C, siehe [`KONSTRUKTION.md`](KONSTRUKTION.md)). Das Endteil in PA12 ist noch nicht gedruckt.
+
 ## Für welches Rad und welches Cockpit
 
 Konstruiert und vermessen an genau dieser Kombination:
@@ -28,7 +30,7 @@ Nicht geprüft, aber naheliegend:
 
 | | |
 |---|---|
-| Unterseite | passt auf den Trek-Deckel: Neigung α_T ≈ 17°, zwei Nasen rasten ein |
+| Unterseite | passt auf den Trek-Deckel: Neigung α_T = 17°, zwei Nasen rasten ein |
 | Oberseite | passt unter den Tavelo-Vorbau: Neigung α_V = 8°, zwei Stifte Ø 3 greifen in die Sacklöcher |
 | Keil | ≈ 9°, hinten dünn (15,5 mm), vorn dick (24,3 mm) |
 | Höhe | 20 mm entlang der Schaftachse (ersetzt einen 20-mm-Spacerstapel) |
@@ -57,15 +59,16 @@ python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
 python 02_CAD/adapter.py             # exportiert den Adapter nach 02_CAD/out
-python 02_CAD/render_adapter.py      # Schnitte, Iso-Ansicht
+python 02_CAD/check_adapter.py       # Kollision der Hälften, Bohrungsmaß, Wandstärken
+python 02_CAD/render_adapter.py      # Schnitte, Iso-Ansicht, Drucklayout
 ```
 
 Die Parameter stehen oben in [`02_CAD/adapter.py`](02_CAD/adapter.py):
 
 | Parameter | Bedeutung | Aktuell |
 |---|---|---|
-| `ALPHA_TREK` | Neigung der Trek-Sitzfläche gegen die Schaftnormale | 17,0° (geschätzt, siehe Montage) |
-| `ALPHA_TAVELO` | Neigung der Tavelo-Sitzfläche gegen die Schaftnormale | 8,0° (gemessen) |
+| `ALPHA_TREK` | Neigung der Trek-Sitzfläche gegen die Schaftnormale | 17,0° (am Prototyp bestätigt) |
+| `ALPHA_TAVELO` | Neigung der Tavelo-Sitzfläche gegen die Schaftnormale | 8,0° (gemessen, am Prototyp bestätigt) |
 | `HEIGHT` | Höhe entlang der Schaftachse | 20 mm |
 | `JOINT_CLEAR` | radiales Spiel im Gelenk | 0,2 mm (bei engen Toleranzen 0,3) |
 | `BORE_D`, `BORE_SLOT` | Bohrungsdurchmesser, Langloch nach hinten | 30 mm (Schaft 28,6), 2 mm |
@@ -86,9 +89,11 @@ Die Winkel stehen im Dateinamen der Exporte (`..._T17_V8`), damit man sieht, wel
 
 | Pfad | Inhalt |
 |---|---|
-| [`KONSTRUKTION.md`](KONSTRUKTION.md) | Schnittstellen, Koordinatensystem, Maße, Winkel, Konstruktionsentscheidungen |
+| [`KONSTRUKTION.md`](KONSTRUKTION.md) | Schnittstellen, Koordinatensystem, Maße, Winkel, Konstruktionsentscheidungen, Befund Prototyp, offene Punkte |
+| [`CLAUDE.md`](CLAUDE.md) | Arbeitsanweisungen für Claude Code (Einstieg in neue Sessions) |
 | `01_Input/` | Skizze, Herstellerzeichnung und Fotos, die ins Modell eingeflossen sind |
 | `02_CAD/adapter.py` | parametrisches Modell, einzige Quelle der Geometrie |
+| `02_CAD/check_adapter.py`, `02_CAD/render_adapter.py` | Prüfungen und Renderings |
 | `02_CAD/out/` | `Adapter_*` = zusammengebaut (Ansicht); `DRUCK_*` = druckfertig |
 | `03_Renderings/` | Aufmacherbild, Schnitte, Iso-Ansicht, Drucklayout |
 
