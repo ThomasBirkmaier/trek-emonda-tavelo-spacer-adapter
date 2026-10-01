@@ -13,7 +13,7 @@ Adapter zwischen dem originalen Trek-Steuersatzdeckel (Émonda SL 6, 2024) und d
 | IF-1 | Unterseite ↔ Trek-Deckel | originaler Trek-Deckel, bleibt unverändert | Kontur 60,5 × 39,5 (Spitze 2,5 weiter vorn als oben), zwei Nasen, Neigung α_T |
 | IF-2 | Oberseite ↔ Tavelo-Vorbau | Vorbauunterseite (identisch zur Spacer-Sitzfläche) | Kontur 58 × 39,5, zwei Stifte in die Sacklöcher des Vorbaus, Neigung α_V |
 | IF-3 | Bohrung ↔ Gabelschaft | Carbonschaft Ø 28,6, seitlich abgeflacht auf 26,75 | Bohrung Ø 30 senkrecht zur Schaftachse, als Langloch 2 nach hinten verlängert (32 × 30), entlang der Schaftachse |
-| IF-4 | Leitungsführung | 2 Bremsleitungen (Di2 funkt) | Tavelo-Kanal → Sichel → Öffnung im Trek-Deckel → Rahmen |
+| IF-4 | Leitungsführung | 2 Bremsleitungen (Di2 funkt) | Tavelo-Kanal → Sichel → Öffnung im Trek-Deckel → Rahmen; die hintere Leitung kommt seitlich rechts aus dem Deckel (Leitungsschräge, D-11) |
 
 ## 2. Koordinatensystem
 
@@ -67,6 +67,7 @@ Der Lenkwinkel spielt für die Passung keine Rolle. Maßgeblich sind nur die Nei
 | D-8 | Drucklayout: beide Hälften in einer Datei, getrennt, Unterseite auf dem Druckbett | ein Auftrag, keine verschränkten Teile im Druck |
 | D-9 | Nasentaschen am vorderen (inneren) Ende zur Bohrung geöffnet: Durchbruch in Taschenbreite (3,0) Richtung Schaftachse, Tiefe wie die Tasche | Durch das Langloch bliebe nur ein Steg von 0,27, der beim Druck oder bei der Montage wegbricht. Offen gibt es keine losen Splitter; die Übergänge zur Bohrung sind stumpfwinklig. Die Nasen werden seitlich und am hinteren Ende geführt. |
 | D-10 | Kantenradien: an Ober- und Unterseite Bohrung R 1,0, Leitungskanal R 0,5; innen am Übergang Langloch → Leitungskanal (Kante entlang der Achse) R 2,0 | Sauberes Aussehen, keine scharfen Kanten an den Leitungen. Am Kanal nur R 0,5, weil R 1,0 die Wand zur oberen vorderen Gelenkaufnahme auf 0,64 senkt (mit R 0,5: 1,21). |
+| D-11 | Leitungsschräge an der Unterseite, beidseitig: Bogen R 45 (nach außen gewölbt) von der äußersten Ecke des Leitungskanals (x ≈ −18,5) zur breitesten Stelle des Langlochs (x = 0); Material innerhalb fällt schräg weg und läuft nach 10 mm entlang der Achse aus; Kante zur Unterseite R 0,5 | Die hintere Bremsleitung kommt seitlich rechts aus dem Trek-Deckel und bekommt so unten bis 3,4 mm mehr Luft. Oberseite unverändert. Außenwand an der Schräge ≈ 3,9 (Langloch sonst 4,74); die dünnsten Wände in diesem Bereich liegen weiterhin oben am Kanal (2,0) und werden nicht berührt. R 1,0 an der Kante ließ sich an den Enden nicht sauber verrunden. Am hinteren Ende bleibt unten ein kleiner Absatz von ≈ 0,4 zur Bohrungsrundung. |
 
 ## 6. Prototyp 1: Befund und Änderungen
 
@@ -104,3 +105,4 @@ Prüfen nach jeder Änderung: `python 02_CAD/check_adapter.py` (Kollision der H�
 |---|---|---|
 | B.1 | 2026-09-28 | α_V = 8° gemessen → Keil 9°; Höhe entlang der Schaftachse; Regelflächen-Außenwand; Drucklayout. Stand von Prototyp 1 |
 | C | 2026-09-29 | Änderungen nach Prototyp 1 (Abschnitt 6); Taschen zur Bohrung geöffnet (D-9); Kantenradien (D-10) |
+| C.1 | 2026-10-01 | Leitungsschräge an der Unterseite (D-11) |

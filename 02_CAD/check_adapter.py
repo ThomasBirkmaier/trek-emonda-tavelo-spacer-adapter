@@ -43,6 +43,9 @@ print(f"Nasentaschen zur Bohrung {'offen' if bore.distance(pockets) < 1e-6 else 
 rows.append(("Bohrung ↔ Stift", bore.distance(pins)))   # Wand; die Bohrungsrundung (R1) liegt auf der Oberseite dazwischen
 rows.append(("Bohrung ↔ Außenwand", wall_out(bore)))
 rows.append(("Stift ↔ Außenwand", wall_out(pins)))
+hose = A.hose_cutters(aT)
+if hose is not None:
+    rows.append(("Leitungsschräge ↔ Außenwand", wall_out(hose.intersect(env).val())))
 zm = h * math.cos(math.radians(aT)) / 2
 for j in A.JOINTS:
     tag = "vorn" if j["x"] < 0 else "hinten"
