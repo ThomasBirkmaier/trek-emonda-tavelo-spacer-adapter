@@ -74,8 +74,9 @@ BOTTOM_TIP_EXTRA = 2.5     # Unterseite: Spitze 2,5 weiter vorn als oben (Stirnw
 NOSE_L, NOSE_W, NOSE_H = 7.6, 2.4, 1.5
 NOSE_ANGLE = 24.0
 NOSE_CX, NOSE_CY = 20.0, 7.9
-POCKET_CLEAR = 0.3
-POCKET_DEPTH = 2.5         # Taschentiefe (vorher 1,8)
+POCKET_CLEAR = 0.3         # Spiel pro Seite in Längsrichtung der Tasche
+POCKET_CLEAR_W = 0.55      # Spiel pro Seite quer (Prototyp 2: 0,3; +0,5 Breite, damit der Adapter leichter bündig aufsitzt)
+POCKET_DEPTH = 3.0         # Taschentiefe (Prototyp 1: 1,8; Prototyp 2: 2,5)
 POCKET_BRIDGE = 4.0        # Taschen vorn-innen zur Bohrung geöffnet (Steg wäre nur 0,27): Länge des Durchbruchs
 
 # Kantenradien an Ober- und Unterseite
@@ -366,7 +367,7 @@ def hose_cutters(aT=ALPHA_TREK, n=60):
 def nose_pocket_cutters(aT=ALPHA_TREK):
     """Taschen für die Trek-Nasen, senkrecht zur Unterseite. Das vordere (innere) Ende jeder Tasche liegt so nah an
     der Bohrung, dass nur ein 0,27-Steg bliebe; deshalb läuft von dort ein Durchbruch gleicher Breite zur Schaftachse."""
-    L, W = NOSE_L + 2 * POCKET_CLEAR, NOSE_W + 2 * POCKET_CLEAR
+    L, W = NOSE_L + 2 * POCKET_CLEAR, NOSE_W + 2 * POCKET_CLEAR_W
     t = math.tan(math.radians(aT))
     ax_x = 0.5 * POCKET_DEPTH * t + BORE_SLOT / math.cos(math.radians(aT))   # Langloch-Hinterkreis, halbe Taschentiefe
     res = None

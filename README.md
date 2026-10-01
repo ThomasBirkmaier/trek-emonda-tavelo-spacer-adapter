@@ -6,7 +6,7 @@ Zweiteiliger, 3D-gedruckter Adapter, mit dem ein integriertes **Tavelo Avro Rise
 
 Das Modell ist parametrisch (Python/CadQuery). Wer einen anderen Rahmen oder andere Winkel hat, ändert ein paar Zahlen und exportiert neu.
 
-**Stand (Rev. C, 2026-09-29):** Prototyp 1 wurde gedruckt und am Rad geprüft, alle Korrekturen sind eingearbeitet. Prototyp 2 (Rev. C, FDM) ist in Fertigung, das Endteil in PA12 ist noch nicht gedruckt. Details, Befund und offene Punkte: [`KONSTRUKTION.md`](KONSTRUKTION.md).
+**Stand (Rev. C.4, 2026-10-01):** Zwei Prototypen wurden gedruckt und am Rad geprüft, alle Korrekturen sind eingearbeitet. Als Nächstes kommt Prototyp 3, das Endteil in PA12 ist noch nicht gedruckt. Details, Befund und offene Punkte: [`KONSTRUKTION.md`](KONSTRUKTION.md).
 
 ## Für welches Rad und welches Cockpit
 
@@ -37,7 +37,7 @@ Nicht geprüft, aber naheliegend:
 | Schaft | Ø 28,6 (seitlich abgeflacht auf 26,75), Bohrung Ø 30 als Langloch 2 mm nach hinten (32 × 30): Die Lage kommt von Nasen und Stiften |
 | Leitungen | Kanal vor dem Schaft für zwei Bremsleitungen (Di2, funkend); unten seitlich angeschrägt, weil die hintere Leitung seitlich aus dem Trek-Deckel kommt |
 | Teilung | zwei Hälften mit Gelenk nach Tavelo-Vorbild, werden entlang des Schafts zusammengeschoben |
-| Kanten | Bohrung und Leitungskanal an Ober- und Unterseite sowie am Übergang verrundet |
+| Kanten | innere Kanten an Ober- und Unterseite R 0,5, Übergang Bohrung → Leitungskanal R 2 |
 | Werkstoff | PA12, MJF-Druck |
 
 ## Schnellstart
@@ -47,7 +47,7 @@ Nicht geprüft, aber naheliegend:
 1. Datei **`02_CAD/out/DRUCK_Adapter_H22_T17_V7.2.stl`** (oder `.3mf`/`.step`) bei einem Druckdienst hochladen, zum Beispiel Craftcloud. Die Datei enthält beide Hälften, getrennt gelegt; die Menge ist 1.
 2. Verfahren **MJF**, Material **PA12**, Farbe schwarz. Zum Fahren kein FDM/PLA/PETG: Das Teil liegt in der Kraftkette der Lagervorspannung. Für eine reine Passprobe reicht ein FDM-Druck (Unterseite aufs Druckbett, so liegt sie in der Datei).
 
-Passungen: Bohrung Ø 30 (0,7 mm Spiel radial zum Schaft, nach hinten 2 mm Langloch), Gelenk 0,2 mm Spiel radial, Nasentaschen 0,3 mm pro Seite. Klemmt das Gelenk nach dem Druck, die Zapfen leicht nachschleifen oder `JOINT_CLEAR` erhöhen.
+Passungen: Bohrung Ø 30 (0,7 mm Spiel radial zum Schaft, nach hinten 2 mm Langloch), Gelenk 0,2 mm Spiel radial, Nasentaschen 0,55 mm pro Seite quer und 0,3 mm in Längsrichtung, 3 mm tief. Klemmt das Gelenk nach dem Druck, die Zapfen leicht nachschleifen oder `JOINT_CLEAR` erhöhen.
 
 ### Ich will das Modell anpassen
 
@@ -73,6 +73,7 @@ Die Parameter stehen oben in [`02_CAD/adapter.py`](02_CAD/adapter.py):
 | `TOP_FRONT_LIFT` | Korrektur aus Prototyp 2: Oberseite um ihre Hinterkante gekippt, Spitze so viel höher; daraus ergeben sich `ALPHA_TAVELO` und `HEIGHT`. Der Vorbau sitzt dadurch nicht höher, nur der Spalt vorn wird gefüllt | 0,8 mm → 7,21°, 22,42 mm |
 | `JOINT_CLEAR` | radiales Spiel im Gelenk | 0,2 mm (bei engen Toleranzen 0,3) |
 | `BORE_D`, `BORE_SLOT` | Bohrungsdurchmesser, Langloch nach hinten | 30 mm (Schaft 28,6), 2 mm |
+| `POCKET_CLEAR_W`, `POCKET_CLEAR`, `POCKET_DEPTH` | Nasentaschen: Spiel quer und längs pro Seite, Tiefe | 0,55 mm, 0,3 mm, 3 mm |
 | `outline_wire_pts()`, `NOSE_*`, `PIN_*` | Kontur, Nasen, Stifte | laut Skizze V2 |
 
 Bezugshöhe und Winkel stehen im Dateinamen der Exporte (`..._H22_T17_V7.2`), damit man sieht, welche Version man druckt.
@@ -82,9 +83,10 @@ Bezugshöhe und Winkel stehen im Dateinamen der Exporte (`..._H22_T17_V7.2`), da
 1. Vorbau abnehmen; der Trek-Deckel bleibt, die Leitungen bleiben angeschlossen.
 2. Hälfte **A** (Zapfen unten) seitlich an Schaft und Leitungen legen, die Nase sitzt in der Tasche.
 3. Hälfte **B** (Zapfen oben) seitlich ansetzen und **entlang des Schafts** von oben einschieben, bis sie aufsitzt.
-4. Tavelo-Vorbau aufsetzen, die Stifte rasten in die Sacklöcher, Vorspannung wie gewohnt einstellen.
+4. Tavelo-Vorbau aufsetzen, die Stifte rasten in die Sacklöcher, Vorspannung wie gewohnt einstellen. Zwischen Schaftende und Oberkante Vorbau muss ein Spalt bleiben (üblich 2–3 mm), sonst sitzt die Top-Cap auf dem Schaft auf und baut keine Vorspannung auf. Prüfung: Der Trek-Deckel darf sich danach nicht mehr verdrehen lassen.
 5. Beide Fugen gegen Licht prüfen: Trek-Deckel ↔ Adapter und Adapter ↔ Vorbau.
    Klafft die untere Fuge, stimmt `ALPHA_TREK` nicht: Spalt **hinten** → Wert zu groß, Spalt **vorn** → Wert zu klein. Anpassen (1° ≈ 1 mm Spalt über die Länge) und neu exportieren.
+   Klafft die obere Fuge vorn, den gemessenen Spalt zu `TOP_FRONT_LIFT` addieren (klafft sie hinten: abziehen) und neu exportieren.
 6. Nach den ersten Ausfahrten das Steuersatzspiel prüfen und bei Bedarf nachstellen: Kunststoff kann sich unter der Vorspannung etwas setzen.
 
 ## Repository-Struktur
