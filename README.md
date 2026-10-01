@@ -1,6 +1,6 @@
 # Trek Émonda × Tavelo Avro Rise – Spacer-Adapter
 
-![Adapter, beide Druckhälften](03_Renderings/Hero.png)
+![Adapter, zusammengesetzt](03_Renderings/Hero.png)
 
 Zweiteiliger, 3D-gedruckter Adapter, mit dem ein integriertes **Tavelo Avro Rise**-Cockpit auf einem **Trek Émonda SL 6 (2024)** sitzt. Der originale Trek-Steuersatzdeckel bleibt unverändert, die Bremsleitungen laufen innen, und für die Montage muss die Hydraulik nicht geöffnet werden.
 
@@ -99,7 +99,7 @@ Bezugshöhe und Winkel stehen im Dateinamen der Exporte (`..._H22_T17_V7.2`), da
 | `02_CAD/adapter.py` | parametrisches Modell, einzige Quelle der Geometrie |
 | `02_CAD/check_adapter.py`, `02_CAD/render_adapter.py` | Prüfungen und Renderings |
 | `02_CAD/out/` | `Adapter_*` = zusammengebaut (Ansicht); `DRUCK_*` = druckfertig |
-| `03_Renderings/` | Aufmacherbild (generiert, Rev. C), Schnitte, Iso-Ansicht, Drucklayout (von `render_adapter.py` erzeugt) |
+| `03_Renderings/` | Aufmacherbild (generiert, Rev. C.4), Schnitte, Iso-Ansicht, Drucklayout (von `render_adapter.py` erzeugt) |
 
 ![Schnitte](03_Renderings/Adapter_Schnitte.png)
 

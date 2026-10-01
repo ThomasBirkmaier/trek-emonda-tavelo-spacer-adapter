@@ -37,7 +37,7 @@ Nach jeder Geometrieänderung alle drei in dieser Reihenfolge ausführen und Exp
 
 - `01_Input/` enthält Rohdaten (Skizze, Fotos, Herstellerzeichnung). Nicht verändern.
 - `02_CAD/adapter.py` ist die einzige Quelle der Geometrie. `02_CAD/out/` wird erzeugt, aber versioniert, damit man ohne Python drucken kann.
-- `03_Renderings/Hero.png` ist ein generiertes Aufmacherbild (Rev. C, Bildgenerator mit einer Modellansicht als Geometrievorlage), ohne Maßbezug. Alle anderen Bilder erzeugt `render_adapter.py`.
+- `03_Renderings/Hero.png` ist ein generiertes Aufmacherbild (Rev. C.4, Bildgenerator mit einer Modellansicht als Geometrievorlage), ohne Maßbezug. Alle anderen Bilder erzeugt `render_adapter.py`.
 - Keine Status-, Auftrags- oder Notizdateien anlegen. Stand und offene Punkte gehören in `KONSTRUKTION.md` (Abschnitte 6 bis 8).
 - Lizenz WTFPL.
 
