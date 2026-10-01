@@ -19,12 +19,12 @@ python 02_CAD/check_adapter.py    # Kollision A∩B, Bohrungsmaß, Wandstärken 
 python 02_CAD/render_adapter.py   # 03_Renderings: Schnitte, Iso, Drucklayout
 ```
 
-Nach jeder Geometrieänderung alle drei in dieser Reihenfolge ausführen und Exporte und Renderings mitcommitten. Die Renderings immer ansehen. Die Dateinamen enthalten die Winkel (`_T17_V8`). STEP und 3MF enthalten einen Zeitstempel: Bei einem reinen Doku- oder Kommentar-Commit die Exporte nicht mitcommitten (`git checkout -- 02_CAD/out/`).
+Nach jeder Geometrieänderung alle drei in dieser Reihenfolge ausführen und Exporte und Renderings mitcommitten. Die Renderings immer ansehen. Die Dateinamen enthalten Bezugshöhe und Winkel (`TAG`, z. B. `_H22_T17_V7.2`); ändern sie sich, die alten Exporte per `git rm` entfernen. STEP und 3MF enthalten einen Zeitstempel: Bei einem reinen Doku- oder Kommentar-Commit die Exporte nicht mitcommitten (`git checkout -- 02_CAD/out/`).
 
 ## Geometrie: was man wissen muss
 
 - Ursprung = Schaftachse ∩ Unterseite. **+x = hinten** (Klemmschraube des Vorbaus, Oberrohr), −x = vorn (Spitze, Leitungskanal). y quer, Teilung bei y = 0 (A: y > 0, B: y < 0). z = Normale der Unterseite.
-- Schaftachse um α_T = 17° nach hinten geneigt. Oberseite (Tavelo) 8° gegen die Schaftnormale, der Keil beträgt also 9°. Beide Winkel sind am Prototyp bestätigt.
+- Schaftachse um α_T = 17° nach hinten geneigt. Oberseite (Tavelo) gemessen 8° gegen die Schaftnormale, nach Prototyp 2 korrigiert: um die Hinterkante gekippt, Spitze 0,8 höher (`TOP_FRONT_LIFT`) → α_V 7,21°, Keil 9,79°. `ALPHA_TAVELO` und `HEIGHT` werden daraus berechnet, nicht direkt setzen. `HEIGHT` (≈ `HEIGHT_REF` + 0,42) ist nur der Durchstoßpunkt der Achse; die Keilkorrektur hebt den Vorbau nicht (er lag hinten schon auf, der Spalt vorn wird gefüllt). Die Stapelhöhe stellt man über `HEIGHT_REF` ein (seit Rev. C.3: 22, damit die Top-Cap Spalt hat).
 - Die Außenwand ist eine Regelfläche zwischen der Kontur unten (`bottom_outline_pts`, vorn 2,5 länger) und oben (`outline_wire_pts`). Die **Oberseite muss exakt bleiben**, dort liegt der Vorbau passgenau auf.
 - `axial_cylinder`/`axial_prism` sind geschert: Das Profil gilt parallel zur Unterseite und ist senkrecht zur Achse längs um cos 17° kürzer. Für Sichel und Gelenk ist das gewollt. Die **Bohrung** ist dagegen ein echter Zylinder (`bore_cutter`). Genau dieser Fehler hat den Prototyp am Schaft klemmen lassen.
 - Die Lage bestimmen die Trek-Nasen (Taschen unten) und die Tavelo-Stifte (oben), nicht der Schaft.

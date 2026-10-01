@@ -25,7 +25,7 @@ for m, k in ((mA, "A"),):
 aT = math.radians(ad.ALPHA_TREK)
 ax.plot([-8 * math.sin(aT), 32 * math.sin(aT)], [-8 * math.cos(aT), 32 * math.cos(aT)], "r--", lw=0.8, label="Schaftachse")
 ax.set_aspect("equal"); ax.grid(True, alpha=.35); ax.legend(fontsize=8, loc="upper left")
-ax.set_title(f"Seitenschnitt y = 8: Keil {ad.ALPHA_TREK - ad.ALPHA_TAVELO:g}°, vorn = links", fontsize=10)
+ax.set_title(f"Seitenschnitt y = 8: Keil {ad.ALPHA_TREK - ad.ALPHA_TAVELO:.2f}°, vorn = links", fontsize=10)
 ax.set_xlabel("x in mm (+ hinten)"); ax.set_ylabel("z in mm"); ax.set_xlim(-34, 38); ax.set_ylim(-6, 30)
 for ax, (z, t) in zip(axs[:3], zs):
     for m, k in ((mA, "A"), (mB, "B")):
@@ -35,8 +35,8 @@ for ax, (z, t) in zip(axs[:3], zs):
     ax.axhline(0, color="k", lw=0.3, ls="--")
     ax.set_aspect("equal"); ax.grid(True, alpha=.35); ax.set_title(t, fontsize=10)
     ax.set_xlabel("x in mm (+ hinten)"); ax.set_xlim(-33, 36); ax.set_ylim(-22, 22)
-fig.suptitle(f"Adapter H{H:g} – α_Trek {ad.ALPHA_TREK:g}°, α_Tavelo {ad.ALPHA_TAVELO:g}° – Hälfte A (y>0) blau, B (y<0) orange", fontsize=12)
-fig.tight_layout(); fig.savefig("03_Renderings/Adapter_H20_Schnitte.png", dpi=95)
+fig.suptitle(f"Adapter {ad.TAG} – α_Trek {ad.ALPHA_TREK:g}°, α_Tavelo {ad.ALPHA_TAVELO:.2f}° – Hälfte A (y>0) blau, B (y<0) orange", fontsize=12)
+fig.tight_layout(); fig.savefig("03_Renderings/Adapter_Schnitte.png", dpi=95)
 
 fig = plt.figure(figsize=(16, 7))
 def draw(ax, m, col, off, v):
@@ -49,10 +49,10 @@ for i, (el, az, t, ex) in enumerate([(28, -55, "Iso von vorn oben", 0), (22, -35
     offB = np.array([math.sin(aT), 0, math.cos(aT)]) * 16 * ex + np.array([0, -6, 0]) * ex
     draw(ax, mA, (0.25, 0.5, 0.85), 0, v); draw(ax, mB, (0.95, 0.55, 0.15), offB, v)
     ax.set_xlim(-32, 38); ax.set_ylim(-35, 35); ax.set_zlim(-10, 45); ax.set_box_aspect((70, 70, 55)); ax.view_init(el, az); ax.axis("off"); ax.set_title(t)
-fig.tight_layout(); fig.savefig("03_Renderings/Adapter_H20_Iso.png", dpi=95)
+fig.tight_layout(); fig.savefig("03_Renderings/Adapter_Iso.png", dpi=95)
 
 # Drucklayout: so, wie die Druckdatei auf dem Bauraum liegt (Unterseite auf z = 0)
-mP = trimesh.load(f"02_CAD/out/DRUCK_Adapter_H{H:g}_T{ad.ALPHA_TREK:g}_V{ad.ALPHA_TAVELO:g}.stl")
+mP = trimesh.load(f"02_CAD/out/DRUCK_Adapter_{ad.TAG}.stl")
 lo, hi = mP.bounds
 fig = plt.figure(figsize=(16, 7))
 for i, (el, az, t) in enumerate([(45, -25, "Drucklayout, Iso"), (90, -90, "Drucklayout, Draufsicht")]):

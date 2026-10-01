@@ -31,9 +31,9 @@ Nicht geprüft, aber naheliegend:
 | | |
 |---|---|
 | Unterseite | passt auf den Trek-Deckel: Neigung α_T = 17°, zwei Nasen rasten ein |
-| Oberseite | passt unter den Tavelo-Vorbau: Neigung α_V = 8°, zwei Stifte Ø 3 greifen in die Sacklöcher |
-| Keil | ≈ 9°, hinten dünn (15,5 mm), vorn dick (24,3 mm) |
-| Höhe | 20 mm entlang der Schaftachse (ersetzt einen 20-mm-Spacerstapel) |
+| Oberseite | passt unter den Tavelo-Vorbau: Neigung α_V ≈ 7,2° (gemessen 8°, am Prototyp 2 korrigiert), zwei Stifte Ø 3 greifen in die Sacklöcher |
+| Keil | ≈ 9,8°, hinten dünn, vorn dick (auf einer ebenen Fläche: Hinterkante 16,3 mm, Spitze 26,2 mm hoch) |
+| Höhe | 22 mm entlang der Schaftachse als Bezug: 2 mm mehr als der ersetzte 20-mm-Spacerstapel, damit die Top-Cap Spalt zum Schaftende hat. Die Keilkorrektur nach Prototyp 2 füllt nur den Spalt vorn, der Vorbau sitzt dadurch nicht höher (rechnerisch 22,4 mm an der Achse, siehe `KONSTRUKTION.md`, D-6) |
 | Schaft | Ø 28,6 (seitlich abgeflacht auf 26,75), Bohrung Ø 30 als Langloch 2 mm nach hinten (32 × 30): Die Lage kommt von Nasen und Stiften |
 | Leitungen | Kanal vor dem Schaft für zwei Bremsleitungen (Di2, funkend); unten seitlich angeschrägt, weil die hintere Leitung seitlich aus dem Trek-Deckel kommt |
 | Teilung | zwei Hälften mit Gelenk nach Tavelo-Vorbild, werden entlang des Schafts zusammengeschoben |
@@ -44,7 +44,7 @@ Nicht geprüft, aber naheliegend:
 
 ### Ich will nur drucken
 
-1. Datei **`02_CAD/out/DRUCK_Adapter_H20_T17_V8.stl`** (oder `.3mf`/`.step`) bei einem Druckdienst hochladen, zum Beispiel Craftcloud. Die Datei enthält beide Hälften, getrennt gelegt; die Menge ist 1.
+1. Datei **`02_CAD/out/DRUCK_Adapter_H22_T17_V7.2.stl`** (oder `.3mf`/`.step`) bei einem Druckdienst hochladen, zum Beispiel Craftcloud. Die Datei enthält beide Hälften, getrennt gelegt; die Menge ist 1.
 2. Verfahren **MJF**, Material **PA12**, Farbe schwarz. Zum Fahren kein FDM/PLA/PETG: Das Teil liegt in der Kraftkette der Lagervorspannung. Für eine reine Passprobe reicht ein FDM-Druck (Unterseite aufs Druckbett, so liegt sie in der Datei).
 
 Passungen: Bohrung Ø 30 (0,7 mm Spiel radial zum Schaft, nach hinten 2 mm Langloch), Gelenk 0,2 mm Spiel radial, Nasentaschen 0,3 mm pro Seite. Klemmt das Gelenk nach dem Druck, die Zapfen leicht nachschleifen oder `JOINT_CLEAR` erhöhen.
@@ -69,13 +69,13 @@ Die Parameter stehen oben in [`02_CAD/adapter.py`](02_CAD/adapter.py):
 | Parameter | Bedeutung | Aktuell |
 |---|---|---|
 | `ALPHA_TREK` | Neigung der Trek-Sitzfläche gegen die Schaftnormale | 17,0° (am Prototyp bestätigt) |
-| `ALPHA_TAVELO` | Neigung der Tavelo-Sitzfläche gegen die Schaftnormale | 8,0° (gemessen, am Prototyp bestätigt) |
-| `HEIGHT` | Höhe entlang der Schaftachse | 20 mm |
+| `ALPHA_TAVELO_MEAS`, `HEIGHT_REF` | gemessene Neigung der Tavelo-Sitzfläche, Bezugshöhe entlang der Schaftachse | 8,0°, 22 mm |
+| `TOP_FRONT_LIFT` | Korrektur aus Prototyp 2: Oberseite um ihre Hinterkante gekippt, Spitze so viel höher; daraus ergeben sich `ALPHA_TAVELO` und `HEIGHT`. Der Vorbau sitzt dadurch nicht höher, nur der Spalt vorn wird gefüllt | 0,8 mm → 7,21°, 22,42 mm |
 | `JOINT_CLEAR` | radiales Spiel im Gelenk | 0,2 mm (bei engen Toleranzen 0,3) |
 | `BORE_D`, `BORE_SLOT` | Bohrungsdurchmesser, Langloch nach hinten | 30 mm (Schaft 28,6), 2 mm |
 | `outline_wire_pts()`, `NOSE_*`, `PIN_*` | Kontur, Nasen, Stifte | laut Skizze V2 |
 
-Die Winkel stehen im Dateinamen der Exporte (`..._T17_V8`), damit man sieht, welche Version man druckt.
+Bezugshöhe und Winkel stehen im Dateinamen der Exporte (`..._H22_T17_V7.2`), damit man sieht, welche Version man druckt.
 
 ## Montage
 
@@ -99,7 +99,7 @@ Die Winkel stehen im Dateinamen der Exporte (`..._T17_V8`), damit man sieht, wel
 | `02_CAD/out/` | `Adapter_*` = zusammengebaut (Ansicht); `DRUCK_*` = druckfertig |
 | `03_Renderings/` | Aufmacherbild (generiert, Rev. C), Schnitte, Iso-Ansicht, Drucklayout (von `render_adapter.py` erzeugt) |
 
-![Schnitte](03_Renderings/Adapter_H20_Schnitte.png)
+![Schnitte](03_Renderings/Adapter_Schnitte.png)
 
 ## Hinweis zur Sicherheit
 

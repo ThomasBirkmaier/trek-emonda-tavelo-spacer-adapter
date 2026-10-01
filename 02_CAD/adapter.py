@@ -18,7 +18,7 @@ Koordinatensystem (siehe KONSTRUKTION.md):
   ist das egal (Zapfen und Aufnahme gleich). Die Bohrung ist deshalb ein echter Zylinder um die Achse.
 
 Aufruf (aus dem Repo-Wurzelverzeichnis):  python 02_CAD/adapter.py
-  -> 02_CAD/out/Adapter_H20_T<aT>_V<aV>.*      Adapter zusammengebaut (Ansicht/Kontrolle)
+  -> 02_CAD/out/Adapter_<TAG>.*                  Adapter zusammengebaut (Ansicht/Kontrolle), TAG = H<Höhe>_T<aT>_V<aV>
   -> 02_CAD/out/DRUCK_Adapter_...stl/.3mf/.step  Drucklayout, beide Hälften getrennt
 Danach: python 02_CAD/check_adapter.py (Wandstärken, Kollision), python 02_CAD/render_adapter.py
 """
@@ -30,10 +30,15 @@ import cadquery as cq
 # ---------------------------------------------------------------- Parameter
 # Winkel
 ALPHA_TREK = 17.0         # Neigung Trek-Auflageebene gegen Schaftnormale (geschätzt, am Prototyp 1 bestätigt: untere Fuge schließt)
-ALPHA_TAVELO = 8.0        # gemessen 2026-09-28: Tavelo-Klemmbohrung 8° nach hinten gekippt bei flach aufliegender Sitzfläche
+ALPHA_TAVELO_MEAS = 8.0   # gemessen 2026-09-28: Tavelo-Klemmbohrung 8° nach hinten gekippt bei flach aufliegender Sitzfläche
+HEIGHT_REF = 22.0         # Adapterhöhe entlang der Schaftachse beim gemessenen Winkel (bis Prototyp 2: 20; +2 für den Spalt der Top-Cap)
 
-# Höhe
-HEIGHT = 20.0             # Adapterhöhe entlang der Schaftachse (Durchstoßpunkt unten -> oben), wie ein Spacerstapel
+# Korrektur aus Prototyp 2 (Fühlerlehre, montiert): oben vorn 0,8 Spalt zum Vorbau, hinten dicht. Die Oberseite wird
+# um ihre Hinterkante gekippt, bis die Spitze TOP_FRONT_LIFT höher liegt; Winkel und Höhe ergeben sich daraus.
+# Der Vorbau sitzt dadurch NICHT höher: Er lag schon an der Hinterkante auf, sein Winkel ist durch die Klemmung am Schaft
+# fest; es wird nur der Spalt gefüllt. HEIGHT (≈ HEIGHT_REF + 0,42) ist nur der neue Durchstoßpunkt der Achse durch die Oberseite,
+# dort war vorher ≈ 0,41 Luft. Nachgerechnet: Vorbau-Lage alt ↔ neu entlang der Achse +0,0002 mm.
+TOP_FRONT_LIFT = 0.8
 
 # Schaft
 STEERER_D = 28.6
@@ -45,6 +50,24 @@ BORE_SLOT = 2.0           # Langloch: Hinterkante 2 weiter hinten, Vorderkante f
 REAR_X = 30.0
 TIP_X = -28.0             # 13,0 ab vorderer Bohrungskante (bemaßt) + ~15
 HALF_W = 19.75
+
+
+def _top_from_lift(aT, aV0, h0, lift):
+    """Oberseite um ihre Hinterkante (REAR_X vor dem Achsdurchstoß, in der Oberseite) kippen, bis die Spitze (TIP_X)
+    um lift höher liegt. Rückgabe: neuer Tavelo-Winkel und neue Höhe entlang der Achse."""
+    da = math.degrees(math.atan2(lift, REAR_X - TIP_X))
+    aV = aV0 - da
+    tT = math.radians(aT)
+    ax = (math.sin(tT), math.cos(tT))
+    d0, d1 = math.radians(aT - aV0), math.radians(aT - aV)
+    rear = (h0 * ax[0] + REAR_X * math.cos(d0), h0 * ax[1] - REAR_X * math.sin(d0))   # Hinterkante (x, z)
+    n1 = (math.sin(d1), math.cos(d1))                                                   # neue Normale
+    h = (rear[0] * n1[0] + rear[1] * n1[1]) / (ax[0] * n1[0] + ax[1] * n1[1])
+    return aV, h
+
+
+ALPHA_TAVELO, HEIGHT = _top_from_lift(ALPHA_TREK, ALPHA_TAVELO_MEAS, HEIGHT_REF, TOP_FRONT_LIFT)
+TAG = f"H{HEIGHT_REF:g}_T{round(ALPHA_TREK, 1):g}_V{round(ALPHA_TAVELO, 1):g}"   # für Dateinamen (Bezugshöhe, s. u.)
 BOTTOM_TIP_EXTRA = 2.5     # Unterseite: Spitze 2,5 weiter vorn als oben (Stirnwand vorn stärker geneigt)
 
 # Trek-Nasen
@@ -466,7 +489,7 @@ if __name__ == "__main__":
     out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "out")
     os.makedirs(out, exist_ok=True)
     A, B = adapter()
-    v = export_pair(A, B, os.path.join(out, f"Adapter_H{HEIGHT:g}_T{ALPHA_TREK:g}_V{ALPHA_TAVELO:g}"))
+    v = export_pair(A, B, os.path.join(out, f"Adapter_{TAG}"))
     print("Adapter", "Körper A/B:", len(A.solids().vals()), len(B.solids().vals()), "Volumen %.0f mm3" % v)
-    bb = export_print_layout(A, B, os.path.join(out, f"DRUCK_Adapter_H{HEIGHT:g}_T{ALPHA_TREK:g}_V{ALPHA_TAVELO:g}"))
+    bb = export_print_layout(A, B, os.path.join(out, f"DRUCK_Adapter_{TAG}"))
     print("  Drucklayout Bauraum %.1f x %.1f x %.1f mm" % (bb.xlen, bb.ylen, bb.zlen))
