@@ -56,8 +56,9 @@ POCKET_DEPTH = 2.5         # Taschentiefe (vorher 1,8)
 POCKET_BRIDGE = 4.0        # Taschen vorn-innen zur Bohrung geöffnet (Steg wäre nur 0,27): Länge des Durchbruchs
 
 # Kantenradien an Ober- und Unterseite
-EDGE_R_BORE = 1.0          # Bohrung (Langloch)
-EDGE_R_CHANNEL = 0.5       # Leitungskanal; größer macht die Wand zum vorderen Gelenk zu dünn (R1: 0,64)
+EDGE_R_INNER = 0.5         # alle inneren Kanten an Ober- und Unterseite (Bohrung, Kanal, Rundung, Schräge); einheitlich,
+                           # weil OCC tangential verbundene Kanten nur mit einem Radius verrundet; größer macht die
+                           # Wand zum vorderen Gelenk zu dünn (R 1: 0,64)
 EDGE_R_JUNCTION = 2.0      # innen: Übergang Langloch → Leitungskanal (Kante entlang der Achse)
 
 # Leitungsschräge unten: Die hintere Bremsleitung kommt seitlich (rechts) aus dem Trek-Deckel. Auf beiden Seiten
@@ -65,7 +66,6 @@ EDGE_R_JUNCTION = 2.0      # innen: Übergang Langloch → Leitungskanal (Kante 
 # innerhalb fällt schräg weg und läuft nach HOSE_SLOPE_H (entlang der Achse) aus. Oberseite unverändert.
 HOSE_ARC_R = 45.0          # nach außen gewölbt; Außenwand unten dadurch min. ≈ 3,9 (Langloch sonst 4,74)
 HOSE_SLOPE_H = 10.0
-HOSE_EDGE_R = 0.5          # Kante Unterseite ↔ Schräge (R 1,0 lässt sich an den Enden nicht sauber verrunden)
 
 # Leitungskanal
 CRESCENT_FRONT_X = TIP_X + 6.8
@@ -195,29 +195,76 @@ def crescent_cutter(aT):
     return axial_prism(crescent_pts(), aT, -20, 60, spline=True, periodic=False)
 
 
+def _inner_path(aT=ALPHA_TREK):
+    """Innenkante in der Unterseite (z = 0), rechte Hälfte: Kanal ab seiner äußersten Ecke S nach hinten bis in die
+    Bohrung, dann Bohrungsrand (waagerechter Schnitt des Zylinders: Ellipse) bis zur breitesten Stelle E = (0, r).
+    Die Ecke Kanal → Bohrung ist mit EDGE_R_JUNCTION abgerundet (tangential, Bézier).
+    Rückgabe: Pfad (N×2) und die Rundung (Ecke, Bézierpunkte) bzw. None."""
+    c = math.cos(math.radians(aT))
+    r = BORE_D / 2
+    w = _wire(crescent_pts(), 0, 0, True, periodic=False)
+    us = np.linspace(0, 1, 4000)
+    cp = [(w.positionAt(u), w.tangentAt(u)) for u in us]
+    cp = [((v.x, v.y), (tg.x, tg.y)) for v, tg in cp if v.y > 0.5]
+    iS = max(range(len(cp)), key=lambda i: cp[i][0][1])
+    if cp[0][0][0] > cp[iS][0][0]:                                        # von S nach hinten
+        side = [(p, (-tg[0], -tg[1])) for p, tg in cp[:iS + 1][::-1]]
+    else:
+        side = cp[iS:]
+    path, tang = [], []
+    for (x, y), tg in side:
+        if (x * c / r) ** 2 + (y / r) ** 2 < 1.0:                         # Kanal tritt in die Bohrung ein
+            break
+        path.append((x, y)); tang.append(tg)
+    k = len(path) - 1                                                     # Eckpunkt Kanal → Bohrung
+    th0 = math.atan2(path[-1][1], path[-1][0] * c)
+    for a in np.linspace(th0, math.pi / 2, 400)[1:]:                      # Ellipse, Richtung zur Oberseite
+        path.append((r * math.cos(a) / c, r * math.sin(a))); tang.append((r * math.sin(a) / c, -r * math.cos(a)))
+    P = np.array(path)
+    Tg = np.array(tang); Tg /= np.linalg.norm(Tg, axis=1)[:, None]
+    if EDGE_R_JUNCTION <= 0:
+        return P, None
+    d = np.r_[0, np.cumsum(np.hypot(*np.diff(P, axis=0).T))]
+    phi = math.acos(max(-1.0, min(1.0, float(Tg[k] @ Tg[k + 1]))))
+    Lt = EDGE_R_JUNCTION * math.tan(phi / 2)
+    i1 = int(np.searchsorted(d, d[k] - Lt)); i2 = int(np.searchsorted(d, d[k] + Lt))
+    T1, T2, t1, t2 = P[i1], P[i2], Tg[i1], Tg[i2]                         # Berührpunkte und exakte Tangenten
+    ang = math.acos(max(-1.0, min(1.0, float(t1 @ t2))))
+    Rb = np.linalg.norm(T2 - T1) / (2 * math.sin(max(ang, 1e-3) / 2))   # Radius des Ersatzkreises
+    a_ = 4 / 3 * math.tan(ang / 4) * Rb                                  # Hebellänge Kreisnäherung
+    c1, c2 = T1 + t1 * a_, T2 - t2 * a_                                   # kubische Bézier, tangential an beide Kurven
+    bez = np.array([(1 - q) ** 3 * T1 + 3 * (1 - q) ** 2 * q * c1 + 3 * (1 - q) * q ** 2 * c2 + q ** 3 * T2
+                    for q in np.linspace(0, 1, 30)])
+    return np.vstack([P[:i1], bez, P[i2 + 1:]]), (P[k].copy(), bez)
+
+
+def junction_cutter(aT=ALPHA_TREK):
+    """Rundung der Kante Langloch → Kanal (entlang der Achse), als Schnittkörper statt als Verrundung, damit die
+    Leitungsschräge exakt dieselbe Rundung trifft. Beidseitig."""
+    _, rnd = _inner_path(aT)
+    if rnd is None:
+        return None
+    corner, bez = rnd
+    tip = corner + (corner - bez.mean(axis=0)) * 0.5                      # Ecke etwas in den Hohlraum verlängert
+    t = math.tan(math.radians(aT))
+
+    def wire(z):
+        V = lambda p: cq.Vector(p[0] + z * t, p[1], z)
+        return cq.Wire.assembleEdges([cq.Edge.makeSpline([V(p) for p in bez]), cq.Edge.makeLine(V(bez[-1]), V(tip)),
+                                      cq.Edge.makeLine(V(tip), V(bez[0]))])
+
+    right = cq.Solid.makeLoft([wire(-20.0), wire(60.0)], True)
+    return cq.Workplane("XY").add(right.fuse(right.mirror("XZ")).clean())
+
+
 def hose_cutters(aT=ALPHA_TREK, n=60):
-    """Leitungsschräge unten (siehe HOSE_*), für y > 0 konstruiert und gespiegelt. Regelfläche zwischen dem Bogen
-    in der Unterseite und der heutigen Innenkante (Kanal → Langloch) auf Höhe HOSE_SLOPE_H; nach innen ragt der
-    Schnittkörper in den Hohlraum, damit keine deckungsgleichen Flächen entstehen."""
+    """Leitungsschräge unten (siehe HOSE_*), für y > 0 konstruiert und gespiegelt. Fläche zwischen dem Bogen in der
+    Unterseite und der Innenkante (Kanal → Langloch, mit Rundung) auf Höhe HOSE_SLOPE_H: untere Hälfte gerade,
+    obere Hälfte läuft tangential in die Wand aus; nach innen ragt der Schnittkörper in den Hohlraum, damit keine deckungsgleichen Flächen entstehen."""
     if HOSE_ARC_R <= 0:
         return None
     t, c = math.tan(math.radians(aT)), math.cos(math.radians(aT))
-    r = BORE_D / 2
-    # Innenkante in der Unterseite (z = 0): Kanal ab seiner äußersten Ecke S nach hinten bis in die Bohrung,
-    # dann Bohrungsrand (waagerechter Schnitt des Zylinders: Ellipse) bis zur breitesten Stelle E = (0, r)
-    w = _wire(crescent_pts(), 0, 0, True, periodic=False)
-    cp = [w.positionAt(u) for u in np.linspace(0, 1, 2000)]
-    cp = [(v.x, v.y) for v in cp if v.y > 0.5]
-    iS = max(range(len(cp)), key=lambda i: cp[i][1])
-    side = cp[:iS + 1][::-1] if cp[0][0] > cp[iS][0] else cp[iS:]      # von S nach hinten
-    path = []
-    for x, y in side:
-        if (x * c / r) ** 2 + (y / r) ** 2 < 1.0:                         # Kanal tritt in die Bohrung ein
-            break
-        path.append((x, y))
-    th0 = math.atan2(path[-1][1], path[-1][0] * c)
-    path += [(r * math.cos(a) / c, r * math.sin(a)) for a in np.linspace(th0, math.pi / 2, 200)][1:]
-    P = np.array(path)
+    P, _ = _inner_path(aT)
     seg = np.r_[0, np.cumsum(np.hypot(*np.diff(P, axis=0).T))]
     C = np.c_[np.interp(np.linspace(0, seg[-1], n), seg, P[:, 0]), np.interp(np.linspace(0, seg[-1], n), seg, P[:, 1])]
     S, E = C[0], C[-1]
@@ -235,18 +282,61 @@ def hose_cutters(aT=ALPHA_TREK, n=60):
     inward = np.array([(-8.0, 0.0)]) - C
     inward /= np.linalg.norm(inward, axis=1)[:, None]
     zt = HOSE_SLOPE_H * c
-    B = C + 0.2 * inward + [zt * t, 0]                                    # Ende der Schräge, knapp im Hohlraum
+    W = C + 0.3 * inward                                                 # Innenkante, knapp im Hohlraum
+    off = Arc - W                                                         # waagerechter Versatz an der Unterseite
 
     def wire(z):
+        V = lambda p: cq.Vector(p[0] + z * t, p[1], z)
+        return cq.Wire.assembleEdges([cq.Edge.makeSpline([V(p) for p in bez]), cq.Edge.makeLine(V(bez[-1]), V(tip)),
+                                      cq.Edge.makeLine(V(tip), V(bez[0]))])
+
+    right = cq.Solid.makeLoft([wire(-20.0), wire(60.0)], True)
+    return cq.Workplane("XY").add(right.fuse(right.mirror("XZ")).clean())
+
+
+def hose_cutters(aT=ALPHA_TREK, n=60):
+    """Leitungsschräge unten (siehe HOSE_*), für y > 0 konstruiert und gespiegelt. Fläche zwischen dem Bogen in der
+    Unterseite und der Innenkante (Kanal → Langloch, mit Rundung) auf Höhe HOSE_SLOPE_H: untere Hälfte gerade,
+    obere Hälfte läuft tangential in die Wand aus; nach innen ragt der Schnittkörper in den Hohlraum, damit keine deckungsgleichen Flächen entstehen."""
+    if HOSE_ARC_R <= 0:
+        return None
+    t, c = math.tan(math.radians(aT)), math.cos(math.radians(aT))
+    P, _ = _inner_path(aT)
+    seg = np.r_[0, np.cumsum(np.hypot(*np.diff(P, axis=0).T))]
+    C = np.c_[np.interp(np.linspace(0, seg[-1], n), seg, P[:, 0]), np.interp(np.linspace(0, seg[-1], n), seg, P[:, 1])]
+    S, E = C[0], C[-1]
+    # Bogen S → E, Radius HOSE_ARC_R, nach außen (+y) gewölbt
+    m, d = (S + E) / 2, E - S
+    L = np.hypot(*d)
+    nrm = np.array([-d[1], d[0]]) / L
+    if nrm[1] < 0:
+        nrm = -nrm
+    cen = m - nrm * math.sqrt(HOSE_ARC_R ** 2 - (L / 2) ** 2)
+    a0, a1 = math.atan2(*(S - cen)[::-1]), math.atan2(*(E - cen)[::-1])
+    da = (a1 - a0 + math.pi) % (2 * math.pi) - math.pi
+    Arc = np.array([cen + HOSE_ARC_R * np.array([math.cos(a0 + da * k), math.sin(a0 + da * k)])
+                    for k in np.linspace(0, 1, n)])
+    inward = np.array([(-8.0, 0.0)]) - C
+    inward /= np.linalg.norm(inward, axis=1)[:, None]
+    zt = HOSE_SLOPE_H * c
+    W = C + 0.3 * inward                                                 # Innenkante, knapp im Hohlraum
+    off = Arc - W                                                         # waagerechter Versatz an der Unterseite
+
+    f0 = 0.5                                                              # bis hier gerade, danach tangentialer Auslauf
+
+    def wire(z):
+        # Versatz: bis f0 linear (saubere Kante unten), danach quadratisch auf null, tangential an die Wand (kein Knick)
         f = z / zt
-        q = Arc + (B - Arc) * f                                           # Regelfläche, linear in z
+        hh = 1 - 2 / (1 + f0) * f if f <= f0 else (1 - f) ** 2 / (1 - f0 ** 2)
+        q = W + [z * t, 0] + off * hh
         back = (C + 2.0 * inward + [z * t, 0])[::-1]                      # Rückweg im Hohlraum
         V = lambda p: cq.Vector(p[0], p[1], z)
         edges = [cq.Edge.makeSpline([V(p) for p in q]), cq.Edge.makeLine(V(q[-1]), V(back[0])),
                  cq.Edge.makeSpline([V(p) for p in back]), cq.Edge.makeLine(V(back[-1]), V(q[0]))]
         return cq.Wire.assembleEdges(edges)
 
-    right = cq.Solid.makeLoft([wire(-1.0), wire(zt)], True)
+    zs = [-1.0, 0.0, f0 * zt] + list(np.linspace(f0, 1.0, 7)[1:] * zt)
+    right = cq.Solid.makeLoft([wire(z) for z in zs], False)
     return cq.Workplane("XY").add(right.fuse(right.mirror("XZ")).clean())
 
 
@@ -320,35 +410,24 @@ def split_halves(body, aT, h, with_joints=True):
 
 # ---------------------------------------------------------------- Bauteile
 def core_body(aT=ALPHA_TREK, aV=ALPHA_TAVELO, h=HEIGHT):
-    """Hülle minus Bohrung, Leitungskanal und Leitungsschräge. Verrundet: Kanten von Bohrung und Kanal an Ober- und
-    Unterseite, die Kanten entlang der Achse am Übergang Langloch → Kanal und die Kante Unterseite ↔ Schräge."""
+    """Hülle minus Bohrung, Leitungskanal, Rundung am Übergang Langloch → Kanal und Leitungsschräge.
+    Danach die inneren Kanten an Ober- und Unterseite verrundet."""
     from OCP.BRepFilletAPI import BRepFilletAPI_MakeFillet
-    bore, chan, hose = bore_cutter(aT), crescent_cutter(aT), hose_cutters(aT)
+    bore, chan = bore_cutter(aT), crescent_cutter(aT)
+    extra = [x for x in (junction_cutter(aT), hose_cutters(aT)) if x is not None]
     cut = bore.union(chan)
-    if hose is not None:
-        cut = cut.union(hose)
-    body = envelope(aT, aV, h).cut(cut).val()
+    for x in extra:
+        cut = cut.union(x)
+    body = envelope(aT, aV, h).cut(cut).solids().val()
+    cv = cut.val()
     mk, n = BRepFilletAPI_MakeFillet(body.wrapped), 0
-
-    def on(cutter, e):
-        return cutter.distance(cq.Vertex.makeVertex(*e.positionAt(0.5).toTuple())) < 1e-4
-
-    if EDGE_R_JUNCTION > 0:
-        for e in body.Edges():
-            if on(bore.val(), e) and on(chan.val(), e):
-                mk.Add(EDGE_R_JUNCTION, e.wrapped); n += 1
-    rules = [(bore.val(), EDGE_R_BORE), (chan.val(), EDGE_R_CHANNEL)]
-    if hose is not None:
-        rules.insert(0, (hose.val(), HOSE_EDGE_R))
     for f in body.Faces():
         if f.geomType() != "PLANE" or abs(f.normalAt().z) < 0.5:   # nur Ober- und Unterseite
             continue
         for e in f.Edges():
-            for cutter, r in rules:
-                if r > 0 and on(cutter, e):
-                    mk.Add(r, e.wrapped); n += 1
-                    break
-    if n == 0:
+            if cv.distance(cq.Vertex.makeVertex(*e.positionAt(0.5).toTuple())) < 1e-4:
+                mk.Add(EDGE_R_INNER, e.wrapped); n += 1
+    if n == 0 or EDGE_R_INNER <= 0:
         return cq.Workplane("XY").add(body)
     mk.Build()
     return cq.Workplane("XY").add(cq.Shape.cast(mk.Shape()))
