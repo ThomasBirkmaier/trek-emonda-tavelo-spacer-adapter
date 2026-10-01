@@ -1,6 +1,6 @@
 """Renderings des zweiteiligen Adapters: Schnitte in mehreren Höhen (Hälfte A blau, B orange), Iso/Explosion je Variante,
 Detailschnitt durch die Stifte (beide Varianten), Drucklayout.
-Vorher python 02_CAD/adapter.py ausführen (das Drucklayout wird aus 02_CAD/out/DRUCK_*.stl gelesen)."""
+Vorher python 02_CAD/adapter.py ausführen (das Drucklayout wird aus 02_CAD/out/Stift/DRUCK_*.stl gelesen)."""
 import sys, os, math, tempfile, numpy as np, trimesh, matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -81,7 +81,7 @@ fig.suptitle(f"Schnitt durch die Stiftachse y = {ad.PIN_Y:g} (Hälfte A), vorn =
 fig.tight_layout(); fig.savefig("03_Renderings/Stift_Varianten.png", dpi=95)
 
 # Drucklayout: so, wie die Druckdatei auf dem Bauraum liegt (Unterseite auf z = 0)
-mP = trimesh.load(f"02_CAD/out/DRUCK_Adapter_{ad.TAG}_Stift.stl")
+mP = trimesh.load(f"02_CAD/out/Stift/DRUCK_Adapter_{ad.TAG}_Stift.stl")
 lo, hi = mP.bounds
 fig = plt.figure(figsize=(16, 7))
 for i, (el, az, t) in enumerate([(45, -25, "Drucklayout, Iso"), (90, -90, "Drucklayout, Draufsicht")]):

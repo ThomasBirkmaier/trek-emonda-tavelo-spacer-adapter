@@ -44,9 +44,9 @@ Nicht geprüft, aber naheliegend:
 
 ### Ich will nur drucken
 
-1. Variante wählen und die Datei bei einem Druckdienst hochladen, zum Beispiel Craftcloud (auch als `.3mf`/`.step`). Die Datei enthält beide Hälften, getrennt gelegt; die Menge ist 1.
-   - **`02_CAD/out/DRUCK_Adapter_H22_T17_V7.2_Stift.stl`**: Stifte angedruckt, nichts weiter nötig.
-   - **`02_CAD/out/DRUCK_Adapter_H22_T17_V7.2_Passstift.stl`**: dazu zwei Zylinderstifte ISO 2338 Ø 3 m6 × 8 (Edelstahl A2/A4), Kleber (2K-Epoxid oder Sekundenkleber) und die Lehre **`DRUCK_Lehre_Passstift.stl`** (darf FDM sein), siehe Montage.
+1. Variante wählen (je ein Ordner in `02_CAD/out/`) und die Druckdatei bei einem Druckdienst hochladen, zum Beispiel Craftcloud (auch als `.3mf`/`.step`). Die Datei enthält beide Hälften, getrennt gelegt; die Menge ist 1.
+   - **`02_CAD/out/Stift/DRUCK_Adapter_H22_T17_V7.2_Stift.stl`**: Stifte angedruckt, nichts weiter nötig.
+   - **`02_CAD/out/Passstift/DRUCK_Adapter_H22_T17_V7.2_Passstift.stl`**: dazu zwei Zylinderstifte ISO 2338 Ø 3 m6 × 8 (Edelstahl A2/A4), Kleber (2K-Epoxid oder Sekundenkleber), siehe Montage.
 2. Verfahren **MJF**, Material **PA12**, Farbe schwarz. Zum Fahren kein FDM/PLA/PETG: Das Teil liegt in der Kraftkette der Lagervorspannung. Für eine reine Passprobe reicht ein FDM-Druck (Unterseite aufs Druckbett, so liegt sie in der Datei).
 
 Passungen: Bohrung Ø 30 (0,7 mm Spiel radial zum Schaft, nach hinten 2 mm Langloch), Gelenk 0,2 mm Spiel radial, Nasentaschen 0,55 mm pro Seite quer und 0,3 mm in Längsrichtung, 3 mm tief. Klemmt das Gelenk nach dem Druck, die Zapfen leicht nachschleifen oder `JOINT_CLEAR` erhöhen.
@@ -61,7 +61,7 @@ cd trek-emonda-tavelo-spacer-adapter
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
-python 02_CAD/adapter.py             # exportiert den Adapter nach 02_CAD/out
+python 02_CAD/adapter.py             # exportiert beide Varianten nach 02_CAD/out/Stift und 02_CAD/out/Passstift
 python 02_CAD/check_adapter.py       # Kollision der Hälften, Bohrungsmaß, Wandstärken
 python 02_CAD/render_adapter.py      # Schnitte, Iso-Ansicht, Drucklayout
 ```
@@ -77,13 +77,13 @@ Die Parameter stehen oben in [`02_CAD/adapter.py`](02_CAD/adapter.py):
 | `BORE_D`, `BORE_SLOT` | Bohrungsdurchmesser, Langloch nach hinten | 30 mm (Schaft 28,6), 2 mm |
 | `POCKET_CLEAR_W`, `POCKET_CLEAR`, `POCKET_DEPTH` | Nasentaschen: Spiel quer und längs pro Seite, Tiefe | 0,55 mm, 0,3 mm, 3 mm |
 | `outline_wire_pts()`, `NOSE_*`, `PIN_*` | Kontur, Nasen, Stifte | laut Skizze V2 |
-| `VARIANTS`, `DOWEL_L`, `PINHOLE_*` | Varianten Stift/Passstift; Länge des Zylinderstifts, Sackloch (Ø, Tiefe, Fase) | Ø 3 × 8; Loch Ø 3,0 × 7,15, Fase 0,3 |
+| `VARIANTS`, `DOWEL_L`, `PINHOLE_*` | Varianten Stift/Passstift; Länge des Zylinderstifts, Sackloch (Ø, Tiefe, Fase) | Ø 3 × 8; Loch Ø 3,0 × 6,15 (Stift auf dem Grund), Fase 0,3 |
 
 Bezugshöhe, Winkel und Variante stehen im Dateinamen der Exporte (`..._H22_T17_V7.2_Stift`), damit man sieht, welche Version man druckt.
 
 ## Montage
 
-0. Nur Variante Passstift, vorab: Beide Sacklöcher mit einem 3,0er-Bohrer von Hand nachbohren. Stift mit Kleber einsetzen (bei Sekundenkleber ein Stück Draht zum Entlüften mit ins Loch), die Lehre über beide Stifte auf die Oberseite legen und die Stifte bündig mit der Lehre drücken: Überstand 1,85. Lehre vor dem Aushärten abnehmen oder vorher mit Klebeband abdecken, damit sie nicht festklebt.
+0. Nur Variante Passstift, vorab: Beide Sacklöcher mit einem 3,0er-Bohrer von Hand aufweiten, nur etwa 5 mm tief (Klebeband als Tiefenanschlag), damit die Bohrerspitze den Lochgrund nicht vertieft. Kleber dünn auf den Stift geben, nicht ins Loch (sonst sammelt er sich am Grund); bei Sekundenkleber ein Stück Draht zum Entlüften mit ins Loch. Stift bis auf den Grund drücken und halten, bis der Kleber anzieht. Der Überstand ergibt sich aus der Lochtiefe: 1,85, mit dem Messschieber prüfen.
 1. Vorbau abnehmen; der Trek-Deckel bleibt, die Leitungen bleiben angeschlossen.
 2. Hälfte **A** (Zapfen unten) seitlich an Schaft und Leitungen legen, die Nase sitzt in der Tasche.
 3. Hälfte **B** (Zapfen oben) seitlich ansetzen und **entlang des Schafts** von oben einschieben, bis sie aufsitzt.
@@ -102,7 +102,7 @@ Bezugshöhe, Winkel und Variante stehen im Dateinamen der Exporte (`..._H22_T17_
 | `01_Input/` | Skizze, Herstellerzeichnung und Fotos, die ins Modell eingeflossen sind (Rohdaten; die Skizze enthält noch die verworfene Länge 52, richtig ist 58) |
 | `02_CAD/adapter.py` | parametrisches Modell, einzige Quelle der Geometrie |
 | `02_CAD/check_adapter.py`, `02_CAD/render_adapter.py` | Prüfungen und Renderings |
-| `02_CAD/out/` | `Adapter_*` = zusammengebaut (Ansicht); `DRUCK_*` = druckfertig; je Variante `_Stift` / `_Passstift`, dazu `DRUCK_Lehre_Passstift` |
+| `02_CAD/out/Stift/`, `02_CAD/out/Passstift/` | je Variante: `Adapter_*` = zusammengebaut (Ansicht), `DRUCK_*` = druckfertig |
 | `03_Renderings/` | Aufmacherbild (generiert, Rev. C.4, Variante Stift), Schnitte, Iso-Ansicht je Variante, Schnitt durch die Stifte beider Varianten, Drucklayout (von `render_adapter.py` erzeugt) |
 
 ![Schnitte](03_Renderings/Adapter_Schnitte.png)

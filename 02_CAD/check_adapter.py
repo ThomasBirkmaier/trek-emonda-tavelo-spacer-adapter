@@ -43,7 +43,7 @@ for var in A.VARIANTS:
 loc = bore.rotate(cq.Vector(), cq.Vector(0, 1, 0), -aT).BoundingBox()
 print(f"Bohrung senkrecht zur Achse: längs {loc.xmin:.2f} … {loc.xmax:.2f} ({loc.xlen:.2f}), quer {loc.ylen:.2f}"
       f"   Schaft Ø {A.STEERER_D}")
-print(f"Passstift: Ø 3 × {A.DOWEL_L:g}, Überstand {A.PIN_H:g}, im Loch {A.DOWEL_L - A.PIN_H:.2f};"
+print(f"Passstift: Ø 3 × {A.DOWEL_L:g} auf dem Grund, Überstand {A.DOWEL_L - A.PINHOLE_DEPTH:.2f} (Soll {A.PIN_H:g});"
       f" Sackloch Ø {A.PINHOLE_D:g} × {A.PINHOLE_DEPTH:.2f}, Fase {A.PINHOLE_CHAMFER:g}")
 
 # Wandstärken

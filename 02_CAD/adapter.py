@@ -18,9 +18,8 @@ Koordinatensystem (siehe KONSTRUKTION.md):
   ist das egal (Zapfen und Aufnahme gleich). Die Bohrung ist deshalb ein echter Zylinder um die Achse.
 
 Aufruf (aus dem Repo-Wurzelverzeichnis):  python 02_CAD/adapter.py
-  -> 02_CAD/out/Adapter_<TAG>_<Variante>.*                  zusammengebaut (Ansicht/Kontrolle), TAG = H<Höhe>_T<aT>_V<aV>
-  -> 02_CAD/out/DRUCK_Adapter_<TAG>_<Variante>.stl/.3mf/.step  Drucklayout, beide Hälften getrennt
-  -> 02_CAD/out/DRUCK_Lehre_Passstift.stl/.step               Lehre für den Stiftüberstand (Variante Passstift)
+  -> 02_CAD/out/<Variante>/Adapter_<TAG>_<Variante>.*                  zusammengebaut (Ansicht/Kontrolle), TAG = H<Höhe>_T<aT>_V<aV>
+  -> 02_CAD/out/<Variante>/DRUCK_Adapter_<TAG>_<Variante>.stl/.3mf/.step  Drucklayout, beide Hälften getrennt
   Varianten (VARIANTS): Stift = angedruckte Stifte, Passstift = Sacklöcher für Zylinderstifte; sonst identisch.
 Danach: python 02_CAD/check_adapter.py (Wandstärken, Kollision), python 02_CAD/render_adapter.py
 """
@@ -105,15 +104,13 @@ PIN_Y = 28.75 / 2
 
 # Varianten: Alles außer den Stiften ist identisch.
 #   "Stift"      Stifte angedruckt (bisherige Ausführung)
-#   "Passstift"  Sacklöcher für Zylinderstifte ISO 2338 Ø 3 m6 × DOWEL_L (Edelstahl), eingeklebt; der Überstand
-#                PIN_H wird beim Kleben mit der Lehre eingestellt. Der Stift ergibt denselben Zapfen wie "Stift".
+#   "Passstift"  Sacklöcher für Zylinderstifte ISO 2338 Ø 3 m6 × DOWEL_L (Edelstahl), eingeklebt und bis auf den Grund
+#                gedrückt; die Lochtiefe legt den Überstand PIN_H fest. Der Stift ergibt denselben Zapfen wie "Stift".
 VARIANTS = ("Stift", "Passstift")
 DOWEL_L = 8.0                            # Stiftlänge; 6,15 im Loch ≈ 2 × d, länger macht die Wand zur Bohrung dünner
 PINHOLE_D = 3.0                          # gedruckt; vor dem Kleben mit 3,0 nachbohren (FDM druckt Löcher zu klein)
-PINHOLE_DEPTH = DOWEL_L - PIN_H + 1.0    # ab Oberseite, 1 Luft am Grund (Kleber, Längentoleranz des Stifts)
+PINHOLE_DEPTH = DOWEL_L - PIN_H          # ab Oberseite; Stift sitzt auf dem Grund, Überstand = PIN_H
 PINHOLE_CHAMFER = 0.3                    # Fase 45° oben
-GAUGE_HOLE_D = 3.2                       # Lehre: Loch mit Luft, Dicke = PIN_H, Lochabstand = 2 × PIN_Y
-GAUGE_W = 8.0
 
 # Teilung + Gelenk nach Tavelo-Vorbild:
 # An jeder Teilstelle greifen zwei Zapfen (Zylinder mit Hals) wechselseitig in Aufnahmen der anderen Hälfte:
@@ -394,15 +391,6 @@ def pin_holes(aT, aV, h):
     return res
 
 
-def pin_gauge():
-    """Lehre zum Einkleben der Passstifte: Leiste mit zwei Löchern im Stiftabstand, Dicke = Überstand PIN_H.
-    Auf die Oberseite legen, Stifte durchstecken, bis sie bündig mit der Lehre sind, aushärten lassen.
-    Flach drucken; die Dicke wird auf die Schichthöhe gerundet, lieber etwas dünner als dicker."""
-    L = 2 * PIN_Y + GAUGE_W
-    return (cq.Workplane("XY").slot2D(L, GAUGE_W, 90).extrude(PIN_H)
-            .faces(">Z").workplane().pushPoints([(0, PIN_Y), (0, -PIN_Y)]).hole(GAUGE_HOLE_D))
-
-
 def knuckle(j, side, aT, z0, z1, grow=0.0):
     """Zapfen (Zylinder + Hals). side=+1: gehört zu A (y>0), ragt nach -y; side=-1: gehört zu B, ragt nach +y.
     grow>0 erzeugt die Aufnahme (mit Spiel) statt des Zapfens."""
@@ -496,16 +484,13 @@ def export_print_layout(A, B, path_stem, gap=8.0):
 
 
 if __name__ == "__main__":
-    out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "out")
-    os.makedirs(out, exist_ok=True)
+    root = os.path.join(os.path.dirname(os.path.abspath(__file__)), "out")
     core = core_body()
     for var in VARIANTS:
+        out = os.path.join(root, var)                    # je Variante ein Ordner
+        os.makedirs(out, exist_ok=True)
         A, B = adapter(variant=var, core=core)
         v = export_pair(A, B, os.path.join(out, f"Adapter_{TAG}_{var}"))
         print(f"Adapter {var}", "Körper A/B:", len(A.solids().vals()), len(B.solids().vals()), "Volumen %.0f mm3" % v)
         bb = export_print_layout(A, B, os.path.join(out, f"DRUCK_Adapter_{TAG}_{var}"))
         print("  Drucklayout Bauraum %.1f x %.1f x %.1f mm" % (bb.xlen, bb.ylen, bb.zlen))
-    g = pin_gauge()
-    cq.exporters.export(g, os.path.join(out, "DRUCK_Lehre_Passstift.stl"), tolerance=0.01, angularTolerance=0.08)
-    cq.exporters.export(g, os.path.join(out, "DRUCK_Lehre_Passstift.step"))
-    print(f"Lehre Passstift: {2 * PIN_Y + GAUGE_W:.2f} x {GAUGE_W:g} x {PIN_H:g} mm, Löcher Ø {GAUGE_HOLE_D:g}")
