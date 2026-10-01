@@ -2,7 +2,7 @@
 
 Adapter zwischen dem originalen Trek-Steuersatzdeckel (Émonda SL 6, 2024) und dem Tavelo-Avro-Rise-Cockpit.
 
-**Stand:** Rev. C.4, 2026-10-01: Prototyp 1 und 2 gedruckt und am Rad geprüft, alle Befunde eingearbeitet (Abschnitt 6). Nächster Schritt: Prototyp 3 (Rev. C.4) drucken, prüfen (O-3) und den Befund in Abschnitt 6 eintragen.
+**Stand:** Rev. C.5, 2026-10-01: Prototyp 1 und 2 gedruckt und am Rad geprüft, alle Befunde eingearbeitet (Abschnitt 6). Seit Rev. C.5 zwei Varianten, die sich nur an den Stiften oben unterscheiden: **Stift** (angedruckt) und **Passstift** (Sacklöcher für eingeklebte Zylinderstifte, D-12). Nächster Schritt: Prototyp 3 drucken, prüfen (O-3) und den Befund in Abschnitt 6 eintragen.
 
 ---
 
@@ -11,7 +11,7 @@ Adapter zwischen dem originalen Trek-Steuersatzdeckel (Émonda SL 6, 2024) und d
 | ID | Schnittstelle | Gegenstück | Festlegung |
 |---|---|---|---|
 | IF-1 | Unterseite ↔ Trek-Deckel | originaler Trek-Deckel, bleibt unverändert | Kontur 60,5 × 39,5 (Spitze 2,5 weiter vorn als oben), zwei Nasen, Neigung α_T |
-| IF-2 | Oberseite ↔ Tavelo-Vorbau | Vorbauunterseite (identisch zur Spacer-Sitzfläche) | Kontur 58 × 39,5, zwei Stifte in die Sacklöcher des Vorbaus, Neigung α_V |
+| IF-2 | Oberseite ↔ Tavelo-Vorbau | Vorbauunterseite (identisch zur Spacer-Sitzfläche) | Kontur 58 × 39,5, zwei Stifte in die Sacklöcher des Vorbaus (angedruckt oder als eingeklebte Zylinderstifte, D-12), Neigung α_V |
 | IF-3 | Bohrung ↔ Gabelschaft | Carbonschaft Ø 28,6, seitlich abgeflacht auf 26,75 | Bohrung Ø 30 senkrecht zur Schaftachse, als Langloch 2 nach hinten verlängert (32 × 30), entlang der Schaftachse |
 | IF-4 | Leitungsführung | 2 Bremsleitungen (Di2 funkt) | Tavelo-Kanal → Sichel → Öffnung im Trek-Deckel → Rahmen; die hintere Leitung kommt seitlich rechts aus dem Deckel (Leitungsschräge, D-11) |
 
@@ -33,6 +33,7 @@ Adapter zwischen dem originalen Trek-Steuersatzdeckel (Émonda SL 6, 2024) und d
 | vordere Bohrungskante → Spitze | 13,0 (Messmaß am Tavelo-Spacer, legt die Spitze fest) | |
 | Sichel (Leitungskanal, zur Bohrung offen) | Vorderkante 6,8 hinter der Spitze; Breite außen 22,75 / innen 20,2 | x = −21,2; y = ±11,375 / ±10,1 |
 | Stifte oben (Tavelo) | Ø 3 × 1,85; Abstand 28,75; 42,0 ab Hinterkante (Prototyp 40,5: Adapter saß 1,5 zu weit vorn) | x = −12,0; y = ±14,375 (in der Oberseite) |
+| Variante Passstift | Zylinderstift ISO 2338 Ø 3 m6 × 8, Edelstahl A2/A4, Überstand 1,85 (wie angedruckt), 6,15 im Loch; Sackloch Ø 3,0 × 7,15 ab Oberseite (1 Luft am Grund), Fase 0,3 × 45° | gleiche Lage und Richtung wie die Stifte (senkrecht zur Oberseite) |
 | Trek-Nasen | Langloch 7,6 × 2,4 × 1,5; äußerste Punkte 20,25 auseinander, innerste 11,35; Längsausdehnung 7,0 | Mitte x = +20,0; y = ±7,9; 24° zur Längsachse, V-förmig (vorn außen) |
 | Taschen für die Nasen | Nase + 0,55 Spiel pro Seite quer (Breite 3,5) und 0,3 in Längsrichtung, Tiefe 3,0; vorderes (inneres) Ende zur Bohrung geöffnet (Durchbruch in Taschenbreite) | |
 | Höhe | Bezug 22 entlang der Schaftachse (bis Prototyp 2: 20); rechnerisch 22,42 an der Achse durch die Keilkorrektur (D-6) | auf ebener Fläche gemessen: Hinterkante oben 16,3, Spitze oben 26,2 |
@@ -57,7 +58,7 @@ Der Lenkwinkel spielt für die Passung keine Rolle. Maßgeblich sind nur die Nei
 
 | ID | Entscheidung | Begründung |
 |---|---|---|
-| D-1 | Bohrung Ø 30 senkrecht zur Schaftachse (0,7 Spiel radial zum Schaft Ø 28,6), als Langloch 2 nach hinten verlängert (32 × 30); Vorderkante 15 vor der Achse | Die Lage kommt von den Trek-Nasen unten und den Tavelo-Stiften oben, nicht vom Schaft. Das Langloch gibt dem Vorbau nach hinten Luft. Der Prototyp (Ø 28,9, Kreise parallel zur Unterseite gezeichnet) war senkrecht zur Achse längs nur 27,6 und damit enger als der Schaft. Die Tavelo-Spacer haben ebenfalls 30. Wand zu den Stiften 2,1. Die Nasentaschen sind zur Bohrung geöffnet (D-9). |
+| D-1 | Bohrung Ø 30 senkrecht zur Schaftachse (0,7 Spiel radial zum Schaft Ø 28,6), als Langloch 2 nach hinten verlängert (32 × 30); Vorderkante 15 vor der Achse | Die Lage kommt von den Trek-Nasen unten und den Tavelo-Stiften oben, nicht vom Schaft. Das Langloch gibt dem Vorbau nach hinten Luft. Der Prototyp (Ø 28,9, Kreise parallel zur Unterseite gezeichnet) war senkrecht zur Achse längs nur 27,6 und damit enger als der Schaft. Die Tavelo-Spacer haben ebenfalls 30. Wand zu den Stiften 1,6 (an der Kante R 0,5 oben; ohne Kantenradius 2,1), zu den Sacklöchern der Variante Passstift 1,3 (D-12). Die Nasentaschen sind zur Bohrung geöffnet (D-9). |
 | D-2 | Außenwand = Regelfläche zwischen Trek-Kontur (unten) und Tavelo-Kontur (oben) | Beide Fugen schließen bündig, obwohl die Ebenen ≈ 10° gegeneinander stehen. |
 | D-3 | Bohrung, Sichel und Gelenk entlang der Schaftachse | Das Teil wird entlang des Schafts gefügt, die Leitungen laufen parallel zum Schaft. Sichel und Gelenk sind als Profil parallel zur Unterseite definiert und entlang der Achse geschert, senkrecht zur Achse also längs um cos α_T kürzer; für sie ist das unerheblich. Die Bohrung ist ein echter Zylinder um die Achse (siehe D-1). |
 | D-4 | Zweiteilig, Teilung bei y = 0 | Montage um Schaft und Leitungen, ohne die Hydraulik zu öffnen. |
@@ -68,6 +69,7 @@ Der Lenkwinkel spielt für die Passung keine Rolle. Maßgeblich sind nur die Nei
 | D-9 | Nasentaschen am vorderen (inneren) Ende zur Bohrung geöffnet: Durchbruch in Taschenbreite (3,5) Richtung Schaftachse, Tiefe wie die Tasche | Durch das Langloch bliebe nur ein Steg von 0,27, der beim Druck oder bei der Montage wegbricht. Offen gibt es keine losen Splitter; die Übergänge zur Bohrung sind stumpfwinklig. Die Nasen werden seitlich und am hinteren Ende geführt. |
 | D-10 | Kantenradien: alle inneren Kanten an Ober- und Unterseite (Bohrung, Kanal, Übergang, Leitungsschräge) einheitlich R 0,5; der Übergang Langloch → Kanal entlang der Achse ist mit R 2,0 gerundet (als Teil des Schnitts, nicht als Verrundung) | Sauberes Aussehen, keine scharfen Kanten an den Leitungen. Einheitlich, weil die inneren Kanten tangential ineinander übergehen und sich so nur mit einem Radius verrunden lassen; R 1,0 würde die Wand zur oberen vorderen Gelenkaufnahme auf 0,64 senken (mit R 0,5: 1,21). Die R-2,0-Rundung ist im Schnitt konstruiert, damit die Leitungsschräge genau dieselbe Rundung trifft. |
 | D-11 | Leitungsschräge an der Unterseite, beidseitig: Bogen R 45 (nach außen gewölbt) von der äußersten Ecke des Leitungskanals (x ≈ −18,5) zur breitesten Stelle des Langlochs (x = 0); das Material innerhalb fällt weg, bis zur halben Höhe der Schräge gerade, darüber läuft sie tangential (ohne Knick) in Kanal- und Bohrungswand aus, nach 10 mm entlang der Achse; Kante zur Unterseite R 0,5 | Die hintere Bremsleitung kommt seitlich rechts aus dem Trek-Deckel und bekommt so unten bis 3,4 mm mehr Luft. Oberseite unverändert. Außenwand an der Schräge ≈ 3,9 (Langloch sonst 4,74); die dünnsten Wände in diesem Bereich liegen weiterhin oben am Kanal (2,0) und an der vorderen Kanalecke (3,1) und werden nicht berührt. |
+| D-12 | **Zwei Varianten**, sonst identisch (`VARIANTS`, ein gemeinsamer `core_body`): **Stift** mit angedruckten Stiften Ø 3 × 1,85; **Passstift** mit Sacklöchern Ø 3,0 × 7,15 (Fase 0,3) für Zylinderstifte ISO 2338 Ø 3 m6 × 8, Edelstahl, gleiche Lage und Richtung. Loch mit 3,0 nachbohren (FDM druckt Löcher zu klein), Stift mit 2K-Epoxid oder Sekundenkleber (Draht zum Entlüften mit ins Loch) einkleben; den Überstand 1,85 stellt die Lehre ein (`DRUCK_Lehre_Passstift`: Leiste 36,75 × 8 × 1,85, Löcher Ø 3,2 im Abstand 28,75) | Stahlstifte sind belastbarer als angedruckte (bei FDM liegt am Fuß eine Schichtgrenze) und ergeben denselben Zapfen. Eingeklebt statt eingepresst: Ein Presssitz von 0,1 dehnt den Lochrand in PETG um ≈ 3 %, die Wand zur Bohrung ist nur 1,3 bis 1,6. 8 mm Länge: 6,15 im Loch ≈ 2 × d reichen, der Stift trägt nur Querkräfte an der Oberseite; länger macht die Wand zur Bohrung dünner (10 mm: ≈ 1,46 statt 1,61 am Lochgrund). Wand Sackloch ↔ Bohrung 1,33 (nur oben an der Fase, darunter 1,6), ↔ Außenwand 1,77. Die Lehre wird flach gedruckt; ihre Dicke rundet der Slicer auf die Schichthöhe, lieber dünner als dicker, damit der Stift nicht im Vorbau aufsitzt. |
 
 ## 6. Befund der Prototypen
 
@@ -99,12 +101,13 @@ Der Lenkwinkel spielt für die Passung keine Rolle. Maßgeblich sind nur die Nei
 |---|---|---|
 | O-1 | Wand zwischen Bohrungs-Langloch und Nasentaschen nur 0,27 | erledigt: Taschen zur Bohrung geöffnet (D-9) |
 | O-2 | Feinschliff | erledigt: vorderes Gelenk verschoben (D-5), Taschen offen (D-9), Kantenradien (D-10) |
-| O-3 | Prototyp 3 (Rev. C.4) am Rad prüfen, dann Endteil in PA12 (MJF) | offen (Prototyp 2 geprüft, Abschnitt 6). Prüfen: Stifte ohne Druck in den Sacklöchern, B ohne Klemmen aufschiebbar, vorn und hinten bündig, Aufziehen ohne Feilen, beide Fugen mit Fühlerlehre dicht (oben vorn!), Top-Cap baut Vorspannung auf (Trek-Deckel lässt sich nicht mehr verdrehen); Höhe auf ebener Fläche: Hinterkante 16,3, Spitze 26,2 |
-| O-4 | Idee: Stahlstifte statt gedruckter Stifte (Zylinderstift Ø 3 × 6, ISO 8734, in Bohrung ≈ Ø 2,9 eingepresst; Passmaß ist eine Annahme) | nicht umgesetzt; erst Durchmesser und Tiefe der Sacklöcher im Vorbau messen (bisher ungemessen) |
+| O-3 | Prototyp 3 (Rev. C.4) am Rad prüfen, dann Endteil in PA12 (MJF) | offen (Prototyp 2 geprüft, Abschnitt 6). Prüfen: Stifte ohne Druck in den Sacklöchern, B ohne Klemmen aufschiebbar, vorn und hinten bündig, Aufziehen ohne Feilen, beide Fugen mit Fühlerlehre dicht (oben vorn!), Top-Cap baut Vorspannung auf (Trek-Deckel lässt sich nicht mehr verdrehen); Höhe auf ebener Fläche: Hinterkante 16,3, Spitze 26,2. Variante Passstift: Loch mit 3,0 nachgebohrt, Stift mit Lehre eingeklebt, Überstand 1,85, Stift sitzt nach dem Aushärten fest |
+| O-4 | Stahlstifte statt gedruckter Stifte | umgesetzt als Variante Passstift (D-12, Rev. C.5): eingeklebt statt eingepresst, weil ein Presssitz die Wand zur Bohrung (1,3 bis 1,6) in PETG überdehnen würde. Die Sacklöcher im Vorbau sind weiter ungemessen; der Überstand 1,85 hat aber schon angedruckt gepasst |
 | O-5 | Idee: Einführfasen 0,3 an den Stiftspitzen, 0,3–0,5 an den Enden der Gelenkzapfen | nicht umgesetzt; erleichtert die Montage |
 | O-6 | Idee: Gelenkspiel für MJF auf 0,25–0,3 (`JOINT_CLEAR`) | nicht umgesetzt; Einschätzung, kein Messwert. 0,2 hat im FDM-Prototyp gepasst |
 | O-7 | Idee: „A“, „B“ und Revision innen einprägen; Oberfläche des Endteils gefärbt und dampfgeglättet | nicht umgesetzt |
 | O-8 | Höhe 20 oder 22: Steht das Schaftende zu hoch, fehlt der Top-Cap der Spalt (Vorspannung) | erledigt: 22 (D-6, Rev. C.3) |
+| O-9 | Endteil in höchster Qualität (Verfahren und Werkstoff offen, z. B. MJF PA12 oder gefräst), mit den letzten kleinen Korrekturen aus Prototyp 3 | offen, nach O-3; Variante dann festlegen |
 
 Geprüft und unkritisch (Review Rev. C): Die Vorspannung (angenommen 1–2 kN) drückt den ≈ 10°-Keil mit ≈ 17 % nach hinten; Reibung an Ober- und Unterseite (μ ≈ 0,2) hält das allein, dazu Stifte, Nasenflanken und nach 0,7 der Schaft. Flächenpressung ≈ 1–2 MPa auf je ≈ 900 mm². Das Gelenk trägt keine Fahrlasten, jede Hälfte sitzt über eigene Nase und eigenen Stift. Lenk- und Biegemomente laufen über die Vorbauklemmung in den Schaft.
 
@@ -120,3 +123,4 @@ Prüfen nach jeder Änderung: `python 02_CAD/check_adapter.py` (Kollision der H�
 | C.2 | 2026-10-01 | Keil nach Prototyp 2: Spitze oben 0,8 höher, α_V 7,21° (Spalt gefüllt, Vorbau unverändert) |
 | C.3 | 2026-10-01 | Höhe 22 statt 20 (Spalt für die Top-Cap); Dateinamen `_H22_T17_V7.2` |
 | C.4 | 2026-10-01 | Nasentaschen 0,5 breiter (Spiel quer 0,55 pro Seite) und 3,0 tief, damit der Adapter leichter bündig auf dem Trek-Deckel sitzt |
+| C.5 | 2026-10-01 | Zweite Variante **Passstift** (Sacklöcher für eingeklebte Zylinderstifte, Lehre für den Überstand), sonst identisch mit **Stift** (D-12); Dateinamen mit Variante `_H22_T17_V7.2_Stift` / `_Passstift` |

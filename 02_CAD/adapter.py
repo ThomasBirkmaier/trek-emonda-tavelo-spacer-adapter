@@ -18,8 +18,10 @@ Koordinatensystem (siehe KONSTRUKTION.md):
   ist das egal (Zapfen und Aufnahme gleich). Die Bohrung ist deshalb ein echter Zylinder um die Achse.
 
 Aufruf (aus dem Repo-Wurzelverzeichnis):  python 02_CAD/adapter.py
-  -> 02_CAD/out/Adapter_<TAG>.*                  Adapter zusammengebaut (Ansicht/Kontrolle), TAG = H<Höhe>_T<aT>_V<aV>
-  -> 02_CAD/out/DRUCK_Adapter_...stl/.3mf/.step  Drucklayout, beide Hälften getrennt
+  -> 02_CAD/out/Adapter_<TAG>_<Variante>.*                  zusammengebaut (Ansicht/Kontrolle), TAG = H<Höhe>_T<aT>_V<aV>
+  -> 02_CAD/out/DRUCK_Adapter_<TAG>_<Variante>.stl/.3mf/.step  Drucklayout, beide Hälften getrennt
+  -> 02_CAD/out/DRUCK_Lehre_Passstift.stl/.step               Lehre für den Stiftüberstand (Variante Passstift)
+  Varianten (VARIANTS): Stift = angedruckte Stifte, Passstift = Sacklöcher für Zylinderstifte; sonst identisch.
 Danach: python 02_CAD/check_adapter.py (Wandstärken, Kollision), python 02_CAD/render_adapter.py
 """
 import math
@@ -100,6 +102,18 @@ CRESCENT_HALF_IN = 20.2 / 2
 PIN_D, PIN_H = 3.0, 1.85
 PIN_X = REAR_X - 42.0   # Prototyp: 40,5 → Adapter saß 1,5 zu weit vorn
 PIN_Y = 28.75 / 2
+
+# Varianten: Alles außer den Stiften ist identisch.
+#   "Stift"      Stifte angedruckt (bisherige Ausführung)
+#   "Passstift"  Sacklöcher für Zylinderstifte ISO 2338 Ø 3 m6 × DOWEL_L (Edelstahl), eingeklebt; der Überstand
+#                PIN_H wird beim Kleben mit der Lehre eingestellt. Der Stift ergibt denselben Zapfen wie "Stift".
+VARIANTS = ("Stift", "Passstift")
+DOWEL_L = 8.0                            # Stiftlänge; 6,15 im Loch ≈ 2 × d, länger macht die Wand zur Bohrung dünner
+PINHOLE_D = 3.0                          # gedruckt; vor dem Kleben mit 3,0 nachbohren (FDM druckt Löcher zu klein)
+PINHOLE_DEPTH = DOWEL_L - PIN_H + 1.0    # ab Oberseite, 1 Luft am Grund (Kleber, Längentoleranz des Stifts)
+PINHOLE_CHAMFER = 0.3                    # Fase 45° oben
+GAUGE_HOLE_D = 3.2                       # Lehre: Loch mit Luft, Dicke = PIN_H, Lochabstand = 2 × PIN_Y
+GAUGE_W = 8.0
 
 # Teilung + Gelenk nach Tavelo-Vorbild:
 # An jeder Teilstelle greifen zwei Zapfen (Zylinder mit Hals) wechselseitig in Aufnahmen der anderen Hälfte:
@@ -309,43 +323,6 @@ def hose_cutters(aT=ALPHA_TREK, n=60):
     W = C + 0.3 * inward                                                 # Innenkante, knapp im Hohlraum
     off = Arc - W                                                         # waagerechter Versatz an der Unterseite
 
-    def wire(z):
-        V = lambda p: cq.Vector(p[0] + z * t, p[1], z)
-        return cq.Wire.assembleEdges([cq.Edge.makeSpline([V(p) for p in bez]), cq.Edge.makeLine(V(bez[-1]), V(tip)),
-                                      cq.Edge.makeLine(V(tip), V(bez[0]))])
-
-    right = cq.Solid.makeLoft([wire(-20.0), wire(60.0)], True)
-    return cq.Workplane("XY").add(right.fuse(right.mirror("XZ")).clean())
-
-
-def hose_cutters(aT=ALPHA_TREK, n=60):
-    """Leitungsschräge unten (siehe HOSE_*), für y > 0 konstruiert und gespiegelt. Fläche zwischen dem Bogen in der
-    Unterseite und der Innenkante (Kanal → Langloch, mit Rundung) auf Höhe HOSE_SLOPE_H: untere Hälfte gerade,
-    obere Hälfte läuft tangential in die Wand aus; nach innen ragt der Schnittkörper in den Hohlraum, damit keine deckungsgleichen Flächen entstehen."""
-    if HOSE_ARC_R <= 0:
-        return None
-    t, c = math.tan(math.radians(aT)), math.cos(math.radians(aT))
-    P, _ = _inner_path(aT)
-    seg = np.r_[0, np.cumsum(np.hypot(*np.diff(P, axis=0).T))]
-    C = np.c_[np.interp(np.linspace(0, seg[-1], n), seg, P[:, 0]), np.interp(np.linspace(0, seg[-1], n), seg, P[:, 1])]
-    S, E = C[0], C[-1]
-    # Bogen S → E, Radius HOSE_ARC_R, nach außen (+y) gewölbt
-    m, d = (S + E) / 2, E - S
-    L = np.hypot(*d)
-    nrm = np.array([-d[1], d[0]]) / L
-    if nrm[1] < 0:
-        nrm = -nrm
-    cen = m - nrm * math.sqrt(HOSE_ARC_R ** 2 - (L / 2) ** 2)
-    a0, a1 = math.atan2(*(S - cen)[::-1]), math.atan2(*(E - cen)[::-1])
-    da = (a1 - a0 + math.pi) % (2 * math.pi) - math.pi
-    Arc = np.array([cen + HOSE_ARC_R * np.array([math.cos(a0 + da * k), math.sin(a0 + da * k)])
-                    for k in np.linspace(0, 1, n)])
-    inward = np.array([(-8.0, 0.0)]) - C
-    inward /= np.linalg.norm(inward, axis=1)[:, None]
-    zt = HOSE_SLOPE_H * c
-    W = C + 0.3 * inward                                                 # Innenkante, knapp im Hohlraum
-    off = Arc - W                                                         # waagerechter Versatz an der Unterseite
-
     f0 = 0.5                                                              # bis hier gerade, danach tangentialer Auslauf
 
     def wire(z):
@@ -399,6 +376,31 @@ def pins(aT, aV, h):
                .rotate((0, 0, 0), (0, 1, 0), math.degrees(d)).translate(c))
         res = pin if res is None else res.union(pin)
     return res
+
+
+def pin_holes(aT, aV, h):
+    """Sacklöcher für die Passstifte: gleiche Lage und Richtung wie pins(), Tiefe PINHOLE_DEPTH ab Oberseite,
+    Fase PINHOLE_CHAMFER × 45° oben. Schnittkörper ragt 1 über die Oberseite hinaus."""
+    P, n, u, d = top_frame(aT, aV, h)
+    r, k = PINHOLE_D / 2, PINHOLE_CHAMFER
+    res = None
+    for s in (1, -1):
+        c = P + u * PIN_X + cq.Vector(0, s * PIN_Y, 0)
+        hole = cq.Solid.makeCylinder(r, PINHOLE_DEPTH + 1.0, cq.Vector(0, 0, -PINHOLE_DEPTH), cq.Vector(0, 0, 1))
+        if k > 0:
+            hole = hole.fuse(cq.Solid.makeCone(r, r + k + 1.0, k + 1.0, cq.Vector(0, 0, -k), cq.Vector(0, 0, 1)))
+        hole = cq.Workplane("XY").add(hole.clean()).rotate((0, 0, 0), (0, 1, 0), math.degrees(d)).translate(c)
+        res = hole if res is None else res.union(hole)
+    return res
+
+
+def pin_gauge():
+    """Lehre zum Einkleben der Passstifte: Leiste mit zwei Löchern im Stiftabstand, Dicke = Überstand PIN_H.
+    Auf die Oberseite legen, Stifte durchstecken, bis sie bündig mit der Lehre sind, aushärten lassen.
+    Flach drucken; die Dicke wird auf die Schichthöhe gerundet, lieber etwas dünner als dicker."""
+    L = 2 * PIN_Y + GAUGE_W
+    return (cq.Workplane("XY").slot2D(L, GAUGE_W, 90).extrude(PIN_H)
+            .faces(">Z").workplane().pushPoints([(0, PIN_Y), (0, -PIN_Y)]).hole(GAUGE_HOLE_D))
 
 
 def knuckle(j, side, aT, z0, z1, grow=0.0):
@@ -457,8 +459,15 @@ def core_body(aT=ALPHA_TREK, aV=ALPHA_TAVELO, h=HEIGHT):
     return cq.Workplane("XY").add(cq.Shape.cast(mk.Shape()))
 
 
-def adapter(aT=ALPHA_TREK, aV=ALPHA_TAVELO, h=HEIGHT, with_joints=True):
-    body = core_body(aT, aV, h).union(pins(aT, aV, h))
+def adapter(aT=ALPHA_TREK, aV=ALPHA_TAVELO, h=HEIGHT, with_joints=True, variant="Stift", core=None):
+    """variant: siehe VARIANTS. Beide Varianten entstehen aus demselben core_body; core kann übergeben werden."""
+    body = core_body(aT, aV, h) if core is None else core
+    if variant == "Stift":
+        body = body.union(pins(aT, aV, h))
+    elif variant == "Passstift":
+        body = body.cut(pin_holes(aT, aV, h))
+    else:
+        raise ValueError(f"unbekannte Variante {variant!r}, erlaubt: {VARIANTS}")
     A, B = split_halves(body, aT, h, with_joints)
     pockets = nose_pocket_cutters(aT)
     return A.cut(pockets), B.cut(pockets)
@@ -489,8 +498,14 @@ def export_print_layout(A, B, path_stem, gap=8.0):
 if __name__ == "__main__":
     out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "out")
     os.makedirs(out, exist_ok=True)
-    A, B = adapter()
-    v = export_pair(A, B, os.path.join(out, f"Adapter_{TAG}"))
-    print("Adapter", "Körper A/B:", len(A.solids().vals()), len(B.solids().vals()), "Volumen %.0f mm3" % v)
-    bb = export_print_layout(A, B, os.path.join(out, f"DRUCK_Adapter_{TAG}"))
-    print("  Drucklayout Bauraum %.1f x %.1f x %.1f mm" % (bb.xlen, bb.ylen, bb.zlen))
+    core = core_body()
+    for var in VARIANTS:
+        A, B = adapter(variant=var, core=core)
+        v = export_pair(A, B, os.path.join(out, f"Adapter_{TAG}_{var}"))
+        print(f"Adapter {var}", "Körper A/B:", len(A.solids().vals()), len(B.solids().vals()), "Volumen %.0f mm3" % v)
+        bb = export_print_layout(A, B, os.path.join(out, f"DRUCK_Adapter_{TAG}_{var}"))
+        print("  Drucklayout Bauraum %.1f x %.1f x %.1f mm" % (bb.xlen, bb.ylen, bb.zlen))
+    g = pin_gauge()
+    cq.exporters.export(g, os.path.join(out, "DRUCK_Lehre_Passstift.stl"), tolerance=0.01, angularTolerance=0.08)
+    cq.exporters.export(g, os.path.join(out, "DRUCK_Lehre_Passstift.step"))
+    print(f"Lehre Passstift: {2 * PIN_Y + GAUGE_W:.2f} x {GAUGE_W:g} x {PIN_H:g} mm, Löcher Ø {GAUGE_HOLE_D:g}")
