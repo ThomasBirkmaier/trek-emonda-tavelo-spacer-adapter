@@ -1,11 +1,13 @@
 """Renderings des zweiteiligen Adapters: Schnitte in mehreren Höhen (Hälfte A blau, B orange), Iso/Explosion je Variante,
 Detailschnitt durch die Stifte (beide Varianten), Drucklayout.
-Vorher python 02_CAD/adapter.py ausführen (das Drucklayout wird aus 02_CAD/out/Stift/DRUCK_*.stl gelesen)."""
+Aufruf:  python 02_CAD/render_adapter.py  (vorher python 02_CAD/adapter.py; das Drucklayout wird aus 02_CAD/out/Stift/DRUCK_*.stl gelesen)."""
 import sys, os, math, tempfile, numpy as np, trimesh, matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-sys.path.insert(0, "02_CAD")
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))   # Repo-Wurzel, unabhängig vom Aufrufort
+os.chdir(ROOT)
+sys.path.insert(0, os.path.join(ROOT, "02_CAD"))
 import adapter as ad, cadquery as cq
 
 core = ad.core_body()
@@ -68,7 +70,7 @@ for ax, var in zip(axs, ad.VARIANTS):
     if var == "Passstift":   # Zylinderstift Ø 3 × DOWEL_L mit Überstand PIN_H
         lo_, hi_ = ad.PIN_H - ad.DOWEL_L, ad.PIN_H
         q = np.array([c0 + uu * x + nn * z for x, z in ((-1.5, lo_), (1.5, lo_), (1.5, hi_), (-1.5, hi_), (-1.5, lo_))])
-        ax.plot(q[:, 0], q[:, 1], "-", color="0.35", lw=1.0, label=f"Zylinderstift Ø 3 × {ad.DOWEL_L:g}")
+        ax.plot(q[:, 0], q[:, 1], "-", color="0.35", lw=1.0, label=f"Zylinderstift Ø {ad.PIN_D:g} × {ad.DOWEL_L:g}")
         ax.legend(fontsize=8, loc="lower left")
         ax.set_title(f"Passstift: Sackloch Ø {ad.PINHOLE_D:g} × {ad.PINHOLE_DEPTH:.2f}, Fase {ad.PINHOLE_CHAMFER:g}, "
                      f"Überstand {ad.PIN_H:g}", fontsize=10)

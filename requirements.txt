@@ -1,4 +1,6 @@
-cadquery>=2.4
+# Getestet mit Python 3.11 und cadquery 2.8.0, cadquery-ocp 7.9.3, trimesh 5.1.0, networkx 3.6.1,
+# matplotlib 3.10.9, numpy 2.4.4. trimesh und networkx braucht nur render_adapter.py.
+cadquery>=2.8
 trimesh
 networkx
 matplotlib

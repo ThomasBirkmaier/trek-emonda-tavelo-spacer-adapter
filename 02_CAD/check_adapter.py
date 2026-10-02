@@ -1,14 +1,17 @@
 """Prüfungen nach jeder Geometrieänderung: Körper, Kollision der Hälften, Bohrungsmaß, Wandstärken.
 Beide Varianten (adapter.VARIANTS) werden geprüft; sie unterscheiden sich nur an den Stiften oben.
 
-Aufruf (aus dem Repo-Wurzelverzeichnis):  python 02_CAD/check_adapter.py
+Aufruf:  python 02_CAD/check_adapter.py
 Wandstärken sind kürzeste Abstände zwischen den Schnittkörpern (OCCT), in mm.
 Die Nasentaschen sind absichtlich zur Bohrung geöffnet (POCKET_BRIDGE), dort ist der Abstand 0.
 """
 import math
+import os
 import sys
 
-sys.path.insert(0, "02_CAD")
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))   # Repo-Wurzel, unabhängig vom Aufrufort
+os.chdir(ROOT)
+sys.path.insert(0, os.path.join(ROOT, "02_CAD"))
 import adapter as A  # noqa: E402
 import cadquery as cq  # noqa: E402
 
@@ -43,7 +46,7 @@ for var in A.VARIANTS:
 loc = bore.rotate(cq.Vector(), cq.Vector(0, 1, 0), -aT).BoundingBox()
 print(f"Bohrung senkrecht zur Achse: längs {loc.xmin:.2f} … {loc.xmax:.2f} ({loc.xlen:.2f}), quer {loc.ylen:.2f}"
       f"   Schaft Ø {A.STEERER_D}")
-print(f"Passstift: Ø 3 × {A.DOWEL_L:g} auf dem Grund, Überstand {A.DOWEL_L - A.PINHOLE_DEPTH:.2f} (Soll {A.PIN_H:g});"
+print(f"Passstift: Ø {A.PIN_D:g} × {A.DOWEL_L:g} auf dem Grund, Überstand {A.DOWEL_L - A.PINHOLE_DEPTH:.2f} (Soll {A.PIN_H:g});"
       f" Sackloch Ø {A.PINHOLE_D:g} × {A.PINHOLE_DEPTH:.2f}, Fase {A.PINHOLE_CHAMFER:g}")
 
 # Wandstärken

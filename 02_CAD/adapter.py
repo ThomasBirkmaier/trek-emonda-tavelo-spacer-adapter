@@ -30,7 +30,7 @@ import cadquery as cq
 
 # ---------------------------------------------------------------- Parameter
 # Winkel
-ALPHA_TREK = 17.0         # Neigung Trek-Auflageebene gegen Schaftnormale (geschätzt, am Prototyp 1 bestätigt: untere Fuge schließt)
+ALPHA_TREK = 17.0         # Neigung Trek-Auflageebene gegen Schaftnormale (geschätzt, an Prototyp 1 bis 3 bestätigt: untere Fuge schließt)
 ALPHA_TAVELO_MEAS = 8.0   # gemessen 2026-09-28: Tavelo-Klemmbohrung 8° nach hinten gekippt bei flach aufliegender Sitzfläche
 HEIGHT_REF = 22.0         # Adapterhöhe entlang der Schaftachse beim gemessenen Winkel (bis Prototyp 2: 20; +2 für den Spalt der Top-Cap)
 
@@ -44,10 +44,10 @@ TOP_FRONT_LIFT = 0.8
 # Schaft
 STEERER_D = 28.6
 STEERER_FLAT = 26.75      # seitliche Abflachungen (nur Info, Bohrung rund)
-BORE_D = 30.0             # großzügig: Lage kommt von Trek-Nasen und Tavelo-Stiften, nicht vom Schaft (Prototyp 28,9 zu eng)
+BORE_D = 30.0             # großzügig: Lage kommt von Trek-Nasen und Tavelo-Stiften, nicht vom Schaft (Prototyp 1: 28,9 zu eng)
 BORE_SLOT = 2.0           # Langloch: Hinterkante 2 weiter hinten, Vorderkante fest (Luft für den Vorbau)
 
-# Außenkontur (Skizze V2; Freiform nach Vorgabe frei gestaltet)
+# Außenkontur (Skizze V2, als Spline frei gestaltet)
 REAR_X = 30.0
 TIP_X = -28.0             # 13,0 ab vorderer Bohrungskante (bemaßt) + ~15
 HALF_W = 19.75
@@ -68,7 +68,7 @@ def _top_from_lift(aT, aV0, h0, lift):
 
 
 ALPHA_TAVELO, HEIGHT = _top_from_lift(ALPHA_TREK, ALPHA_TAVELO_MEAS, HEIGHT_REF, TOP_FRONT_LIFT)
-TAG = f"H{HEIGHT_REF:g}_T{round(ALPHA_TREK, 1):g}_V{round(ALPHA_TAVELO, 1):g}"   # für Dateinamen (Bezugshöhe, s. u.)
+TAG = f"H{HEIGHT_REF:g}_T{round(ALPHA_TREK, 1):g}_V{round(ALPHA_TAVELO, 1):g}"   # für Dateinamen: Bezugshöhe, Winkel
 BOTTOM_TIP_EXTRA = 2.5     # Unterseite: Spitze 2,5 weiter vorn als oben (Stirnwand vorn stärker geneigt)
 
 # Trek-Nasen
@@ -89,7 +89,7 @@ EDGE_R_JUNCTION = 2.0      # innen: Übergang Langloch → Leitungskanal (Kante 
 # Leitungsschräge unten: Die hintere Bremsleitung kommt seitlich (rechts) aus dem Trek-Deckel. Auf beiden Seiten
 # verläuft an der Unterseite ein Bogen von der äußersten Kanalecke zur breitesten Stelle des Langlochs; das Material
 # innerhalb fällt schräg weg und läuft nach HOSE_SLOPE_H (entlang der Achse) aus. Oberseite unverändert.
-HOSE_ARC_R = 45.0          # nach außen gewölbt; Außenwand unten dadurch min. ≈ 3,9 (Langloch sonst 4,74)
+HOSE_ARC_R = 45.0          # nach außen gewölbt; Außenwand an der Schräge min. ≈ 3,2 (check_adapter), am Langloch sonst 4,74
 HOSE_SLOPE_H = 10.0
 
 # Leitungskanal
@@ -99,16 +99,16 @@ CRESCENT_HALF_IN = 20.2 / 2
 
 # Stifte oben (greifen in die Sacklöcher der Tavelo-Vorbauunterseite)
 PIN_D, PIN_H = 3.0, 1.85
-PIN_X = REAR_X - 42.0   # Prototyp: 40,5 → Adapter saß 1,5 zu weit vorn
+PIN_X = REAR_X - 42.0   # Prototyp 1: 40,5 → Adapter saß 1,5 zu weit vorn
 PIN_Y = 28.75 / 2
 
 # Varianten: Alles außer den Stiften ist identisch.
-#   "Stift"      Stifte angedruckt (bisherige Ausführung)
-#   "Passstift"  Sacklöcher für Zylinderstifte ISO 2338 Ø 3 m6 × DOWEL_L (Edelstahl), eingeklebt und bis auf den Grund
-#                gedrückt; die Lochtiefe legt den Überstand PIN_H fest. Der Stift ergibt denselben Zapfen wie "Stift".
+#   "Stift"      Stifte angedruckt
+#   "Passstift"  Sacklöcher für Zylinderstifte ISO 2338 Ø 3 m6 × DOWEL_L (Edelstahl), eingeklebt, sitzt auf
+#                dem Lochgrund; die Lochtiefe legt den Überstand PIN_H fest. Der Stift ergibt denselben Zapfen wie "Stift".
 VARIANTS = ("Stift", "Passstift")
 DOWEL_L = 8.0                            # Stiftlänge; 6,15 im Loch ≈ 2 × d, länger macht die Wand zur Bohrung dünner
-PINHOLE_D = 3.0                          # gedruckt; vor dem Kleben mit 3,0 nachbohren (FDM druckt Löcher zu klein)
+PINHOLE_D = 3.0                          # Sackloch-Ø wie gezeichnet; bei Bedarf an das Druckverfahren anpassen
 PINHOLE_DEPTH = DOWEL_L - PIN_H          # ab Oberseite; Stift sitzt auf dem Grund, Überstand = PIN_H
 PINHOLE_CHAMFER = 0.3                    # Fase 45° oben
 
@@ -122,7 +122,7 @@ JOINT_ZGAP = 0.15         # Luft in Schaftrichtung zwischen oberem und unterem Z
 JOINTS = [
     # x-Position, Zapfen-Ø, Versatz Zapfenmitte über die Fuge, Halsbreite
     # Versatz e > Zapfenradius + Spiel + ~0,6 mm, damit die Aufnahme echte Hinterschnitt-Lippen hat
-    dict(x=-24.85, d=3.2, e=2.4, w=1.6),  # vorn, in der Wand vor der Sichel (Prototyp -24,1: nur 1,05 zum Kanal)
+    dict(x=-24.85, d=3.2, e=2.4, w=1.6),  # vorn, in der Wand vor der Sichel (Prototyp 1: -24,1, nur 1,05 zum Kanal)
     dict(x=26.0, d=4.0, e=2.9, w=2.2),    # hinten, zwischen den Nasen
 ]
 
@@ -177,12 +177,6 @@ def top_frame(aT, aV, h):
     n = cq.Vector(math.sin(d), 0, math.cos(d))
     u = cq.Vector(math.cos(d), 0, -math.sin(d))
     return P, n, u, d
-
-
-def above_top_cutter(aT, aV, h):
-    P, n, u, d = top_frame(aT, aV, h)
-    return (box_between(-BIG / 2, BIG / 2, -BIG / 2, BIG / 2, 0, BIG)
-            .rotate((0, 0, 0), (0, 1, 0), math.degrees(d)).translate(P))
 
 
 # ---------------------------------------------------------------- Features
