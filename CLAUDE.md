@@ -19,6 +19,8 @@ python 02_CAD/render_adapter.py   # 03_Renderings: Schnitte, Iso je Variante, St
 
 Nach jeder Geometrieänderung alle drei in dieser Reihenfolge ausführen und Exporte und Renderings mitcommitten. Die Renderings immer ansehen. Die Dateinamen enthalten Bezugshöhe, Winkel (`TAG`, z. B. `_H22_T17_V7.2`) und Variante (`_Stift`, `_Passstift`); ändern sie sich, die alten Exporte per `git rm` entfernen. STEP und 3MF enthalten einen Zeitstempel: Bei einem reinen Doku- oder Kommentar-Commit die Exporte nicht mitcommitten (`git checkout -- 02_CAD/out/`).
 
+Neue Revision veröffentlichen: Revision in `KONSTRUKTION.md` (Abschnitt 8) eintragen, committen, pushen, dann einen Tag `rev-<Revision>` (z. B. `rev-E`) pushen. `.github/workflows/release.yml` packt je Ordner in `02_CAD/out/` ein ZIP aus den eingecheckten Dateien und legt den Release an; der Text kommt aus der Zeile der Revisionstabelle.
+
 ## Geometrie: was man wissen muss
 
 - Ursprung = Schaftachse ∩ Unterseite. **+x = hinten** (Klemmschraube des Vorbaus, Oberrohr), −x = vorn (Spitze, Leitungskanal). y quer, Teilung bei y = 0 (A: y > 0, B: y < 0). z = Normale der Unterseite.

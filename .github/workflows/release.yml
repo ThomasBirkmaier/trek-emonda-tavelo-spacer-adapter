@@ -1,0 +1,50 @@
+# Legt bei einem gepushten Tag rev-<Revision> (z. B. rev-D) einen GitHub-Release an:
+# je Variante in 02_CAD/out/ ein ZIP mit den eingecheckten Exporten, Text aus der Revisionstabelle in KONSTRUKTION.md.
+name: Release
+
+on:
+  push:
+    tags:
+      - "rev-*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: ZIPs je Variante packen
+        run: |
+          REV="${GITHUB_REF_NAME#rev-}"
+          mkdir -p dist
+          cd 02_CAD/out
+          for dir in */; do
+            v="${dir%/}"
+            zip -q -X -r "../../dist/${v}_Rev-${REV}.zip" "$v"
+          done
+          ls -l ../../dist
+
+      - name: Release-Text erzeugen
+        run: |
+          REV="${GITHUB_REF_NAME#rev-}"
+          ROW="$(grep -E "^\| ${REV} \|" KONSTRUKTION.md | awk -F'|' '{print $4}' | sed 's/^ *//; s/ *$//')"
+          {
+            echo "${ROW:-Revision ${REV}}"
+            echo
+            echo "**Downloads:** je Variante ein ZIP mit Druckdatei (\`DRUCK_*\` als STL, 3MF, STEP: beide Hälften getrennt gelegt, Unterseite auf dem Druckbett) und zusammengebautem Modell (\`Adapter_*\`). Welche Variante passt, steht in der README unter „Variante wählen“."
+            echo
+            echo "Werkstoff, Passungen und Befunde: [README](https://github.com/${GITHUB_REPOSITORY}/blob/${GITHUB_REF_NAME}/README.md), [KONSTRUKTION.md](https://github.com/${GITHUB_REPOSITORY}/blob/${GITHUB_REF_NAME}/KONSTRUKTION.md)."
+            echo
+            echo "Sicherheitsrelevantes Bauteil, privates Eigenbauprojekt ohne Herstellerfreigabe: Nutzung auf eigene Verantwortung."
+          } > notes.md
+          cat notes.md
+
+      - name: Release anlegen
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          REV="${GITHUB_REF_NAME#rev-}"
+          gh release create "$GITHUB_REF_NAME" dist/*.zip --title "Rev. ${REV}" --notes-file notes.md --verify-tag

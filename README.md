@@ -60,7 +60,7 @@ Es gibt zwei Varianten. Sie sind bis auf die beiden Stifte oben, die in die Sack
 
 ## Drucken
 
-Die Druckdatei `DRUCK_Adapter_H22_T17_V7.2_<Variante>` (`.stl`, `.3mf` oder `.step`) enthält beide Hälften, getrennt gelegt, Unterseite auf dem Druckbett. Bei einem Druckdienst (zum Beispiel Craftcloud) ist die Menge daher 1.
+Am einfachsten lädt man unter [Releases](https://github.com/ThomasBirkmaier/trek-emonda-tavelo-spacer-adapter/releases) das ZIP der gewünschten Variante. Die Druckdatei `DRUCK_Adapter_H22_T17_V7.2_<Variante>` (`.stl`, `.3mf` oder `.step`) enthält beide Hälften, getrennt gelegt, Unterseite auf dem Druckbett. Bei einem Druckdienst (zum Beispiel Craftcloud) ist die Menge daher 1.
 
 - **Verfahren und Werkstoff:** Für den Fahrbetrieb wird PA12 (MJF) empfohlen: Das Teil liegt in der Kraftkette der Lagervorspannung und wird warm. PETG (auch PETG-HF) kann unter dieser Last kriechen; wer es fährt, sollte das Steuersatzspiel anfangs häufig prüfen. Kein PLA. Für eine Passprobe reicht FDM.
 - **Passungen:** Bohrung Ø 30 (0,7 mm Spiel radial zum Schaft, 2 mm Langloch nach hinten), Gelenk 0,2 mm Spiel radial, Nasentaschen 0,55 mm pro Seite quer und 0,3 mm längs, 3 mm tief. Sackloch der Variante Passstift Ø 3,0 × 6,15 mit Fase 0,3 (`PINHOLE_D` lässt sich an das Druckverfahren anpassen).
@@ -112,6 +112,7 @@ Die Winkel prüft man an einem Probedruck über die beiden Fugen:
 | `02_CAD/adapter.py` | parametrisches Modell, einzige Quelle der Geometrie |
 | `02_CAD/check_adapter.py`, `02_CAD/render_adapter.py` | Prüfungen und Renderings |
 | `02_CAD/out/Passstift/`, `02_CAD/out/Stift/` | Exporte je Variante: `DRUCK_*` druckfertig, `Adapter_*` zusammengebaut |
+| `.github/workflows/release.yml` | legt bei einem Tag `rev-<Revision>` einen Release mit je einem ZIP pro Variante an |
 | `03_Renderings/` | Aufmacherbild (generiert, ohne Maßbezug), sonst von `render_adapter.py` erzeugt: Schnitte, Iso-Ansicht je Variante, Schnitt durch die Stifte, Drucklayout |
 
 ![Schnitte](03_Renderings/Adapter_Schnitte.png)
