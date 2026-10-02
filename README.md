@@ -6,7 +6,7 @@ Zweiteiliger, 3D-gedruckter Adapter, mit dem ein integriertes **Tavelo Avro Rise
 
 Das Modell ist parametrisch (Python/CadQuery). Wer einen anderen Rahmen oder andere Winkel hat, ändert ein paar Zahlen und exportiert neu.
 
-**Stand (Rev. D, 2026-10-02):** Geometrie abgeschlossen für die Bezugshöhe 22 mm. Drei Prototypen wurden gedruckt und am Rad geprüft; der dritte (Variante Passstift) passt ohne weitere Korrektur. Ein Endteil in PA12 ist noch nicht gefertigt. Befunde, Entscheidungen und offene Punkte: [`KONSTRUKTION.md`](KONSTRUKTION.md).
+**Stand (Rev. D, 2026-10-02):** Geometrie abgeschlossen für die Bezugshöhe 22 mm. Drei Prototypen wurden gedruckt und am Rad geprüft; der dritte (Variante Passstift, PETG-HF) passt ohne weitere Korrektur. Für den Dauerbetrieb empfohlen bleibt PA12 (MJF), siehe [Drucken](#drucken). Befunde, Entscheidungen und offene Punkte: [`KONSTRUKTION.md`](KONSTRUKTION.md).
 
 ## Für welches Rad und welches Cockpit
 
@@ -56,13 +56,13 @@ Es gibt zwei Varianten. Sie sind bis auf die beiden Stifte oben, die in die Sack
 | Leitungen | Kanal vor dem Schaft für zwei Bremsleitungen; unten seitlich angeschrägt, weil die hintere Leitung seitlich aus dem Trek-Deckel kommt |
 | Teilung | zwei Hälften mit Gelenk nach Tavelo-Vorbild, werden entlang des Schafts zusammengeschoben |
 | Kanten | innere Kanten an Ober- und Unterseite R 0,5, Übergang Bohrung → Leitungskanal R 2 |
-| Werkstoff | PA12, MJF-Druck |
+| Werkstoff | empfohlen PA12, MJF-Druck; Prototyp 3 aus PETG-HF |
 
 ## Drucken
 
 Die Druckdatei `DRUCK_Adapter_H22_T17_V7.2_<Variante>` (`.stl`, `.3mf` oder `.step`) enthält beide Hälften, getrennt gelegt, Unterseite auf dem Druckbett. Bei einem Druckdienst (zum Beispiel Craftcloud) ist die Menge daher 1.
 
-- **Verfahren und Werkstoff:** MJF, PA12. Für eine Passprobe reicht FDM. Für den Fahrbetrieb kein PLA oder PETG: Das Teil liegt in der Kraftkette der Lagervorspannung und wird warm.
+- **Verfahren und Werkstoff:** Für den Fahrbetrieb wird PA12 (MJF) empfohlen: Das Teil liegt in der Kraftkette der Lagervorspannung und wird warm. PETG (auch PETG-HF) kann unter dieser Last kriechen; wer es fährt, sollte das Steuersatzspiel anfangs häufig prüfen. Kein PLA. Für eine Passprobe reicht FDM.
 - **Passungen:** Bohrung Ø 30 (0,7 mm Spiel radial zum Schaft, 2 mm Langloch nach hinten), Gelenk 0,2 mm Spiel radial, Nasentaschen 0,55 mm pro Seite quer und 0,3 mm längs, 3 mm tief. Sackloch der Variante Passstift Ø 3,0 × 6,15 mit Fase 0,3 (`PINHOLE_D` lässt sich an das Druckverfahren anpassen).
 - **Dateinamen:** Bezugshöhe, Winkel und Variante stehen im Namen (`_H22_T17_V7.2_Passstift`). `Adapter_*` ist der zusammengebaute Zustand zur Ansicht, `DRUCK_*` die Druckdatei.
 

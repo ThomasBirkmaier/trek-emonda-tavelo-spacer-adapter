@@ -64,7 +64,7 @@ Der Lenkwinkel spielt für die Passung keine Rolle. Maßgeblich sind nur die Nei
 | D-4 | Zweiteilig, Teilung bei y = 0 | Montage um Schaft und Leitungen, ohne die Hydraulik zu öffnen. |
 | D-5 | **Gelenk nach Tavelo-Vorbild:** je Teilstelle zwei Zapfen mit Hals in Schlüssellochaufnahmen, unten von A nach B, oben von B nach A. Vorn: Ø 3,2 / Hals 1,6 / Versatz 2,4, bei x = −24,85 (Prototyp 1: −24,1; verschoben für mehr Wand zum Kanal). Kleinste Wand der vorderen Aufnahme zu Bohrung/Kanal 1,2 (oben, seit den Kantenradien D-10), unten 1,4. Hinten: Ø 4,0 / Hals 2,2 / Versatz 2,9, bei x = +26,0. Spiel 0,2 radial, 0,15 axial, Fuge 0,25 | Die Zapfen sperren quer. Gefügt wird durch Aufschieben von B entlang des Schafts. CAD-Kollisionstest: keine Überschneidung; quer blockiert ab ~0,5 mm; entlang des Schafts frei fügbar. |
 | D-6 | Höhe 22 entlang der Schaftachse als Bezug (bis Prototyp 2: 20); durch die Korrektur der Oberseite (Kippen um die Hinterkante) liegt der Durchstoßpunkt der Achse bei 22,42 | ersetzt einen 20-mm-Spacerstapel und hebt den Vorbau um 2 mm: Der Schaft war so knapp gekürzt, dass die Top-Cap kaum Spalt für die Vorspannung hatte (O-8). Die 2 mm verschieben den Vorbau genau um 2,0 entlang der Achse (nachgerechnet); Winkel, Kontur, Stifte und Taschen bleiben. **Der Vorbau sitzt durch die Korrektur nicht höher:** Er lag am Prototyp 2 schon an der Hinterkante auf, und sein Winkel ist durch die Klemmung am Schaft fest; die Korrektur füllt nur den Spalt (vorher an der Spitze 0,80, an der Achse 0,41, an der Hinterkante 0). Nachgerechnet am Modell: Lage des Vorbaus alt ↔ neu entlang der Achse +0,0002 mm, neue Oberseite liegt auf 0,0000 mm in der Vorbau-Ebene. |
-| D-7 | Werkstoff PA12 (MJF) für das Endteil | Das Teil liegt in der Kraftkette der Lagervorspannung und wird warm; kein PLA/PETG. |
+| D-7 | Werkstoff PA12 (MJF) für das Endteil empfohlen | Das Teil liegt in der Kraftkette der Lagervorspannung und wird warm. PETG (auch PETG-HF) kann unter dieser Last kriechen: dann lässt die Vorspannung nach, das Steuersatzspiel anfangs häufig prüfen. Kein PLA. |
 | D-8 | Drucklayout: beide Hälften in einer Datei, getrennt, Unterseite auf dem Druckbett | ein Auftrag, keine verschränkten Teile im Druck |
 | D-9 | Nasentaschen am vorderen (inneren) Ende zur Bohrung geöffnet: Durchbruch in Taschenbreite (3,5) Richtung Schaftachse, Tiefe wie die Tasche | Durch das Langloch bliebe nur ein Steg von 0,27, der beim Druck oder bei der Montage wegbricht. Offen gibt es keine losen Splitter; die Übergänge zur Bohrung sind stumpfwinklig. Die Nasen werden seitlich und am hinteren Ende geführt. |
 | D-10 | Kantenradien: alle inneren Kanten an Ober- und Unterseite (Bohrung, Kanal, Übergang, Leitungsschräge) einheitlich R 0,5; der Übergang Langloch → Kanal entlang der Achse ist mit R 2,0 gerundet (als Teil des Schnitts, nicht als Verrundung) | Sauberes Aussehen, keine scharfen Kanten an den Leitungen. Einheitlich, weil die inneren Kanten tangential ineinander übergehen und sich so nur mit einem Radius verrunden lassen; R 1,0 würde die Wand zur oberen vorderen Gelenkaufnahme auf 0,64 senken (mit R 0,5: 1,21). Die R-2,0-Rundung ist im Schnitt konstruiert, damit die Leitungsschräge genau dieselbe Rundung trifft. |
@@ -95,7 +95,7 @@ Der Lenkwinkel spielt für die Passung keine Rolle. Maßgeblich sind nur die Nei
 | Hintere Unterkante schließt bündig mit dem Trek-Deckel | – | Unterseitenkontur nicht mehr ändern |
 | Adapter setzt sich schwer bündig auf den Trek-Deckel | Nasentaschen knapp | Rev. C.4: Taschen 0,5 breiter, 3,0 tief |
 
-### Prototyp 3 (Rev. C.6, Variante Passstift, 2026-10-02, montiert)
+### Prototyp 3 (Rev. C.6, Variante Passstift, PETG-HF, 2026-10-02, montiert)
 
 | Befund | Ursache | Änderung |
 |---|---|---|
@@ -113,7 +113,7 @@ Der Lenkwinkel spielt für die Passung keine Rolle. Maßgeblich sind nur die Nei
 | O-6 | Idee: Gelenkspiel für MJF auf 0,25–0,3 (`JOINT_CLEAR`) | nicht umgesetzt; Einschätzung, kein Messwert. 0,2 hat im FDM-Prototyp gepasst |
 | O-7 | Idee: „A“, „B“ und Revision innen einprägen; Oberfläche des Endteils gefärbt und dampfgeglättet | nicht umgesetzt |
 | O-8 | Höhe 20 oder 22: Steht das Schaftende zu hoch, fehlt der Top-Cap der Spalt (Vorspannung) | erledigt: 22 (D-6, Rev. C.3) |
-| O-9 | Endteil in PA12 (MJF) oder gefräst | offen; Prototyp 3 brauchte keine Korrektur, die Geometrie von Rev. D gilt unverändert |
+| O-9 | Teil in PA12 (MJF) oder gefräst | offen; das Teil in den finalen Maßen liegt in PETG-HF vor (Prototyp 3), die Geometrie von Rev. D gilt unverändert |
 | O-10 | Andere Bezugshöhen (`HEIGHT_REF`) | nicht geprüft; abgeschlossen ist nur 22. Eine andere Höhe verschiebt den Vorbau entlang der Achse, Winkel und Kontur bleiben |
 
 Abschätzung (Rev. C), unkritisch: Die Vorspannung (angenommen 1–2 kN) drückt den ≈ 10°-Keil mit ≈ 17 % nach hinten; Reibung an Ober- und Unterseite (μ ≈ 0,2) hält das allein, dazu Stifte, Nasenflanken und nach 0,7 der Schaft. Flächenpressung ≈ 1–2 MPa auf je ≈ 900 mm². Das Gelenk trägt keine Fahrlasten, jede Hälfte sitzt über eigene Nase und eigenen Stift. Lenk- und Biegemomente laufen über die Vorbauklemmung in den Schaft.
