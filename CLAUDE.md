@@ -15,11 +15,27 @@ python -m venv .venv && source .venv/bin/activate && pip install -r requirements
 python 02_CAD/adapter.py          # Export nach 02_CAD/out/<Variante>/ (zusammengebaut + DRUCK_*-Layout)
 python 02_CAD/check_adapter.py    # Kollision A∩B je Variante, Bohrungsmaß, Wandstärken (Warnung < 1,2 mm)
 python 02_CAD/render_adapter.py   # 03_Renderings: Schnitte, Iso je Variante, Stiftschnitt, Drucklayout
+python 02_CAD/check_exports.py    # vor einem Release: passen die eingecheckten Exporte zum Code? (ändert nichts)
 ```
 
 Nach jeder Geometrieänderung alle drei in dieser Reihenfolge ausführen und Exporte und Renderings mitcommitten. Die Renderings immer ansehen. Die Dateinamen enthalten Bezugshöhe, Winkel (`TAG`, z. B. `_H22_T17_V7.2`) und Variante (`_Stift`, `_Passstift`); ändern sie sich, die alten Exporte per `git rm` entfernen. STEP und 3MF enthalten einen Zeitstempel: Bei einem reinen Doku- oder Kommentar-Commit die Exporte nicht mitcommitten (`git checkout -- 02_CAD/out/`).
 
-Neue Revision veröffentlichen: Revision in `KONSTRUKTION.md` (Abschnitt 8) eintragen, committen, pushen, dann einen Tag `rev-<Revision>` (z. B. `rev-E`) pushen. `.github/workflows/release.yml` packt je Ordner in `02_CAD/out/` ein ZIP aus den eingecheckten Dateien und legt den Release an; der Text kommt aus der Zeile der Revisionstabelle.
+## Release („mache einen Release“)
+
+Ein Release ist immer eine Revision aus der Tabelle in `KONSTRUKTION.md`, Abschnitt 8. Den Release selbst legt `.github/workflows/release.yml` auf GitHub an, sobald ein Tag `rev-<Revision>` gepusht wird: je Ordner in `02_CAD/out/` ein ZIP aus den eingecheckten Dateien, Titel „Rev. <Revision>“, Text aus der Tabellenzeile der Revision. Lokal wird nur der Tag gesetzt und gepusht.
+
+Die Anweisung „mache einen Release“ ist die Freigabe, den Tag zu setzen und zu pushen. Bei jeder Unklarheit unten stattdessen anhalten und fragen.
+
+1. **Ausgangslage prüfen:** `git fetch origin --tags`, dann `git status -sb`. Erwartet: Branch `main`, keine ungesicherten Änderungen, nicht hinter `origin/main`. Ist `main` vor `origin/main`, die Commits nennen und fragen, ob sie mit in den Release sollen (dann zuerst `git push origin main`).
+2. **Revision bestimmen:** letzte Zeile der Revisionstabelle in `KONSTRUKTION.md` (z. B. `| D | 2026-10-02 | … |` → Revision `D`, Tag `rev-D`). Vorhandene Tags: `git tag -l 'rev-*'`.
+   - Gibt es den Tag schon, ist diese Revision bereits veröffentlicht. Hat sich seit dem Tag etwas geändert (`git log rev-<R>..HEAD --oneline`), fragen, ob eine neue Revision eingetragen werden soll, und den Buchstaben bzw. die Nummer vorschlagen (nach `D` kommt `D.1` für Kleinigkeiten oder `E`). Ohne neue Zeile in der Tabelle keinen Release anlegen.
+3. **Stimmigkeit prüfen:**
+   - `README.md` nennt im Abschnitt „Stand“ dieselbe Revision; `KONSTRUKTION.md` ebenso in der Zeile „Stand“ oben.
+   - `python 02_CAD/check_exports.py` muss mit „Exporte aktuell.“ enden (Exit-Code 0). Es baut beide Varianten neu und vergleicht exakt mit den eingecheckten STEP-Dateien, ohne `02_CAD/out/` anzufassen. Meldet es ABWEICHT, FEHLT oder VERALTET: anhalten und melden, nicht selbst neu exportieren. Gibt es noch keine Python-Umgebung, zuerst `.venv` anlegen und `requirements.txt` installieren (siehe Befehle); geht das nicht, den Punkt überspringen und das in der Rückmeldung sagen.
+   - `python 02_CAD/check_adapter.py` muss ohne Fehler laufen (keine Überschneidung der Hälften).
+4. **Tag setzen und pushen:** `git tag -a rev-<R> -m "Rev. <R>"` auf dem aktuellen `main`, dann `git push origin rev-<R>`.
+5. **Ergebnis prüfen:** Mit der GitHub-CLI: `gh run watch` bzw. `gh run list --workflow Release --limit 1`, danach `gh release view rev-<R>` (zwei ZIPs `Passstift_Rev-<R>.zip`, `Stift_Rev-<R>.zip`). Ohne `gh` die Links nennen: `https://github.com/ThomasBirkmaier/trek-emonda-tavelo-spacer-adapter/actions` und `…/releases`.
+6. **Wenn der Workflow scheitert:** Es entsteht kein Release. Fehler aus dem Log melden. Tag nur nach Rückfrage löschen und neu setzen (`git push --delete origin rev-<R>`, `git tag -d rev-<R>`).
 
 ## Geometrie: was man wissen muss
 

@@ -79,6 +79,7 @@ pip install -r requirements.txt
 python 02_CAD/adapter.py             # exportiert beide Varianten nach 02_CAD/out/Stift und 02_CAD/out/Passstift
 python 02_CAD/check_adapter.py       # Kollision der Hälften, Bohrungsmaß, Wandstärken
 python 02_CAD/render_adapter.py      # Schnitte, Iso-Ansichten, Drucklayout
+python 02_CAD/check_exports.py       # passen die eingecheckten Exporte zum Code?
 ```
 
 Die Parameter stehen oben in [`02_CAD/adapter.py`](02_CAD/adapter.py):
@@ -110,7 +111,7 @@ Die Winkel prüft man an einem Probedruck über die beiden Fugen:
 | [`CLAUDE.md`](CLAUDE.md) | Einstieg für KI-Assistenten (Claude Code): Befehle und Fallstricke der Geometrie |
 | `01_Input/` | Skizze, Herstellerzeichnung und Fotos, die ins Modell eingeflossen sind (Rohdaten; die Skizze nennt noch die Länge 52,2, richtig ist 58) |
 | `02_CAD/adapter.py` | parametrisches Modell, einzige Quelle der Geometrie |
-| `02_CAD/check_adapter.py`, `02_CAD/render_adapter.py` | Prüfungen und Renderings |
+| `02_CAD/check_adapter.py`, `02_CAD/check_exports.py`, `02_CAD/render_adapter.py` | Prüfungen (Geometrie, Aktualität der Exporte) und Renderings |
 | `02_CAD/out/Passstift/`, `02_CAD/out/Stift/` | Exporte je Variante: `DRUCK_*` druckfertig, `Adapter_*` zusammengebaut |
 | `.github/workflows/release.yml` | legt bei einem Tag `rev-<Revision>` einen Release mit je einem ZIP pro Variante an |
 | `03_Renderings/` | Aufmacherbild (generiert, ohne Maßbezug), sonst von `render_adapter.py` erzeugt: Schnitte, Iso-Ansicht je Variante, Schnitt durch die Stifte, Drucklayout |
