@@ -2,7 +2,7 @@
 
 Adapter zwischen dem originalen Trek-Steuersatzdeckel (Émonda SL 6, 2024) und dem Tavelo-Avro-Rise-Cockpit.
 
-**Stand:** Rev. D, 2026-10-02: abgeschlossen für die Bezugshöhe 22. Drei Prototypen gedruckt und am Rad geprüft (Abschnitt 6); Prototyp 3 (Variante Passstift) passt ohne weitere Korrektur. Zwei Varianten, die sich nur an den Stiften oben unterscheiden: **Passstift** (Sacklöcher für eingeklebte Zylinderstifte) und **Stift** (angedruckt), siehe D-12.
+**Stand:** Rev. D.1, 2026-10-03: Geometrie abgeschlossen für die Bezugshöhe 22 (unverändert seit Rev. D); Festigkeit mit FEM abgeschätzt (Abschnitt 9). Drei Prototypen gedruckt und am Rad geprüft (Abschnitt 6); Prototyp 3 (Variante Passstift) passt ohne weitere Korrektur. Zwei Varianten, die sich nur an den Stiften oben unterscheiden: **Passstift** (Sacklöcher für eingeklebte Zylinderstifte) und **Stift** (angedruckt), siehe D-12.
 
 ---
 
@@ -115,8 +115,9 @@ Der Lenkwinkel spielt für die Passung keine Rolle. Maßgeblich sind nur die Nei
 | O-8 | Höhe 20 oder 22: Steht das Schaftende zu hoch, fehlt der Top-Cap der Spalt (Vorspannung) | erledigt: 22 (D-6, Rev. C.3) |
 | O-9 | Teil in PA12 (MJF) oder gefräst | offen; das Teil in den finalen Maßen liegt in PETG-HF vor (Prototyp 3), die Geometrie von Rev. D gilt unverändert |
 | O-10 | Andere Bezugshöhen (`HEIGHT_REF`) | nicht geprüft; abgeschlossen ist nur 22. Eine andere Höhe verschiebt den Vorbau entlang der Achse, Winkel und Kontur bleiben |
+| O-11 | Langzeitverhalten in PETG-HF: Kriechen unter der Vorspannung, besonders bei Wärme (Abschnitt 9) | offen; Steuersatzspiel anfangs häufig prüfen |
 
-Abschätzung (Rev. C), unkritisch: Die Vorspannung (angenommen 1–2 kN) drückt den ≈ 10°-Keil mit ≈ 17 % nach hinten; Reibung an Ober- und Unterseite (μ ≈ 0,2) hält das allein, dazu Stifte, Nasenflanken und nach 0,7 der Schaft. Flächenpressung ≈ 1–2 MPa auf je ≈ 900 mm². Das Gelenk trägt keine Fahrlasten, jede Hälfte sitzt über eigene Nase und eigenen Stift. Lenk- und Biegemomente laufen über die Vorbauklemmung in den Schaft.
+Kräfte (FEM-Rechnung dazu in Abschnitt 9): Eine Kraft entlang der Schaftachse drückt den 9,79°-Keil mit ≈ 17 % der Normalkraft nach vorn (zum dicken Ende). Reibung an Ober- und Unterseite hält das zusammen schon ab μ ≈ 0,09 je Fläche; sonst tragen Nasen oder Stifte, und nach 2,7 (0,7 Spiel plus 2 Langloch) der Schaft. Flächenpressung bei 1 kN ≈ 1,2 MPa auf ≈ 405 mm² je Hälfte (≈ 810 mm² gesamt). Das Gelenk trägt keine Fahrlasten, jede Hälfte sitzt über eigene Nase und eigenen Stift. Lenk- und Biegemomente laufen über die Vorbauklemmung in den Schaft.
 
 Prüfen nach jeder Änderung: `python 02_CAD/check_adapter.py` (Kollision der Hälften je Variante, Bohrungsmaß, Wandstärken).
 
@@ -133,3 +134,38 @@ Prüfen nach jeder Änderung: `python 02_CAD/check_adapter.py` (Kollision der H�
 | C.5 | 2026-10-01 | Zweite Variante **Passstift** (Sacklöcher für eingeklebte Zylinderstifte, Lehre für den Überstand), sonst identisch mit **Stift** (D-12); Dateinamen mit Variante `_H22_T17_V7.2_Stift` / `_Passstift` |
 | C.6 | 2026-10-01 | Passstift sitzt auf dem Grund: Sackloch 6,15 statt 7,15 tief, Lehre entfällt (D-12); je Variante ein Ordner in `02_CAD/out/` |
 | D | 2026-10-02 | Prototyp 3 (Variante Passstift) passt: Geometrie unverändert wie C.6, Stand für die Bezugshöhe 22 abgeschlossen; Dokumentation für die Veröffentlichung überarbeitet, Fotos in `01_Input/` als JPEG |
+| D.1 | 2026-10-03 | Festigkeitsabschätzung mit FEM (Abschnitt 9, `02_CAD/fem_adapter.py`): im Normalfall ausreichend fest, Voraussetzung trockene Auflageflächen, Variante Passstift bestätigt; Geometrie unverändert wie D |
+
+## 9. Festigkeitsabschätzung (FEM)
+
+Lineare FEM-Rechnung mit gmsh (quadratische Tetraeder C3D10) und CalculiX, Skript `02_CAD/fem_adapter.py`, Bilder `03_Renderings/FEM_*.png`. Das ist eine Plausibilisierung unter angenommenen Lasten, kein Festigkeitsnachweis.
+
+**Mechanik.** Der Adapter ist ein Keil (9,79°) zwischen Vorbau und Trek-Deckel. Eine Kraft F entlang der Schaftachse drückt ihn mit ≈ 17 % der Normalkraft nach vorn, zum dicken Ende. Reibung oben und unten hält das zusammen schon ab μ ≈ 0,09 je Fläche; dann tragen Nasen und Stifte nichts. Ohne Reibung trägt entweder die Nase (am Trek-Deckel) oder der Stift (im Vorbau) die Keilkraft, je nachdem, wo das Spiel zuerst aufgebraucht ist (Nase 0,3 längs; Stift im Vorbau ungemessen). Der Schaft liegt in Schubrichtung erst nach 2,7 an (0,7 Spiel plus 2 Langloch).
+
+**Modell**
+- Last: **F = 3 kN** entlang der Achse als bewusst hoher Hüllwert (Vorspannung der Top-Cap plus Zusatzlast im Fahrbetrieb, wenn der Rahmen gegenüber der Gabel nach oben drückt; für Spacer gibt es keine Norm). Die Vorspannung allein liegt eher bei 0,3–1 kN (Annahme). Linear: Spannungen skalieren mit F.
+- LF1 an Hälfte A: Die Hälften sind durch die Fuge getrennt und tragen je F/2 über ihre Flächen. LF2 bis LF4 am ganzen Ring, weil die Gelenke die Hälften quer koppeln; hier vereinfacht als starre Verbindung.
+- Werkstoff isotrop linear-elastisch. **PETG-HF** (Bambu PETG HF TDS V1.0, 100 % Füllgrad, getempert): E 1810 / 1540 MPa, Zugfestigkeit 34 MPa in der Schicht, 23 MPa quer zu den Schichten, HDT 62 °C bei 1,8 MPa, Tg 66 °C. **PA12 MJF** (HP 3D HR PA12): E 1750 / 1950 MPa, Zugfestigkeit 50 / 51 MPa, HDT 104–108 °C bei 1,82 MPa. Druckrichtung Unterseite auf dem Bett: Die Schichten liegen parallel zur Unterseite, σ_zz ist die Spannung quer zu den Schichten.
+- Netz 1,5 mm (0,4 an Rundungen), Hälfte ≈ 89 000, Ring ≈ 195 000 Knoten; quadratische Elemente mit geraden Kanten. Gegen 2,0 mm und (für LF1) 1,0 mm ändern sich Verschiebungen und 99,9-%-Werte um < 10 %. Stabil sind auch die Spitzen am Sackloch in LF4 (82,7 → 81,3 MPa); die Spitzen in LF2 und LF3 sitzen am Rand der Lagerung und werden über Nennwerte bewertet.
+- Gegenproben: Reaktionskräfte = Last (LF1 438,6 / 0 / 1434,5 N = 1500 N · (sin 17°, 0, cos 17°); LF2/LF3 514 / 0 / 2980 N = N · (sin 9,79°, 0, cos 9,79°); LF4 quer 0, wie bei statisch bestimmter Lagerung gewollt). Mittlere Pressung oben 3,7 MPa bei 3 kN (≈ 405 mm² je Hälfte). Stiftfuß nach Biegeformel und FEM in derselben Größenordnung.
+
+**Lastfälle und Ergebnisse** (F = 3 kN; bei 1 kN alle Spannungen durch 3)
+
+| Lastfall | Annahme | maßgebender Wert | Ort | Sicherheit PETG-HF (in der Schicht / quer) | Sicherheit PA12 |
+|---|---|---|---|---|---|
+| LF1 Normalfall | Reibung trägt: Unterseite fest, Last entlang der Achse (verlangt unten μ ≈ 0,31, also konservativ) | σ1 8,8 MPa, σ_zz 2,9 MPa, Verformung 0,06 mm | Ecke der hinteren Gelenkaufnahme, Taschenrand | 3,9 / 7,9 | 5,7 |
+| LF2 ohne Reibung, Nasen | Keilkraft 261 N je Seite an der hinteren Taschenstirn (Kontakt auf Nasenhöhe 1,5) | Pressung an der Nasenstirn nominell 72 MPa (FEM am Kontaktrand σ1 69, σ3 −80 MPa) | Nasentasche | bei 3 kN überlastet; bei 1 kN Pressung 24 MPa | bei 1 kN ≈ 2 |
+| LF3 ohne Reibung, Passstift eingespannt | Stift im Vorbau fest, Lochwand unterhalb der Fase gehalten | σ1 22 MPa | Lochgrund | 1,6 / 3,6 | 2,3 |
+| LF4 ohne Reibung, Passstift kippt | Querkraft 261 N je Stift in halber Überstandshöhe, Lagerdruck an der Mündung am größten | σ1 81 MPa, σ_zz 17 MPa | Lochflanke zur Bohrung (Wand 1,3) | 0,42 / 1,4 (bei 1 kN: 1,3 / 4,1) | 0,62 (bei 1 kN: 1,8) |
+| LF3 Variante Stift | angedruckter Stift im Vorbau gehalten | σ1 97 MPa; nominell Schub im Fuß 37 MPa, bei kippendem Stift Biegung 91 MPa | Stiftfuß, in der Schichtebene | 0,35 (bei 1 kN: 1,05) | 0,52 (bei 1 kN: 1,6) |
+
+**Bewertung**
+- **Normalfall:** Unter Druck über die Flächen ist der Adapter unkritisch. Selbst bei 3 kN liegt die größte Zugspannung bei 9 MPa: rund 4-fache Reserve in PETG-HF (quer zu den Schichten fast 8-fach), knapp 6-fach in PA12. Die Verformung (0,06 mm) ist vernachlässigbar.
+- **Voraussetzung sind trockene, fettfreie Auflageflächen.** Nur dann hält die Reibung die Keilkraft. Ohne Reibung trägt die Nase sie mit hoher Pressung an der Taschenstirn: Bei 3 kN wird die Stirn örtlich eingedrückt, bei der Vorspannung allein (≤ 1 kN, 24 MPa) bleibt es elastisch, kann in PETG aber kriechen; der Adapter würde sich dann um das Taschenspiel nach vorn setzen.
+- **Passstift:** Ist der Stift im Vorbau eingespannt, ist das Sackloch unkritisch. Kann er kippen, konzentriert sich der Lagerdruck an der Lochmündung zur Bohrung hin (Wand 1,3): Bei 1 kN bleibt in PETG-HF nur 1,3-fache Reserve, bei 3 kN wird der Lochrand örtlich überlastet (er weitet sich, der Stift bleibt vom Vorbau gehalten). Das ist nur relevant, wenn die Reibung fehlt.
+- **Angedruckter Stift:** Ohne Reibung würde er schon bei etwa 1 kN im Fuß abscheren oder abbrechen, und zwar in der Schichtgrenze (Schub 12 MPa, Biegung 30 MPa bei 1 kN gegen 23 MPa quer zu den Schichten). Das bestätigt D-12: Variante Passstift empfohlen.
+- **Kriechen (nicht gerechnet, Abschätzung):** Die Vorspannung wirkt dauerhaft, die mittlere Pressung liegt bei 1 kN bei ≈ 1,2 MPa. PETG-HF hat seine Wärmeformbeständigkeit bei 62 °C und den Glasübergang bei 66 °C; ein schwarzes Teil in der Sonne kann 50–60 °C erreichen (Annahme). Dann kriecht PETG merklich, und die **Vorspannung lässt nach** (Steuersatzspiel), ohne dass das Teil bricht. Bei 1 kN wird der Spacer axial nur ≈ 0,015 mm zusammengedrückt (F · h / (E · A)); ist er das weichste Glied im verspannten Stapel (Annahme; ≈ 65 kN/mm, der Carbonschaft liegt vermutlich in ähnlicher Größenordnung), kann schon Kriechen von wenigen Tausendstelmillimetern einen spürbaren Teil der Vorspannung kosten. PA12 (HDT > 100 °C) ist hier deutlich unkritischer.
+
+**Grenzen der Aussage:** linear-elastisch, isotrop, ohne Kontakt, ohne Reibung im Modell und ohne Kriechen; Kurzzeitfestigkeit der Datenblätter (ideale Probekörper; reale Drucke, besonders zwischen den Schichten, oft schwächer); der Vorbau drückt als gleichmäßige Flächenlast, nicht als steifer Körper; keine Ermüdung, kein Schlag; Lasten angenommen, nicht gemessen.
+
+**Folgerung:** Im Normalfall ausreichend fest, auch in PETG-HF. Entscheidend sind trockene Auflageflächen und die Variante Passstift. In PETG-HF ist das Langzeitrisiko das Nachlassen der Vorspannung durch Kriechen; deshalb das Steuersatzspiel anfangs häufig prüfen, für den Dauerbetrieb PA12.

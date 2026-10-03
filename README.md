@@ -6,7 +6,7 @@ Zweiteiliger, 3D-gedruckter Adapter, mit dem ein integriertes **Tavelo Avro Rise
 
 Das Modell ist parametrisch (Python/CadQuery). Wer einen anderen Rahmen oder andere Winkel hat, ändert ein paar Zahlen und exportiert neu.
 
-**Stand (Rev. D, 2026-10-02):** Geometrie abgeschlossen für die Bezugshöhe 22 mm. Drei Prototypen wurden gedruckt und am Rad geprüft; der dritte (Variante Passstift, PETG-HF) passt ohne weitere Korrektur. Für den Dauerbetrieb empfohlen bleibt PA12 (MJF), siehe [Drucken](#drucken). Befunde, Entscheidungen und offene Punkte: [`KONSTRUKTION.md`](KONSTRUKTION.md).
+**Stand (Rev. D.1, 2026-10-03):** Geometrie abgeschlossen für die Bezugshöhe 22 mm (unverändert seit Rev. D), Festigkeit mit FEM abgeschätzt. Drei Prototypen wurden gedruckt und am Rad geprüft; der dritte (Variante Passstift, PETG-HF) passt ohne weitere Korrektur. Für den Dauerbetrieb empfohlen bleibt PA12 (MJF), siehe [Drucken](#drucken). Befunde, Entscheidungen und offene Punkte: [`KONSTRUKTION.md`](KONSTRUKTION.md).
 
 ## Für welches Rad und welches Cockpit
 
@@ -57,6 +57,21 @@ Es gibt zwei Varianten. Sie sind bis auf die beiden Stifte oben, die in die Sack
 | Teilung | zwei Hälften mit Gelenk nach Tavelo-Vorbild, werden entlang des Schafts zusammengeschoben |
 | Kanten | innere Kanten an Ober- und Unterseite R 0,5, Übergang Bohrung → Leitungskanal R 2 |
 | Werkstoff | empfohlen PA12, MJF-Druck; Prototyp 3 aus PETG-HF |
+| Festigkeit | im Normalfall rund 4-fache Reserve in PETG-HF bei 3 kN entlang der Achse (lineare FEM-Abschätzung), siehe [Festigkeit](#festigkeit) |
+
+## Festigkeit
+
+Eine lineare FEM-Rechnung (gmsh + CalculiX, [`02_CAD/fem_adapter.py`](02_CAD/fem_adapter.py)) schätzt die Festigkeit unter einer Kraft von 3 kN entlang der Schaftachse ab. Das ist ein bewusst hoher Hüllwert; die Vorspannung allein liegt eher bei 0,3–1 kN.
+
+- **Normalfall:** Reibung an Ober- und Unterseite hält den Keil. Größte Zugspannung 9 MPa, rund 4-fache Reserve in PETG-HF, knapp 6-fach in PA12; Verformung 0,06 mm.
+- **Ohne Reibung** (gefettete Flächen) müssen Nasen oder Stifte die Keilkraft tragen, ≈ 17 % der Normalkraft. Dann werden Nasentasche und Lochmündung örtlich hoch belastet, und der angedruckte Stift der Variante Stift würde schon bei etwa 1 kN abscheren. Deshalb: Auflageflächen trocken und fettfrei, Variante Passstift.
+- **Langzeit:** In PETG-HF kann der Spacer unter der Vorspannung bei Wärme kriechen; die Vorspannung lässt dann nach. Steuersatzspiel anfangs häufig prüfen, für den Dauerbetrieb PA12.
+
+| Normalfall (Reibung trägt) | Grenzfall ohne Reibung, Passstift kippt im Vorbau |
+|---|---|
+| ![FEM Normalfall](03_Renderings/FEM_Passstift_LF1.png) | ![FEM ohne Reibung, Passstift](03_Renderings/FEM_Passstift_LF4.png) |
+
+Das ist eine Abschätzung unter angenommenen Lasten, kein Festigkeitsnachweis. Modell, alle Lastfälle und Grenzen der Aussage: [`KONSTRUKTION.md`, Abschnitt 9](KONSTRUKTION.md#9-festigkeitsabschätzung-fem).
 
 ## Drucken
 
@@ -81,6 +96,8 @@ python 02_CAD/check_adapter.py       # Kollision der Hälften, Bohrungsmaß, Wan
 python 02_CAD/render_adapter.py      # Schnitte, Iso-Ansichten, Drucklayout
 python 02_CAD/check_exports.py       # passen die eingecheckten Exporte zum Code?
 ```
+
+Optional die Festigkeitsabschätzung (Abschnitt 9 in `KONSTRUKTION.md`): zusätzlich `pip install gmsh` und CalculiX (`ccx`, unter Debian/Ubuntu `apt install calculix-ccx`), dann `python 02_CAD/fem_adapter.py` (mit dem Standardnetz rund 10 Minuten je Variante auf 2 Kernen).
 
 Die Parameter stehen oben in [`02_CAD/adapter.py`](02_CAD/adapter.py):
 
@@ -112,6 +129,7 @@ Die Winkel prüft man an einem Probedruck über die beiden Fugen:
 | `01_Input/` | Skizze, Herstellerzeichnung und Fotos, die ins Modell eingeflossen sind (Rohdaten; die Skizze nennt noch die Länge 52,2, richtig ist 58) |
 | `02_CAD/adapter.py` | parametrisches Modell, einzige Quelle der Geometrie |
 | `02_CAD/check_adapter.py`, `02_CAD/check_exports.py`, `02_CAD/render_adapter.py` | Prüfungen (Geometrie, Aktualität der Exporte) und Renderings |
+| `02_CAD/fem_adapter.py` | Festigkeitsabschätzung (FEM, gmsh + CalculiX), Bilder `03_Renderings/FEM_*.png` |
 | `02_CAD/out/Passstift/`, `02_CAD/out/Stift/` | Exporte je Variante: `DRUCK_*` druckfertig, `Adapter_*` zusammengebaut |
 | `.github/workflows/release.yml` | legt bei einem Tag `rev-<Revision>` einen Release mit je einem ZIP pro Variante an |
 | `03_Renderings/` | Aufmacherbild (generiert, ohne Maßbezug), sonst von `render_adapter.py` erzeugt: Schnitte, Iso-Ansicht je Variante, Schnitt durch die Stifte, Drucklayout |
@@ -120,7 +138,7 @@ Die Winkel prüft man an einem Probedruck über die beiden Fugen:
 
 ## Hinweis zur Sicherheit
 
-Der Adapter sitzt am Steuersatz und damit an einem sicherheitsrelevanten Bauteil. Er ist ein privates Eigenbauprojekt ohne Herstellerfreigabe, ohne Festigkeitsnachweis und ohne Langzeiterprobung. Maße und Winkel vor dem Druck am eigenen Rad prüfen; Steuersatz und Cockpit fachgerecht nach Herstellerangaben montieren. Nutzung auf eigene Verantwortung.
+Der Adapter sitzt am Steuersatz und damit an einem sicherheitsrelevanten Bauteil. Er ist ein privates Eigenbauprojekt ohne Herstellerfreigabe, ohne Festigkeitsnachweis (die FEM-Rechnung in `KONSTRUKTION.md`, Abschnitt 9, ist eine Abschätzung unter angenommenen Lasten) und ohne Langzeiterprobung. Die Auslegung setzt trockene, fettfreie Auflageflächen voraus. Maße und Winkel vor dem Druck am eigenen Rad prüfen; Steuersatz und Cockpit fachgerecht nach Herstellerangaben montieren. Nutzung auf eigene Verantwortung.
 
 ## Lizenz
 

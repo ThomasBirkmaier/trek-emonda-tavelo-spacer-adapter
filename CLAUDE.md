@@ -1,11 +1,11 @@
 # CLAUDE.md
 
-Zweiteiliger Spacer-Adapter zwischen dem Trek-Steuersatzdeckel (Émonda SL 6, 2024) und dem Tavelo-Avro-Rise-Cockpit. Parametrisches CadQuery-Modell. Was das Teil ist und wie man es druckt, steht in `README.md`. Maße, Entscheidungen, der Befund der Prototypen und die offenen Punkte stehen in `KONSTRUKTION.md`. **Lies zuerst `KONSTRUKTION.md`, Abschnitte 5 bis 7.**
+Zweiteiliger Spacer-Adapter zwischen dem Trek-Steuersatzdeckel (Émonda SL 6, 2024) und dem Tavelo-Avro-Rise-Cockpit. Parametrisches CadQuery-Modell. Was das Teil ist und wie man es druckt, steht in `README.md`. Maße, Entscheidungen, der Befund der Prototypen und die offenen Punkte stehen in `KONSTRUKTION.md`. **Lies zuerst `KONSTRUKTION.md`, Abschnitte 5 bis 7; zur Festigkeit Abschnitt 9.**
 
 ## Arbeitsweise
 
 - Doku und Kommentare auf Deutsch, technisch präzise; Annahmen als Annahmen kennzeichnen.
-- Rev. D ist für die Bezugshöhe 22 am Rad bestätigt. Geometrie nur gezielt ändern und vorher die Folgen nennen, vor allem Wandstärken; Konflikte mit anderen Merkmalen sofort melden.
+- Die Geometrie von Rev. D ist für die Bezugshöhe 22 am Rad bestätigt. Geometrie nur gezielt ändern und vorher die Folgen nennen, vor allem Wandstärken; Konflikte mit anderen Merkmalen sofort melden.
 - Stand, Befunde und offene Punkte gehören in `KONSTRUKTION.md` (Abschnitte 6 bis 8), keine eigenen Status- oder Notizdateien.
 
 ## Befehle
@@ -16,6 +16,7 @@ python 02_CAD/adapter.py          # Export nach 02_CAD/out/<Variante>/ (zusammen
 python 02_CAD/check_adapter.py    # Kollision A∩B je Variante, Bohrungsmaß, Wandstärken (Warnung < 1,2 mm)
 python 02_CAD/render_adapter.py   # 03_Renderings: Schnitte, Iso je Variante, Stiftschnitt, Drucklayout
 python 02_CAD/check_exports.py    # vor einem Release: passen die eingecheckten Exporte zum Code? (ändert nichts)
+python 02_CAD/fem_adapter.py [--variant Stift] [--h 1.0 --hmin 0.3]   # FEM-Abschätzung, braucht gmsh + ccx (KONSTRUKTION.md, Abschnitt 9)
 ```
 
 Nach jeder Geometrieänderung alle drei in dieser Reihenfolge ausführen und Exporte und Renderings mitcommitten. Die Renderings immer ansehen. Die Dateinamen enthalten Bezugshöhe, Winkel (`TAG`, z. B. `_H22_T17_V7.2`) und Variante (`_Stift`, `_Passstift`); ändern sie sich, die alten Exporte per `git rm` entfernen. STEP und 3MF enthalten einen Zeitstempel: Bei einem reinen Doku- oder Kommentar-Commit die Exporte nicht mitcommitten (`git checkout -- 02_CAD/out/`).
@@ -54,5 +55,5 @@ Die Anweisung „mache einen Release“ ist die Freigabe, den Tag zu setzen und 
 
 - `01_Input/` enthält Rohdaten (Skizze, Fotos, Herstellerzeichnung). Nicht verändern.
 - `02_CAD/adapter.py` ist die einzige Quelle der Geometrie. `02_CAD/out/` wird erzeugt, aber versioniert, damit man ohne Python drucken kann; je Variante ein Unterordner (`Passstift/`, `Stift/`).
-- `03_Renderings/Hero.png` ist ein generiertes Aufmacherbild (Rev. C.4, Bildgenerator mit einer Modellansicht als Geometrievorlage), ohne Maßbezug. Alle anderen Bilder erzeugt `render_adapter.py`.
+- `03_Renderings/Hero.png` ist ein generiertes Aufmacherbild (Rev. C.4, Bildgenerator mit einer Modellansicht als Geometrievorlage), ohne Maßbezug. `FEM_*.png` erzeugt `fem_adapter.py`, alle anderen Bilder `render_adapter.py`.
 - Lizenz WTFPL.
